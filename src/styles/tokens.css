@@ -1,0 +1,32 @@
+:root {
+  --brand-primary: #2388df;
+  --brand-secondary: #85c9e1;
+  --text-primary: #112f5a;
+  --text-secondary: #757c87;
+  --background: #fcfdff;
+  --surface: #ffffff;
+  --bubble-assistant: #eff2f8;
+  --bubble-user: #087fef;
+  --border: #dce6ed;
+  --radius-sm: 12px;
+  --radius-md: 22px;
+  --radius-lg: 28px;
+  --shadow-sm: 0 2px 5px #1632540d;
+  --shadow-panel: 0 4px 12px #16325412, 0 0 3px #1632540a;
+  --font-sm: clamp(12px, 1.12vw, 16px);
+  --font-base: clamp(16px, 1.39vw, 20px);
+  --font-lg: clamp(18px, 1.53vw, 22px);
+  --font-title: clamp(30px, 3.2vw, 46px);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  font-family: 'AuRA Inter', Arial, Helvetica, sans-serif;
+  color: var(--text-primary);
+  background: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}

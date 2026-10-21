@@ -1,0 +1,193 @@
+/* Inter subsets extracted from the supplied PDF; missing glyphs use system fallbacks. */
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-535.ttf') format('truetype');
+  unicode-range:
+    U+20, U+2C, U+2E, U+53, U+61, U+62, U+63, U+64, U+65, U+66, U+67, U+69,
+    U+6B, U+6C, U+6D, U+6E, U+6F, U+70, U+72, U+73, U+74, U+77, U+79;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-1029.ttf') format('truetype');
+  unicode-range:
+    U+20, U+2D, U+2E, U+41, U+42, U+43, U+44, U+45, U+46, U+49, U+4B, U+4F,
+    U+50, U+52, U+53, U+59, U+61, U+62, U+65, U+67, U+68, U+69, U+6B, U+6C,
+    U+6D, U+6E, U+6F, U+72, U+73, U+74, U+75, U+77, U+79;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-1030.ttf') format('truetype');
+  unicode-range:
+    U+20, U+41, U+52, U+57, U+63, U+65, U+6C, U+6D, U+6F, U+74, U+75;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-1031.ttf') format('truetype');
+  unicode-range:
+    U+20, U+2E, U+54, U+65, U+6E, U+6F, U+70, U+72, U+73, U+75, U+79;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-612.ttf') format('truetype');
+  unicode-range:
+    U+20, U+21, U+2C, U+2E, U+30, U+31, U+32, U+34, U+3A, U+3F, U+41, U+45,
+    U+48, U+49, U+4D, U+52, U+54, U+61, U+62, U+63, U+64, U+65, U+67, U+68,
+    U+69, U+6B, U+6C, U+6D, U+6E, U+6F, U+70, U+72, U+73, U+74, U+75, U+76,
+    U+77, U+79, U+2019;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-1038.ttf') format('truetype');
+  unicode-range: U+41, U+52, U+75;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-1039.ttf') format('truetype');
+  unicode-range:
+    U+20, U+2D, U+2E, U+41, U+42, U+43, U+44, U+45, U+46, U+48, U+49, U+4F,
+    U+50, U+52, U+53, U+61, U+62, U+63, U+65, U+67, U+68, U+69, U+6B, U+6C,
+    U+6D, U+6E, U+6F, U+70, U+72, U+73, U+74, U+75, U+77, U+79;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-707.ttf') format('truetype');
+  unicode-range:
+    U+20, U+2D, U+2E, U+30, U+31, U+32, U+35, U+3A, U+41, U+42, U+43, U+44,
+    U+45, U+46, U+48, U+49, U+4B, U+4C, U+4D, U+4F, U+50, U+52, U+53, U+61,
+    U+62, U+63, U+65, U+67, U+68, U+69, U+6B, U+6C, U+6D, U+6E, U+6F, U+70,
+    U+72, U+73, U+74, U+75, U+77, U+79;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-1046.ttf') format('truetype');
+  unicode-range: U+41, U+52, U+75;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-1047.ttf') format('truetype');
+  unicode-range:
+    U+20, U+28, U+29, U+2C, U+2D, U+2E, U+3F, U+41, U+44, U+45, U+53, U+54,
+    U+57, U+61, U+62, U+63, U+64, U+65, U+66, U+67, U+68, U+69, U+6B, U+6C,
+    U+6D, U+6E, U+6F, U+70, U+72, U+73, U+74, U+75, U+76, U+77, U+79;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-799.ttf') format('truetype');
+  unicode-range:
+    U+20, U+2D, U+2E, U+2F, U+3F, U+41, U+48, U+49, U+4C, U+4E, U+53, U+61,
+    U+62, U+63, U+64, U+65, U+66, U+67, U+68, U+69, U+6B, U+6C, U+6D, U+6E,
+    U+6F, U+70, U+71, U+72, U+73, U+74, U+75, U+76, U+77, U+79, U+2019;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-1054.ttf') format('truetype');
+  unicode-range:
+    U+20, U+31, U+33, U+3A, U+41, U+43, U+45, U+51, U+52, U+61, U+63, U+65,
+    U+66, U+69, U+6E, U+6F, U+73, U+74, U+75, U+79;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-1055.ttf') format('truetype');
+  unicode-range:
+    U+20, U+2D, U+2E, U+2F, U+30, U+31, U+32, U+33, U+37, U+38, U+3A, U+41,
+    U+42, U+43, U+45, U+46, U+48, U+49, U+4D, U+4F, U+50, U+52, U+53, U+54,
+    U+61, U+62, U+63, U+65, U+67, U+68, U+69, U+6B, U+6C, U+6D, U+6E, U+6F,
+    U+70, U+72, U+73, U+74, U+75, U+76, U+79;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-881.ttf') format('truetype');
+  unicode-range:
+    U+20, U+2D, U+3A, U+41, U+46, U+51, U+52, U+65, U+69, U+6C, U+6E, U+6F,
+    U+70, U+73, U+74, U+75, U+77;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-882.ttf') format('truetype');
+  unicode-range:
+    U+20, U+27, U+2E, U+3F, U+50, U+57, U+61, U+62, U+63, U+64, U+65, U+68,
+    U+69, U+6C, U+6D, U+6E, U+6F, U+70, U+72, U+73, U+74, U+75, U+77, U+79;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-883.ttf') format('truetype');
+  unicode-range:
+    U+20, U+2C, U+53, U+61, U+62, U+65, U+68, U+69, U+6B, U+6C, U+6D, U+6E,
+    U+6F, U+73, U+74, U+75, U+77, U+79;
+}
+
+@font-face {
+  font-family: 'AuRA Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/assets/fonts/inter-reference-1062.ttf') format('truetype');
+  unicode-range:
+    U+20, U+2D, U+2E, U+2F, U+30, U+31, U+32, U+33, U+37, U+38, U+3A, U+3E,
+    U+41, U+42, U+43, U+45, U+46, U+48, U+49, U+4D, U+4E, U+4F, U+50, U+52,
+    U+53, U+54, U+61, U+62, U+63, U+65, U+67, U+68, U+69, U+6B, U+6C, U+6D,
+    U+6E, U+6F, U+70, U+71, U+72, U+73, U+74, U+75, U+76, U+78, U+79;
+}
