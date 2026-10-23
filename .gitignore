@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.vite
 .npm-cache
 *.local
 
@@ -23,3 +24,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python backend environments, local secrets and generated files
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+backend/build/
+backend/.env
+backend/.env.*
+!backend/.env.example

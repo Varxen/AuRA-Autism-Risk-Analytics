@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aura-backend"
+version = "0.1.0"
+description = "AuRA development API: parent/guardian authentication and sessions"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.141.1,<0.142",
+  "uvicorn>=0.34,<0.35",
+  "pydantic>=2.12,<3",
+  "sqlalchemy>=2.0.52,<2.1",
+  "psycopg2-binary>=2.9.10,<3",
+  "alembic>=1.19,<2",
+  "python-dotenv>=1,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=9.1,<10", "httpx>=0.28,<0.29"]
+
+[tool.setuptools.packages.find]
+include = ["aura_api*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"

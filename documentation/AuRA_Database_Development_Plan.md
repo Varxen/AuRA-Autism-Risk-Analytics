@@ -1,18 +1,22 @@
 # AuRA — Database Development Plan
 
+**Repository layout update (2026-10-23):** The application now lives in `frontend/`. Source, public assets, tests, package/config files and build paths in this document are relative to that directory unless explicitly prefixed. Run frontend npm and browser-test commands from `frontend/`. Shared `docs/` and `documentation/` remain at the repository root. See [frontend guide](../frontend/README.md).
+
 **Project:** AuRA (Autism Risk Analytics)  
 **Document type:** Database blueprint and phased implementation plan  
 **Recommended database:** PostgreSQL  
-**Status:** Proposed technical design; requires confirmation before implementation
+**Status:** Authentication tables implemented; remaining database design is proposed.
 
-**Planning update:** The authentication and standalone onboarding experience in Section 2.1 is user-approved. Database schemas and other engineering recommendations remain proposals. This update is documentation-only; authentication and onboarding have not been implemented.
+**Planning update (2026-10-23):** Frontend authentication/onboarding still use mock state. A separate FastAPI email/password API now persists users and HttpOnly cookie sessions in PostgreSQL. Server-owned onboarding, durable consent and screening data remain unimplemented. Other database schemas remain proposals. See the [current development roadmap](../docs/roadmap.md) and [backend setup](../backend/README.md).
+
+**Backend implementation update (2026-10-23):** FastAPI email/password authentication and PostgreSQL-backed HttpOnly sessions are implemented in `backend/`. Alembic revision `20261023_01` creates `users` and `auth_sessions` in the separate local `aura_db`. This updates the earlier frontend-only baseline above. Other proposed schema tables, frontend auth integration, server onboarding/consent/eligibility, screening persistence and NLP/ML remain pending. See the [current roadmap](../docs/roadmap.md) and [backend guide](../backend/README.md).
 
 ## 1. Purpose and sources
 
 This document describes a proposed database design for the AuRA web application. It is intended to support development in this order:
 
 1. **Frontend UI:** React + TypeScript + Vite, initially using mock data.
-2. **Backend server:** FastAPI (recommended) with an agreed API contract.
+2. **Backend server:** FastAPI (selected), with implemented auth contracts and further screening contracts pending.
 3. **Database server:** PostgreSQL and database migrations.
 4. **NLP and machine learning:** Rule-based text interpretation, behavioral feature mapping, Logistic Regression, Random Forest, XGBoost, and Soft Voting Ensemble.
 
@@ -134,11 +138,11 @@ Keep account profile, child profile, and per-assessment information conceptually
 | User logs out | End the authenticated session. Future protected access requires login; clear user-specific frontend state so another account cannot see prior responses. |
 | User revisits profile/settings | Allow relevant corrections later without silently rewriting past assessment records; validate eligibility again for subsequent assessments. |
 
-**Recommended implementation details, not implemented:** Use a deterministic onboarding state model with validated transitions, a clear step indicator, and Back/Continue controls. Route guards must check authentication and current setup/consent requirements, including direct navigation to protected routes. Page visits alone cannot complete setup. Frontend guards guide the UI; the future backend must independently validate authorization, consent scope/version, eligibility, and completion.
+**Frontend implementation status:** The following behavior is implemented using temporary mock state; server-side enforcement remains pending. Use a deterministic onboarding state model with validated transitions, a clear step indicator, and Back/Continue controls. Route guards must check authentication and current setup/consent requirements, including direct navigation to protected routes. Page visits alone cannot complete setup. Frontend guards guide the UI; the future backend must independently validate authorization, consent scope/version, eligibility, and completion.
 
-#### Planned frontend architecture and visual direction
+#### Frontend architecture and visual direction
 
-Adapt to the existing `src/app/AppRouter.tsx`, `src/app/providers/`, `src/components/layout/`, `src/pages/`, `src/contexts/`, `src/hooks/`, `src/types/`, and service-adapter structure. The following is a logical proposal only; **do not create these files during this documentation update**:
+The frontend uses `src/app/AppRouter.tsx`, `src/app/providers/`, `src/components/layout/`, `src/pages/`, `src/contexts/`, `src/hooks/`, `src/types/`, and service adapters. The tree below retains the original logical proposal; actual file names and ownership are documented in [frontend guide](../frontend/README.md). No source files are created by this documentation update.
 
 ```text
 src/
@@ -175,9 +179,9 @@ src/
     api/                          # Planned future backend contracts/adapters
 ```
 
-Keep three separate route/layout groups: public authentication and entry screens; authenticated standalone onboarding; authenticated main application with valid required setup. Exact route URLs and guard/component names remain undecided. Reuse the existing logo, robot artwork/animation, palette, typography, and design tokens. Onboarding uses polished full-screen pages and brief branded transitions, not chat bubbles, sidebar, chat input, or embedded conversation cards. Support desktop, tablet, mobile, keyboard navigation, visible focus, and reduced-motion preferences.
+The implementation keeps three separate route/layout groups: mock authentication; standalone onboarding; and the main application after valid mock setup. Route URLs and frontend guards are defined in `src/constants/routes.ts`, `src/app/AppRouter.tsx` and `src/app/DemoRouteGate.tsx`; real server authorization remains pending. Shared branding uses the supplied robot artwork/animation, palette, typography and design tokens. Onboarding remains separate from the main chat shell. Later user-approved refinements add animated mascot speech bubbles to standalone screens. Preserve responsive layouts, keyboard navigation, visible focus and reduced-motion support.
 
-**Frontend-first boundary:** After a subsequent explicit implementation request, simulate identity, onboarding status, consent, and eligible profiles with typed temporary in-memory state and dedicated mock services. Do not claim real authentication, durable consent, or production persistence. Reloading may reset the demo; do not persist real children's sensitive information in localStorage by default. Secure sessions and validation belong to Phase 2; durable records and resumption belong to Phase 3; real NLP/ML follows in Phase 4. Backend/database capability planning is in Section 8.1.
+**Frontend-first boundary:** The frontend now simulates identity, onboarding status, consent, and eligible profiles with typed temporary in-memory state and dedicated mock services. Do not claim real authentication, durable consent, or production persistence. Reloading may reset the demo; do not persist real children's sensitive information in localStorage by default. Secure sessions and validation belong to Phase 2; durable records and resumption belong to Phase 3; real NLP/ML follows in Phase 4. Backend/database capability planning is in Section 8.1.
 
 ### UI reference mapping
 
@@ -622,7 +626,7 @@ This section describes future responsibilities only; it does not define new endp
 | Mark required setup complete | Validate all mandatory requirements before acknowledging completion; support safe resume and re-consent rather than trusting a visited page or client boolean | Validated per-user completion/resume state consistent with the applicable consent and profile records |
 | Begin a later assessment | Re-check authorization, valid consent and current eligibility; create an attempt only following the user's explicit pre-assessment choice | Assessment-specific age snapshot and immutable historical associations to original answers and relevant consent/version evidence |
 
-Phase 1 may simulate these capabilities in typed in-memory frontend state after implementation is explicitly requested. Phase 2 supplies server-side sessions, authorization and validation using temporary adapters where needed. Phase 3 adds durable PostgreSQL records, secure resume, integrity checks and approved lifecycle handling. Phase 4 preserves the existing rule-based NLP → reviewed feature mapping → ML workflow. No mock state is production persistence, and operational parent records must not silently become training data.
+Phase 1 now simulates these capabilities in typed in-memory frontend state. Phase 2 supplies server-side sessions, authorization and validation using temporary adapters where needed. Phase 3 adds durable PostgreSQL records, secure resume, integrity checks and approved lifecycle handling. Phase 4 preserves the existing rule-based NLP → reviewed feature mapping → ML workflow. No mock state is production persistence, and operational parent records must not silently become training data.
 
 ### Mock data types for React (illustrative)
 
@@ -675,27 +679,31 @@ Do not show fake predictions as genuine assessments: mock UI outcomes must be la
 
 ## 9. Development phases and checklist
 
-**Repository baseline:** The reference-based chat UI, typed in-memory mock services, and assessment demonstration already exist. Authentication and standalone onboarding remain planned and unimplemented. The existing checklist statuses below are retained; this documentation update is not a completion-status audit or authorization to start implementation.
+**Repository baseline (2026-10-23):** The reference-based frontend, mock login/onboarding, bilingual 13-item assessment, processing preview and in-memory session History are implemented. Real authentication, API, persistence, NLP and ML are not. The [current roadmap](../docs/roadmap.md) owns detailed completion tracking; this section summarizes the original four implementation phases.
 
 ### Phase 1 — Frontend UI
 
-- [ ] Build layout using uploaded 5-screen PDF as visual basis.
-- [ ] Implement sidebar: Chat, Assessments, Resources / Know About ASD, History, Support, Settings (only functional where specifications exist).
-- [ ] Create chat bubbles, start options, progress bar, option buttons and follow-up text input.
-- [ ] Show standalone Login/Register immediately for signed-out visitors, followed by the authentication/setup status check in Section 2.1; no pre-login splash.
-- [ ] Add the short post-login animated AuRA transition only for users requiring onboarding.
-- [ ] Build standalone About Pre-assessment → Privacy & Informed Consent → Parent & Child Information → You're All Set, with validated Back/Continue navigation and step progress.
-- [ ] Plan/use separate `AuthLayout`, `OnboardingLayout`, and existing `AppLayout` route groups with typed temporary mock state and route guards; do not embed setup in chat.
-- [ ] Handle incomplete setup, correction/decline/exit, re-consent, completed returning users and logout. Label mock state and reload limitations; do not default to storing real child information in localStorage.
-- [ ] Enter the existing welcome/Start Chat experience after valid setup; start the assessment only when the user chooses Pre-assessment in the main UI.
-- [ ] Build an assessment session UI with 13 steps and previous/next navigation.
-- [ ] Use version-aware mock questions; don't invent final questionnaire content.
-- [ ] Add result screen with clearly labeled demo values.
-- [ ] Define frontend data types matching backend contracts.
+- [x] Build the shared layout from the supplied five-screen PDF, using actual AuRA assets.
+- [x] Implement navigation: Chat (including ASD information), Assessments, Resources, History, Support and Settings. Resources search/filter, Support FAQs and demo Settings are implemented; real policy/contact and clinical resource review remain pending.
+- [x] Create chat bubbles, thinking/typewriter states, start actions, progress, answer buttons and follow-up input.
+- [x] Show standalone mock Login/Register immediately for signed-out visitors; no pre-login splash.
+- [x] Add the post-login animated transition for users requiring onboarding.
+- [x] Build separate About, Consent, Parent/Child Information and All Set screens with validated navigation.
+- [x] Use AuthLayout, OnboardingLayout and AppLayout route groups, typed in-memory mock state and frontend access guards.
+- [x] Demonstrate incomplete setup, valid consent/eligibility checks, returning fixtures and sign out without browser-storage persistence.
+- [x] Enter welcome/Start Chat after valid setup; begin assessment only by choice.
+- [x] Implement 13 approved-source questions and follow-ups, explicit English/Tagalog selection and automatic advancement in one continuous transcript.
+- [x] Preserve canonical question/option IDs, questionnaire version, structured scores and verbatim explanations.
+- [x] Show clearly labeled processing simulation and unavailable-risk-result notice, without fabricated clinical classes.
+- [x] Implement multiple in-memory chat/assessment records and resumable History.
+- [x] Define typed domain models and separate asynchronous service adapters for future API integration.
+- [x] Implement Resources, Support FAQs and frontend Settings using the shared design; no fake contact or account service.
+- [x] Review consent/decline and rerun frontend accessibility, responsive and end-to-end browser checks.
+- [ ] Obtain approved privacy/terms, contact details and clinical/bilingual resource review; verify physical mobile keyboards.
 
 ### Phase 2 — Backend API
 
-- [ ] Set up Python FastAPI.
+- [ ] Confirm backend framework (FastAPI recommended), then set up the selected server.
 - [ ] Define Pydantic schemas and API route contracts.
 - [ ] Implement consent, eligibility and session state validation.
 - [ ] Finalize and implement the selected authentication/session architecture and setup-status, consent-version/scope, eligible-profile and validated-completion capabilities in Section 8.1.
@@ -710,7 +718,7 @@ Do not show fake predictions as genuine assessments: mock UI outcomes must be la
 - [ ] Seed the **reviewed** 13-question questionnaire and correct scores.
 - [ ] Add assessment answers, consent and progress persistence.
 - [ ] Persist approved identity links, onboarding/resume status, scoped consent records and minimal parent/child relationships, with assessment-specific age/history preserved (Section 8.1).
-- [ ] Wire FastAPI repositories to PostgreSQL.
+- [ ] Wire the selected backend repositories to PostgreSQL.
 - [ ] Test restore/resume, ownership, data integrity and migrations.
 - [ ] Add chat messages, educational resources and optional history features.
 
@@ -769,7 +777,7 @@ Do not show fake predictions as genuine assessments: mock UI outcomes must be la
 | Authentication provider, credentials and session architecture | Parent/guardian account access is user-approved, but secure implementation is not selected | Decide before real authentication or account history integration; guest screening and additional roles remain undecided, not required |
 | Onboarding state and profile representation | Determines validated completion, resumable steps and separation of account, child and assessment records | Finalize minimal fields, relationship representation and durable resume behavior; justify any DOB or extra personal information |
 | Consent version, scope and renewal/linkage | Standalone onboarding consent precedes assessment creation; later attempts must reference applicable valid consent | Obtain approved wording and decide assessment-specific acceptance/linkage, research-consent separation, renewal, withdrawal and deletion/contact processes |
-| Final 13 questions and labels | Prevents wrong indicator/option mappings | Obtain final expert-reviewed instrument |
+| Final instrument/version sign-off | Prevents wrong indicator/option mappings | The revised English PDF and Filipino DOCX supply all 13 implemented question pairs; confirm final expert-reviewed version, labels and feature mapping |
 | Exact interpretation/reconciliation policy | Prevents arbitrary NLP-derived feature scores | Define and review mapping and conflict-handling rules |
 | Ground-truth labeling protocol | ML performance is not meaningful without defensible labels | Document expert-reviewed labels and their provenance |
 | Educational response design | The thesis specifies curated/reviewed outputs | Define approved response templates and resources |
@@ -786,5 +794,5 @@ If all training labels are mechanically derived from the same questionnaire scor
 
 Use this as the **database contract during frontend development**, not as a requirement to build PostgreSQL immediately. Implement realistic React mock objects shaped like the planned `questions`, `assessments`, and `assessment_answers` entities. Then connect APIs and PostgreSQL without redesigning the UI. Add NLP and ML only after the feature/label definitions are complete and validated.
 
-**Updated next planning tasks:** Finalize the questionnaire-to-indicator mapping and frontend contracts; resolve authentication/session architecture, minimal eligibility/profile representation, and approved consent/lifecycle details. The reference chat UI already exists. After a subsequent explicit implementation request, extend the frontend with Section 2.1's separate authentication/onboarding flow and typed in-memory mocks; follow with backend, database, then NLP/ML in the existing phase order. This documentation update does not begin that implementation.
+**Updated next tasks (2026-10-23):** Obtain the remaining frontend content approvals and physical-device review in the [current roadmap](../docs/roadmap.md). Login/onboarding mocks, bilingual 13-item assessment, processing preview and in-memory History already work. Resolve authentication/session architecture, approved consent/data lifecycle, feature reconciliation and research labeling before the dependent backend, database and NLP/ML milestones. This documentation update does not begin those implementations.
 

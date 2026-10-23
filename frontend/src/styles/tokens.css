@@ -1,0 +1,41 @@
+:root {
+  --brand-primary: #2388df;
+  --brand-secondary: #85c9e1;
+  --text-primary: #112f5a;
+  --text-secondary: #637f96;
+  --background: #fcfdff;
+  --surface: #ffffff;
+  --surface-muted: #edf6ff;
+  --page-background:
+    radial-gradient(ellipse at 50% 0, #eaf4ff, transparent 65%), #fbfdff;
+  --bubble-assistant: var(--surface-muted);
+  --bubble-user: var(--brand-primary);
+  --border: #deebf5;
+  --radius-sm: 12px;
+  --radius-md: 22px;
+  --radius-lg: 28px;
+  --radius-panel: 25px;
+  --shadow-sm: 0 2px 5px #1632540d;
+  --shadow-card:
+    0 12px 28px #244b7310,
+    0 2px 6px #244b7308,
+    inset 0 1px 0 #ffffff;
+  --shadow-bubble: 0 6px 16px #315f8d12, 0 1px 3px #315f8d08;
+  --shadow-panel: var(--shadow-card);
+  --font-sm: clamp(12px, 1.12vw, 16px);
+  --font-base: clamp(16px, 1.39vw, 20px);
+  --font-lg: clamp(18px, 1.53vw, 22px);
+  --font-title: clamp(30px, 3.2vw, 46px);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  font-family: 'AuRA Inter', Arial, Helvetica, sans-serif;
+  color: var(--text-primary);
+  background: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
