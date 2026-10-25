@@ -1,5 +1,4 @@
 import { routes } from '../constants/routes.ts'
-import { DEMO_CONSENT_VERSION } from '../data/mockAccounts.ts'
 import type { AuthDemoAction, AuthDemoState } from '../types/auth.types'
 import type {
   DemoOnboarding,
@@ -39,8 +38,8 @@ export function hasValidConsent(record: DemoOnboarding): boolean {
   return (
     record.consentSelected &&
     record.consent?.accepted === true &&
-    record.consent.version === DEMO_CONSENT_VERSION &&
-    record.consent.scope === 'frontend-demo' &&
+    record.consent.version === record.consentVersionCurrent &&
+    record.consent.scope === 'chat-assessment-storage-demo' &&
     Number.isFinite(Date.parse(record.consent.acceptedAt))
   )
 }
@@ -139,6 +138,8 @@ export function authDemoReducer(
       sessionRevision: state.sessionRevision + 1,
     }
   }
+  if (action.type === 'ONBOARDING_HYDRATED')
+    return updateRecord(state, action.onboarding)
   if (action.type === 'EXIT')
     return {
       ...state,
@@ -170,8 +171,8 @@ export function authDemoReducer(
         consent: {
           accepted: true,
           acceptedAt: action.timestamp,
-          version: DEMO_CONSENT_VERSION,
-          scope: 'frontend-demo',
+          version: record.consentVersionCurrent,
+          scope: 'chat-assessment-storage-demo',
         },
       })
     case 'ELIGIBILITY_CHANGED':

@@ -90,11 +90,7 @@ export const mockChatService = {
           id,
           'Hello! I’m AuRA, your autism information assistant.\n\nHow can I help you today?',
           {
-            type: 'actions',
-            actions: [
-              { id: 'education', label: 'I want to know about ASD' },
-              { id: 'assessment', label: 'Pre-assessment' },
-            ],
+            type: 'text',
           },
         ),
       ],

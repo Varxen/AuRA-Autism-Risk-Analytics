@@ -1,4 +1,4 @@
-import type { AssessmentSession } from '../../types/assessment.types'
+import type { AssessmentConsistencyAttempt, AssessmentSession } from '../../types/assessment.types'
 import type { ChatIntroduction } from '../../types/chat.types'
 import type { QuestionnaireQuestion } from '../../types/questionnaire.types'
 import { assessmentCopy } from '../../data/assessmentCopy'
@@ -9,13 +9,15 @@ import { AnswerOptions } from './AnswerOptions'
 import { FollowUpQuestion } from './FollowUpQuestion'
 
 export function AssessmentExchange({
-  question, session, introduction, pendingOptionId, pendingFollowUpText, busy, onSelect,
+  question, session, introduction, pendingOptionId, pendingFollowUpText, failedAttempts, consistencyBlocked, busy, onSelect,
 }: {
   question: QuestionnaireQuestion
   session: AssessmentSession
   introduction: ChatIntroduction
   pendingOptionId: string | null
   pendingFollowUpText: string | null
+  failedAttempts: AssessmentConsistencyAttempt[]
+  consistencyBlocked: boolean
   busy: boolean
   onSelect: (id: string) => void
 }) {
@@ -54,7 +56,21 @@ export function AssessmentExchange({
           typing={questionTyping}
         />
       )}
-      {current && !presenting && !selectedOption && (
+      {failedAttempts.map((attempt, index) => (
+        <div className="assessment-consistency-attempt" key={`${question.id}-retry-${index}`}>
+          <ChatMessage role="user" className="structured-response">
+            {question.options.find((option) => option.id === attempt.selectedOptionId)?.label ?? attempt.selectedOptionId}
+          </ChatMessage>
+          <ChatMessage role="user" filled><p>{attempt.followUpText}</p></ChatMessage>
+          <ChatMessage>
+            <p>{consistencyBlocked && index === failedAttempts.length - 1 ? copy.consistencyStop : copy.consistencyRetryPrompt}</p>
+          </ChatMessage>
+        </div>
+      ))}
+      {consistencyBlocked && failedAttempts.length === 0 && (
+        <ChatMessage><p>{copy.consistencyStop}</p></ChatMessage>
+      )}
+      {current && !presenting && !selectedOption && !consistencyBlocked && (
         <AnswerOptions language={session.language} options={question.options} onSelect={onSelect} disabled={busy} />
       )}
       {selectedOption && (
@@ -65,11 +81,11 @@ export function AssessmentExchange({
       {(questionAnimating || followUpAnimating) && introduction.phase === 'thinking' && (
         <ChatMessage className="message--typing"><LoadingIndicator label={copy.typingStatus} /></ChatMessage>
       )}
-      {answer && question.followUpQuestion && !(followUpAnimating && waiting) && (
+      {(answer || (current && pendingOptionId)) && question.followUpQuestion && !(followUpAnimating && waiting) && (
         <FollowUpQuestion
           language={session.language}
           content={followUpTyping ? question.followUpQuestion.slice(0, introduction.characters) : question.followUpQuestion}
-          timestamp={followUpAnimating ? undefined : answer.answeredAt}
+          timestamp={followUpAnimating || !answer ? undefined : answer.answeredAt}
           typing={followUpTyping}
         />
       )}

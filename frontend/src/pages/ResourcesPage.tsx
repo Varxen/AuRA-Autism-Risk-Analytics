@@ -15,7 +15,7 @@ export function ResourcesPage() {
   )
 
   return (
-    <ContentPage eyebrow="A little understanding, at your pace" title="Resources" description="Explore trusted organizations and learn how the AuRA demo works.">
+    <ContentPage eyebrow="A little understanding, at your pace" title="Resources" description="Explore trusted organizations and learn how AuRA's pre-assessment works.">
       <div className="content-notice">
         <BookOpen size={20} aria-hidden="true" />
         <p>These external references are in English. Source verification and clinical review are pending; approved Filipino resource summaries are not available yet.</p>
@@ -62,7 +62,7 @@ export function ResourcesPage() {
           <article className="content-card">
             <ClipboardList className="content-card-icon" size={25} aria-hidden="true" />
             <h4>What to expect</h4>
-            <p>Choose English or Tagalog, then answer 13 questions with a choice and a written explanation. You can revisit the conversation in History during this demo.</p>
+            <p>Choose English or Tagalog, then answer 13 questions with a choice and a written explanation. You can revisit the conversation in History.</p>
             <Link to="/assessment" className="content-link">Explore the pre-assessment <ArrowUpRight size={17} aria-hidden="true" /></Link>
           </article>
           <article className="content-card">

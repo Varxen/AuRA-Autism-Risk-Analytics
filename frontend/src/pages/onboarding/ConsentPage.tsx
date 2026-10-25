@@ -1,16 +1,17 @@
-import { PolicyLinks } from "../../components/ui/PolicyLinks";
-import { useOnboarding } from "../../hooks/useOnboarding";
-import { OnboardingNavigation } from "../../components/onboarding/OnboardingNavigation";
+import { ClipboardList, FileCheck2, HeartHandshake, LockKeyhole, ShieldCheck } from 'lucide-react'
+import { PolicyLinks } from '../../components/ui/PolicyLinks'
+import { OnboardingNavigation } from '../../components/onboarding/OnboardingNavigation'
+import { useOnboarding } from '../../hooks/useOnboarding'
 
 export function ConsentPage() {
-  const { record, selectConsent, acceptConsent, backToAbout } = useOnboarding();
+  const { record, selectConsent, acceptConsent, backToAbout, busy, error } = useOnboarding()
   return (
     <form
       className="consent-form"
       aria-labelledby="consent-title"
       onSubmit={(event) => {
-        event.preventDefault();
-        acceptConsent();
+        event.preventDefault()
+        acceptConsent()
       }}
     >
       <div className="onboarding-heading onboarding-heading--icon">
@@ -24,34 +25,37 @@ export function ConsentPage() {
         <section>
           <h2><ClipboardList aria-hidden="true" />What this preview asks for</h2>
           <p>
-            Your parent/guardian relationship, regular interaction with the
-            child, and age in months. The later assessment accepts behavior
-            choices and written observations. Please use fictional details.
+            Your information-chat messages and AuRA replies are saved with your
+            account. Setup also stores your guardian relationship, regular
+            interaction, and child age in months. Assessments store choices and
+            written observations. Please use fictional child details.
           </p>
         </section>
         <section>
           <h2><LockKeyhole aria-hidden="true" />What happens to your information</h2>
           <p>
-            Parent and child details and assessment responses stay in temporary
-            browser memory. The authentication API stores your account email,
-            a password hash, and a session record. Refreshing resets demo progress.
+            AuRA saves your account email, consent record, guardian relationship,
+            regular interaction confirmation, child age in months, chat messages,
+            and assessment language, choices, scores, original follow-up text,
+            and timestamps in the project&#39;s PostgreSQL database.
           </p>
         </section>
         <section>
           <h2><FileCheck2 aria-hidden="true" />Before a real service is available</h2>
           <p>
-            Approved privacy wording must identify authorized access, collection
-            purposes, retention, and deletion/contact arrangements. Those
-            production practices are not implemented or promised by this
-            preview.
+            No automatic deletion schedule is set. You can permanently delete
+            each chat or assessment in History. Account and onboarding deletion
+            is not self-service yet. Database backup retention is undefined;
+            project database operators can access these records.
           </p>
         </section>
         <section>
           <h2><HeartHandshake aria-hidden="true" />Taking part is voluntary</h2>
           <p>
-            You can decline or exit. This agreement does not authorize research
-            use or model training. Any optional research consent would be
-            requested separately.
+            This consent covers the development demonstration only. It does not
+            authorize research use or model training. Use fictional child
+            information. Chat replies use the local knowledge content; no NLP or
+            ML analysis runs on your messages.
           </p>
         </section>
       </div>
@@ -63,15 +67,15 @@ export function ConsentPage() {
           onChange={(event) => selectConsent(event.target.checked)}
         />
         <span>
-          I have read this notice and agree to continue with the frontend
-          demonstration using fictional information.
+          I have read this data storage notice and agree to save fictional
+          demonstration chat messages and assessment answers to my AuRA account.
         </span>
       </label>
       <OnboardingNavigation
         onBack={backToAbout}
-        disabled={!record.consentSelected}
+        disabled={!record.consentSelected || busy}
       />
+      {error && <p className="entry-error" role="alert">{error}</p>}
     </form>
-  );
+  )
 }
-import { ClipboardList, FileCheck2, HeartHandshake, LockKeyhole, ShieldCheck } from "lucide-react";

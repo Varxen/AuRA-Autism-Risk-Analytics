@@ -1,4 +1,4 @@
-# AuRA authentication contract
+# AuRA authentication, onboarding and assessment contract
 
 Implemented: email/password authentication with PostgreSQL-backed opaque cookie sessions. Base path: `/api/v1/auth`. Public JSON uses camelCase. The React development frontend calls this API through Vite's same-origin `/api` proxy.
 
@@ -48,6 +48,60 @@ POST `/logout` returns 204, revokes the database session and clears its cookie. 
 
 Mutations require an exact configured frontend Origin or the API's own origin after trusted-host checks. Missing/null/untrusted Origin is rejected. Browser fetch supplies Origin; command-line clients must set it explicitly. Swagger's same-origin UI can also exercise the endpoints.
 
+## Onboarding
+
+Base path: `/api/v1/onboarding`. Every endpoint requires the HttpOnly session cookie. The server derives account ownership from that session; requests cannot supply a user ID, consent version, consent timestamp, eligibility flag, or completion flag.
+
+| Method and path | Behavior |
+|---|---|
+| GET `/` | Load account's state; creates an empty record on first load |
+| POST `/about` | Acknowledge the About Pre-assessment screen |
+| POST `/consent` | Record acceptance after About; server sets version, scope, and UTC time |
+| PUT `/eligibility` | Save relationship, regular interaction and age after accepted consent |
+| POST `/complete` | Mark setup complete only when all server checks pass |
+
+Responses include `requiredStep`: `about`, `consent`, `parent-child`, `complete`, or `null`. The current notice version is `aura-chat-assessment-storage-v1`, scope is `chat-assessment-storage-demo`. The server checks sequence, age 12-36 months, allowed guardian relationship, regular interaction, and accepted current consent. Each write locks the account's onboarding row. A stale or out-of-order request returns 409. Invalid fields return 422.
+
+Persisted onboarding fields are guardian relationship, regular interaction, child age in months, About acknowledgement, consent version/scope/time and completion time. No child name is collected. This is a demonstration consent record, not an approved production Privacy Policy or research consent.
+
+## Assessments
+
+Base path: `/api/v1/assessments`. Every request requires the HttpOnly session cookie. Reads and writes scope by the session's user ID. Creating a session requires completed current-version onboarding consent and eligibility.
+
+| Method and path | Behavior |
+|---|---|
+| GET `/` | List only this account's sessions, answer records and question snapshots |
+| POST `/` | Create a session using approved version `revised-pilot-testing-2-v1` and language `en` or `fil` |
+| GET `/{id}` | Restore the owned session and its immutable wording snapshot |
+| PUT `/{id}/answers/{question_id}` | Submit one choice with its follow-up; stage 2.3 accepts and saves the pair or returns a retry action |
+| POST `/{id}/advance` | Require an accepted answer/follow-up pair before advancing; complete after item 13 |
+| POST `/{id}/processing` | Run saved Logistic Regression, Random Forest, and XGBoost artifacts with equal-weight soft voting; requires all 13 accepted answers and follow-ups |
+| GET `/{id}/processing` | Read persisted model status and category/probabilities |
+| POST `/{id}/processing/retry` | Retry failed model inference |
+| DELETE `/{id}` | Permanently delete only the owned session and its answers |
+
+The server validates item ID, option ID, sequence and 4,000-character follow-up limit. Stage 2.3 uses the selected question's bilingual lexicon entry and conservative rules. `consistency` returns `consistent`/`continue`, `contradiction` or `unclear` with `repeat_frequency_and_follow_up`, or `stop_unresolved` after two clarification retries. A non-consistent pair is not saved; the session persists retry count and unresolved state. Only accepted pairs can advance. Scoring is Q1-Q9 Always/Sometimes/Never = 0/1/2 and Q10-Q13 Yes/Sometimes/No = 2/1/0. The server stores the selected option, calculated item score and unmodified accepted parent text. It never accepts a client-supplied score. Identical writes are safe; conflicting changes return 409. A response lost after a committed write can be recovered with GET `/{id}`.
+
+Each session stores language, questionnaire version and full question/option snapshot. PostgreSQL keeps the session, answers and snapshots until the user deletes the assessment in History. Accepted structured scores form the only model feature vector; parent follow-up text is stored unchanged but is not sent to these models. Processing loads the three saved Stage 3.1 artifacts and applies Stage 3.2 equal-weight soft voting. Jobs persist the returned category, model support probabilities, model version and generation time. Low/Moderate/High are provisional score-derived categories, not ASD probabilities or a diagnosis. Legacy preview records remain ineligible. Processing results and answers are deleted with their assessment. Model dependencies and artifacts must exist in the backend runtime; failed inference can be retried.
+
+## Information chats
+
+Base path: `/api/v1/chats`. Requests require an authenticated session and current onboarding storage consent for writes. All reads, writes and deletes are scoped to the signed-in account.
+
+| Method and path | Behavior |
+|---|---|
+| GET `/` | List this account's chat transcripts for History |
+| POST `/` | Create a chat with the fixed AuRA welcome message and actions |
+| GET `/{id}` | Restore the owned transcript in sequence order |
+| POST `/{id}/turns` | Save one parent message and its fixed knowledge-base reply messages atomically |
+| DELETE `/{id}` | Permanently delete the owned conversation and all its messages |
+
+Chat writes accept 1-2 assistant reply messages per turn, enforce the 4,000-character message limit, and use a client turn ID for safe retry. A conflicting replay returns 409. Conversation history is capped at 500 messages; start a new chat to continue after the cap. The frontend's fixed local knowledge-base adapter still selects educational replies; this API stores and restores them but does not run NLP or generate answers.
+
+PostgreSQL retains chats and assessments until deleted in History. No automatic expiry or backup retention is configured. Account/onboarding deletion remains an operator action. The development privacy notice covers chat storage and requires users to use fictional child details.
+
+The development privacy notice describes stored fields, purpose, local database access, retention and deletion. Assessment deletion is self-service. Account/onboarding deletion remains an operator action; backup retention is undefined. The notice is a development draft, not legally or clinically approved policy. Use fictional child information.
+
 ## Error contract
 
 ```json
@@ -63,8 +117,8 @@ Mutations require an exact configured frontend Origin or the API's own origin af
 |---|---|
 | 401 | Invalid credentials or missing/expired/revoked session |
 | 403 | Missing/untrusted Origin or invalid CSRF |
-| 409 | Account registration unavailable |
-| 413 | Request body exceeds 16 KiB |
+| 409 | Duplicate registration, invalid onboarding step, or assessment state conflict |
+| 413 | Request body exceeds the endpoint limit (16 KiB for credential endpoints; 64 KiB elsewhere) |
 | 415 | Credential payload is not JSON |
 | 422 | Missing/invalid/extra fields or malformed JSON |
 | 429 | Credential rate limit; respect Retry-After |
@@ -74,8 +128,8 @@ Mutations require an exact configured frontend Origin or the API's own origin af
 
 ## Frontend integration
 
-The React client uses credentials: include for register, login, session restore and logout. Vite proxies `/api` to the local backend on port 8000. A production host will need equivalent routing. The CSRF value stays in React memory and is obtained again through GET /session after refresh. Authentication tokens are never copied to localStorage/sessionStorage or URLs.
+The React client uses credentials: include for register, login, session restore, onboarding, assessments and logout. Vite proxies `/api` to the local backend on port 8001. A production host will need equivalent routing. The CSRF value stays in React memory and is obtained again through GET /session after refresh. Authentication tokens are never copied to localStorage/sessionStorage or URLs.
 
-Frontend sign out calls backend logout and clears temporary onboarding, chat and assessment state. Registration/login use actual backend identity. Onboarding currently has no server-owned status, so a successful login or restored session starts an incomplete in-memory setup. Refreshing resets that setup and screening history. Backend onboarding and consent endpoints are needed before returning users can resume validated setup across refreshes.
+Frontend sign out calls backend logout and clears client-side cache. Registration/login use actual backend identity. Onboarding, chat transcripts, assessment sessions and model-processing results load from PostgreSQL, so progress survives refresh and backend restarts. Inference runs synchronously in the API request; no background worker is configured.
 
-PostgreSQL currently stores users and authentication sessions only. Screening responses, onboarding evidence, email verification/reset, approved policies and production deployment remain separate work. See [backend setup](../README.md).
+PostgreSQL stores users, authentication sessions, onboarding evidence, chat transcripts, assessment sessions, answer History and model results. NLP follow-up interpretation, email verification/reset, approved production policies and deployment remain separate work. See [backend setup](../README.md).

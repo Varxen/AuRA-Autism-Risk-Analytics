@@ -5,7 +5,7 @@ import { supportQuestions } from '../data/supportContent'
 
 export function SupportPage() {
   return (
-    <ContentPage eyebrow="Here to help you find your way" title="Support" description="Quick answers for using the AuRA frontend demo.">
+    <ContentPage eyebrow="Here to help you find your way" title="Support" description="Quick answers for using AuRA's information chat and pre-assessment.">
       <div className="content-grid">
         <article className="content-card">
           <MessageCircle className="content-card-icon" size={25} aria-hidden="true" />
@@ -32,7 +32,7 @@ export function SupportPage() {
           ))}
         </div>
       </section>
-      <p className="content-footnote">For concerns about your child’s development, speak with a qualified healthcare professional. This demo provides no clinical assessment or medical consultation.</p>
+      <p className="content-footnote">For concerns about your child’s development, speak with a qualified healthcare professional. AuRA’s model category is not a diagnosis or medical consultation.</p>
     </ContentPage>
   )
 }

@@ -77,7 +77,7 @@ export function LoginCard({ mode }: { mode: 'login' | 'register' }) {
       <div className="login-demo-note">
         Your privacy matters. Learn about our <PolicyLinks />.
         <span className="login-demo-boundary">
-          For development, use a test email. Your account is stored; onboarding and screening responses reset on refresh.
+          For development, use a test email and fictional child information. Assessments are stored in the project database until deleted from History.
         </span>
       </div>
       <div className="login-mode-switch">

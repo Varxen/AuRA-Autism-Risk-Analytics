@@ -1,6 +1,7 @@
 """ASGI application factory. Run with: uvicorn aura_api.main:create_app --factory --reload."""
 
 from contextlib import asynccontextmanager
+import logging
 
 from fastapi import FastAPI, Request
 from sqlalchemy.exc import SQLAlchemyError
@@ -16,6 +17,9 @@ from .config import Settings
 from .database import Database
 from .errors import APIError
 from .middleware import APIBoundaryMiddleware
+from .assessments import router as assessments_router
+from .chats import router as chats_router
+from .onboarding import router as onboarding_router
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -27,8 +31,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             database.verify()
         except SQLAlchemyError:
+            logging.getLogger(__name__).exception(
+                "Database verification failed; check PostgreSQL connectivity and migration state."
+            )
             database.engine.dispose()
-            raise RuntimeError("PostgreSQL is unavailable or auth migrations are missing.") from None
+            raise RuntimeError("PostgreSQL is unavailable or required migrations are missing.") from None
         try:
             yield
         finally:
@@ -38,7 +45,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         lifespan=lifespan,
         title="AuRA API",
         version="0.1.0",
-        description="Local development authentication API. No screening or model processing is connected.",
+        description="Local development API for authentication, onboarding, educational chat, and assessment inference using the saved Stage 3.1 models with Stage 3.2 soft voting.",
     )
     app.state.settings = settings
     app.state.database = database
@@ -53,7 +60,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         CORSMiddleware,
         allow_origins=list(settings.frontend_origins),
         allow_credentials=True,
-        allow_methods=["GET", "POST"],
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
         allow_headers=["Content-Type", "X-CSRF-Token"],
     )
 
@@ -107,5 +114,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return {"status": "ok", "environment": settings.environment, "storage": "postgresql"}
 
     app.include_router(auth_router)
+    app.include_router(onboarding_router)
+    app.include_router(assessments_router)
+    app.include_router(chats_router)
     return app
 

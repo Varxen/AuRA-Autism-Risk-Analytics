@@ -6,7 +6,7 @@ import { OnboardingNavigation } from '../../components/onboarding/OnboardingNavi
 import type { EligibilityErrors } from '../../types/onboarding.types'
 
 export function ParentChildInfoPage() {
-  const { record, updateEligibility, submitEligibility, backToConsent } =
+  const { record, updateEligibility, submitEligibility, backToConsent, busy, error } =
     useOnboarding()
   const [errors, setErrors] = useState<EligibilityErrors>({})
   const form = useRef<HTMLFormElement>(null)
@@ -31,7 +31,7 @@ export function ParentChildInfoPage() {
         <span className="onboarding-heading-icon" aria-hidden="true"><UsersRound /></span>
         <div>
           <h1 id="parent-child-title">A little about you and your child.</h1>
-          <p>A few details to check if this demonstration is right for you.</p>
+          <p>A few details to check whether this pre-assessment is right for you.</p>
         </div>
       </div>
       <div className="eligibility-fields">
@@ -143,11 +143,12 @@ export function ParentChildInfoPage() {
           <strong>Only the essentials</strong>
           <p>
             No child name, address, medical records, or diagnosis is needed. These
-            demo details are kept separately from assessment answers.
+            these details are saved to your account and kept separate from assessment answers.
           </p>
         </div>
       </div>
-      <OnboardingNavigation onBack={backToConsent} />
+      {error && <p className="entry-error" role="alert">{error}</p>}
+      <OnboardingNavigation onBack={backToConsent} disabled={busy} />
     </form>
   )
 }

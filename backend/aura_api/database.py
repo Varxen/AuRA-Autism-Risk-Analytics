@@ -22,8 +22,23 @@ class Database:
         self.sessions = sessionmaker(self.engine, expire_on_commit=False)
 
     def verify(self) -> None:
-        from .auth.store import SessionRecord, UserRecord
+        from .auth.store import (
+            AssessmentAnswerRecord,
+            AssessmentProcessingJobRecord,
+            AssessmentRecord,
+            ChatConversationRecord,
+            ChatMessageRecord,
+            OnboardingRecord,
+            SessionRecord,
+            UserRecord,
+        )
 
         with self.engine.connect() as connection:
             connection.execute(select(UserRecord).limit(0))
             connection.execute(select(SessionRecord).limit(0))
+            connection.execute(select(OnboardingRecord).limit(0))
+            connection.execute(select(AssessmentRecord).limit(0))
+            connection.execute(select(AssessmentAnswerRecord).limit(0))
+            connection.execute(select(AssessmentProcessingJobRecord).limit(0))
+            connection.execute(select(ChatConversationRecord).limit(0))
+            connection.execute(select(ChatMessageRecord).limit(0))

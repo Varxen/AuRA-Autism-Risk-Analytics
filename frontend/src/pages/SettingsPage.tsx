@@ -18,15 +18,19 @@ export function SettingsPage() {
 
   return (
     <ContentPage eyebrow="Your AuRA experience" title="Settings" description="See your account and current session information.">
-      <section className="content-card" aria-labelledby="session-settings-title">
+      <section className="content-card" id="account-settings" aria-labelledby="session-settings-title">
         <h3 id="session-settings-title">Current account</h3>
         <dl className="settings-details">
           <div><dt>Email</dt><dd>{state.identity?.email}</dd></div>
           <div><dt>Email verification</dt><dd>{state.identity?.emailVerified ? 'Verified' : 'Not available yet'}</dd></div>
           <div><dt>Session history</dt><dd>{chatCount} information {chatCount === 1 ? 'chat' : 'chats'} · {assessmentCount} {assessmentCount === 1 ? 'assessment' : 'assessments'}</dd></div>
-          <div><dt>Screening storage</dt><dd>Temporary memory only</dd></div>
+          <div><dt>Chat &amp; assessment storage</dt><dd>Saved to AuRA development PostgreSQL</dd></div>
         </dl>
         <Link to="/history" className="content-link">Open session history <ArrowUpRight size={17} aria-hidden="true" /></Link>
+      </section>
+      <section className="content-card content-section" id="profile-settings" aria-labelledby="profile-settings-title">
+        <h3 id="profile-settings-title">Profile settings</h3>
+        <p>Profile details and profile editing are under development. Your account currently uses your email address.</p>
       </section>
       <div className="content-grid content-section">
         <section className="content-card" aria-labelledby="language-settings-title">
@@ -43,12 +47,12 @@ export function SettingsPage() {
       <section className="content-card content-section" aria-labelledby="privacy-settings-title">
         <ShieldCheck className="content-card-icon" size={25} aria-hidden="true" />
         <h3 id="privacy-settings-title">Privacy &amp; your data</h3>
-        <p>Account credentials use the authentication API. Chat and assessment responses are not saved to the backend or browser storage. Refreshing or signing out clears them. Use fictional screening details.</p>
+        <p>Account, consent, eligibility, information chats and assessment answers are saved in the project's PostgreSQL database. Delete chats or assessments in History. No automatic deletion schedule is set; use fictional child information.</p>
         <div className="content-policy"><PolicyLinks /></div>
-        <p className="content-footnote">Account editing, email verification, data export and deletion requests need additional backend services and approved policies.</p>
+        <p className="content-footnote">Account and onboarding deletion are not self-service yet. This development notice is not an approved production Privacy Policy.</p>
       </section>
       <section className="content-card content-section settings-signout" aria-labelledby="signout-title">
-        <div><h3 id="signout-title">Sign out</h3><p>Signing out ends your account session and clears temporary setup, chat and assessment data from this tab.</p></div>
+        <div><h3 id="signout-title">Sign out</h3><p>Signing out ends your account session and clears this tab’s cached data. Saved chats and assessments remain in History.</p></div>
         <Button onClick={() => void exit()} disabled={busy}><LogOut size={17} aria-hidden="true" />Sign out</Button>
         {error && <p className="error-message" role="alert">{error}</p>}
       </section>

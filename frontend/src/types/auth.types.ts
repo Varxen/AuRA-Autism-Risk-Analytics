@@ -33,6 +33,7 @@ export interface AuthDemoState {
 
 export type AuthDemoAction =
   | { type: 'SIGNED_IN'; result: AuthSignInResult }
+  | { type: 'ONBOARDING_HYDRATED'; onboarding: DemoOnboarding }
   | { type: 'EXIT' }
   | { type: 'SPLASH_FINISHED' }
   | { type: 'ABOUT_ACKNOWLEDGED' }

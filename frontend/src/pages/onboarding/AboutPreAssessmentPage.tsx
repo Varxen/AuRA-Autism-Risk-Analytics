@@ -6,7 +6,7 @@ import { OnboardingNavigation } from "../../components/onboarding/OnboardingNavi
 import { useOnboarding } from "../../hooks/useOnboarding";
 
 export function AboutPreAssessmentPage() {
-  const { continueAbout, exit } = useOnboarding();
+  const { continueAbout, exit, busy, error } = useOnboarding();
   return (
     <section aria-labelledby="about-assessment-title">
       <div className="onboarding-heading">
@@ -43,8 +43,9 @@ export function AboutPreAssessmentPage() {
                 <h2>Your words add context</h2>
                 <p>
                   Future rule-based NLP and ML may support Low / Moderate / High
-                  pre-screening categories. Those services are not connected in
-                  this demo.
+                  pre-screening categories. Categories and model support are
+                  based on preliminary score-derived labels, not ASD risk or
+                  diagnosis. The follow-up explanation is not a model feature.
                 </p>
               </div>
             </li>
@@ -58,7 +59,8 @@ export function AboutPreAssessmentPage() {
           />
         </AnimatedAuraAsset>
       </div>
-      <OnboardingNavigation onBack={exit} onNext={continueAbout} />
+      {error && <p className="entry-error" role="alert">{error}</p>}
+      <OnboardingNavigation onBack={exit} onNext={continueAbout} disabled={busy} />
     </section>
   );
 }

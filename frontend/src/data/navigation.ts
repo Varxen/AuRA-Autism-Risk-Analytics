@@ -1,7 +1,6 @@
 import {
   ClipboardList,
   Headphones,
-  History,
   LibraryBig,
   MessageCircle,
   Settings,
@@ -11,7 +10,6 @@ export const navigation = [
   { label: 'Chat', path: '/chat', icon: MessageCircle },
   { label: 'Assessments', path: '/assessment', icon: ClipboardList },
   { label: 'Resources', path: '/resources', icon: LibraryBig },
-  { label: 'History', path: '/history', icon: History },
   { label: 'Support', path: '/support', icon: Headphones },
   { label: 'Settings', path: '/settings', icon: Settings },
 ]

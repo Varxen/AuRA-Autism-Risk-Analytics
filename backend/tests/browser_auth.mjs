@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { chromium } from '../../frontend/node_modules/playwright/index.mjs'
 
 const frontendURL = process.env.AURA_TEST_URL ?? 'http://127.0.0.1:5173'
-const backendURL = process.env.AURA_BACKEND_TEST_URL ?? 'http://127.0.0.1:8000'
+const backendURL = process.env.AURA_BACKEND_TEST_URL ?? 'http://127.0.0.1:8001'
 const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined })
 const page = await browser.newPage({ reducedMotion: 'reduce' })
 const errors = []

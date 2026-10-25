@@ -4,7 +4,15 @@ export interface HistorySessionEntry {
   title: string
   summary: string
   details: string
-  status: 'Ready to continue' | 'In progress' | 'Awaiting content' | 'Processing preview' | 'Completed'
+  status: 'Ready to continue' | 'In progress' | 'Awaiting content' | 'Legacy preview · no result' | 'Classified' | 'Completed'
   updatedAt: string
   isDemoPreview: boolean
+  isPinned: boolean
+  isArchived: boolean
+}
+
+export interface SessionMetadataUpdate {
+  customTitle?: string
+  isPinned?: boolean
+  isArchived?: boolean
 }

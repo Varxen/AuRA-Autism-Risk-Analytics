@@ -1,6 +1,6 @@
 # AuRA (Autism Risk Analytics)
 
-AuRA is an autism education and pre-screening frontend demonstration. The React, TypeScript and Vite application lives in `frontend/`. A separate FastAPI backend provides PostgreSQL-backed authentication and cookie sessions, now connected to the frontend. Onboarding/screening persistence, NLP and ML remain pending.
+AuRA is an autism education and pre-screening research application. The React, TypeScript and Vite frontend lives in `frontend/`. A separate FastAPI backend provides PostgreSQL-backed authentication, onboarding, questionnaire storage and assessment inference using saved LR, RF and XGBoost artifacts with equal-weight soft voting. Output labels remain provisional score-derived categories, not ASD-risk estimates or diagnoses.
 
 ## Repository structure
 
@@ -35,7 +35,7 @@ npm install
 npm run dev
 ```
 
-Run the backend first, then open the URL printed by Vite. Vite proxies `/api` to `127.0.0.1:8000`. On PowerShell installations with script restrictions, use `npm.cmd` instead of `npm`.
+Run the backend first, then open the URL printed by Vite. Vite proxies `/api` to `127.0.0.1:8001`. On PowerShell installations with script restrictions, use `npm.cmd` instead of `npm`.
 
 Run checks from `frontend/`:
 
@@ -58,15 +58,15 @@ The current authentication browser check requires Vite, the backend and Playwrig
 - [frontend guide](frontend/README.md)
 - [Database development blueprint](documentation/AuRA_Database_Development_Plan.md)
 
-The frontend uses the real authentication API. Chat, assessment and onboarding remain in temporary memory. It does not persist screening records or provide a clinical risk classification.
+The frontend uses real authentication, onboarding, chat and assessment APIs. PostgreSQL stores consent, eligibility, ordered chat transcripts, questionnaire snapshots, structured responses and original follow-up text. History supports resume and deletion. The app does not provide a clinical risk classification.
 
 ## Backend authentication
 
-See [backend setup](backend/README.md) and [the auth API contract](backend/docs/auth-api.md). The local aura_db database contains users and auth_sessions, managed by Alembic migrations. Credentials belong only in ignored backend/.env. Authentication does not yet persist onboarding or screening responses.
+See [backend setup](backend/README.md) and [the API contract](backend/docs/auth-api.md). The local aura_db database stores users, auth_sessions, onboarding_records, assessment_sessions, assessment_answers and model results, managed by Alembic migrations. Credentials belong only in ignored backend/.env. Use fictional child information. Follow-up NLP is not connected; the current classifier uses only 13 structured scores.
 
 From backend/ after configuring PostgreSQL and installing dependencies:
 
 ```powershell
 .\.venv\Scripts\python.exe -m alembic upgrade head
-.\.venv\Scripts\python.exe -m uvicorn aura_api.main:create_app --factory --host 127.0.0.1 --port 8000 --reload --no-access-log
+.\.venv\Scripts\python.exe -m uvicorn aura_api.main:create_app --factory --host 127.0.0.1 --port 8001 --reload --no-access-log
 ```

@@ -13,6 +13,11 @@ dist-ssr
 .vite
 .npm-cache
 *.local
+/tmp/
+~$*.xlsx
+
+# Local workbook may contain raw respondent data
+/documentation/AURA-DATASET - new record.xlsx
 
 # Editor directories and files
 .vscode/*

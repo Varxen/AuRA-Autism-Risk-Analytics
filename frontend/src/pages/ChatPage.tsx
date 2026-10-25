@@ -12,7 +12,7 @@ import type { ChatAction } from '../types/chat.types'
 export function ChatPage() {
   const { chat, assessment } = useAura()
   const navigate = useNavigate()
-  const { conversation, busy, start, send, introduction } = chat
+  const { conversation, busy, loading, start, send, introduction } = chat
   const introducing = introduction.phase !== 'ready'
 
   function actionSelected(action: ChatAction) {
@@ -26,7 +26,7 @@ export function ChatPage() {
   return (
     <div className="conversation-page">
       {!conversation && !busy ? (
-        <ChatWelcome onStart={() => void start()} busy={busy} />
+        <ChatWelcome onStart={() => void start()} busy={busy || loading} />
       ) : (
         <ChatWindow
           scrollKey={`${messages.length}-${busy}-${introduction.phase}-${introduction.characters}`}

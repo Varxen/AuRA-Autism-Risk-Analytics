@@ -13,7 +13,8 @@ export function AssessmentProgress({
   return (
     <div className="assessment-progress">
       <label htmlFor="assessment-progress">
-        <span>{assessmentCopy[language].progress} {current}/{total}</span>
+        <span className="assessment-progress-title">{assessmentCopy[language].progress}</span>
+        <span className="assessment-progress-count">{current}/{total}</span>
         <span className="assessment-language-badge">{language === 'fil' ? 'Tagalog' : 'English'}</span>
       </label>
       <progress id="assessment-progress" value={current} max={total}>

@@ -14,18 +14,58 @@ export interface AssessmentSession {
   questionnaireVersion: string
   status: 'in-progress' | 'awaiting-content' | 'completed'
   currentQuestionIndex: number
+  clarificationAttemptsUsed?: number
+  maxClarificationAttempts?: number
+  consistencyBlocked?: boolean
   answers: AssessmentAnswer[]
   startedAt: string
   completedAt: string | null
   isDemoPreview?: boolean
+  customTitle?: string | null
+  isPinned?: boolean
+  isArchived?: boolean
+  featureVector?: number[] | null
+}
+
+export interface AssessmentConsistencyGate {
+  status: 'consistent' | 'contradiction' | 'unclear'
+  nextAction: 'continue' | 'repeat_frequency_and_follow_up' | 'stop_unresolved'
+  attemptsUsed: number
+  maxAttempts: number
+}
+
+export interface AssessmentAnswerSubmission extends AssessmentSessionRecord {
+  consistency: AssessmentConsistencyGate | null
+}
+
+export interface AssessmentConsistencyAttempt {
+  selectedOptionId: string
+  followUpText: string
 }
 
 export interface AssessmentResult {
   assessmentId: string
-  riskLevel: 'unavailable'
-  modelVersion: null
-  probabilities?: Record<string, number>
+  category: 'Low' | 'Moderate' | 'High'
+  modelVersion: string
+  probabilities: Record<'Low' | 'Moderate' | 'High', number>
   generatedAt: string
+}
+
+export interface AssessmentProcessingJob {
+  id: string
+  assessmentId: string
+  mode: 'model'
+  status: 'running' | 'failed' | 'completed'
+  stageId: string | null
+  stageIndex: number
+  totalStages: number
+  attempt: number
+  startedAt: string
+  updatedAt: string
+  completedAt: string | null
+  failureCode: string | null
+  resultAvailable: boolean
+  result: AssessmentResult | null
 }
 
 export type AssessmentStage =
@@ -39,10 +79,11 @@ export interface AssessmentProcessingStep {
   id: string
   label: string
   description: string
-  durationMs: number
 }
 
 export interface AssessmentSessionRecord {
   session: AssessmentSession
   questions: QuestionnaireQuestion[]
+  processingJob?: AssessmentProcessingJob | null
+  consistency?: AssessmentConsistencyGate | null
 }

@@ -11,10 +11,26 @@ export interface DemoConsent {
   accepted: true
   version: string
   acceptedAt: string
-  scope: 'frontend-demo'
+  scope: 'chat-assessment-storage-demo'
+}
+
+export interface OnboardingApiResponse {
+  aboutAcknowledged: boolean
+  consentAccepted: boolean
+  consentVersion: string | null
+  consentScope: string | null
+  consentAcceptedAt: string | null
+  relationship: GuardianRelationship
+  regularInteraction: boolean
+  ageMonths: number | null
+  eligibilityConfirmed: boolean
+  completedAt: string | null
+  requiredStep: OnboardingStep | null
+  consentVersionCurrent: string
 }
 
 export interface DemoOnboarding {
+  consentVersionCurrent: string
   aboutAcknowledged: boolean
   consentSelected: boolean
   consent: DemoConsent | null

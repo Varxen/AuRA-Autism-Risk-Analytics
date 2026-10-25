@@ -3,7 +3,6 @@ import {
   getQuestionnaireQuestions,
   QUESTIONNAIRE_VERSION,
 } from '../../data/mockQuestions.ts'
-import { assessmentCopy } from '../../data/assessmentCopy.ts'
 import type { AssessmentLanguage } from '../../types/questionnaire.types'
 import type { AssessmentSession } from '../../types/assessment.types'
 import {
@@ -28,6 +27,7 @@ export const mockAssessmentService = {
       questionnaireVersion: QUESTIONNAIRE_VERSION,
       status: 'in-progress',
       currentQuestionIndex: 0,
+      clarificationAttemptsUsed: 0,
       answers: [],
       startedAt: new Date().toISOString(),
       completedAt: null,
@@ -100,39 +100,6 @@ export const mockAssessmentService = {
         status: 'awaiting-content',
       }
     return { ...session, currentQuestionIndex: next }
-  },
-  // Developer preview only: fill missing responses with explicit fictional placeholders.
-  async createProcessingPreview(session?: AssessmentSession | null, language: AssessmentLanguage = 'en'): Promise<AssessmentSession> {
-    const current = session ?? await mockAssessmentService.createSession(language)
-    if (current.questionnaireVersion !== QUESTIONNAIRE_VERSION)
-      throw new Error('This preview requires the current questionnaire version.')
-    if (mockQuestions.some((question) => question.contentStatus !== 'approved'))
-      throw new Error('Preview is unavailable while questionnaire content awaits approval.')
-    await delay()
-    const timestamp = new Date().toISOString()
-    const preview: AssessmentSession = {
-      ...current,
-      isDemoPreview: true,
-      currentQuestionIndex: mockQuestions.length - 1,
-      status: 'completed',
-      completedAt: timestamp,
-      answers: mockQuestions.map((question) => {
-        const existing = current.answers.find((answer) => answer.questionId === question.id)
-        const followUpText = assessmentCopy[current.language].previewResponse(question.questionNumber)
-        return existing
-          ? { ...existing, followUpText: existing.followUpText.trim() ? existing.followUpText : followUpText }
-          : {
-              questionId: question.id,
-              selectedOptionId: 'sometimes',
-              structuredScore: scoreAnswer(question, 'sometimes'),
-              followUpText,
-              answeredAt: timestamp,
-            }
-      }),
-    }
-    if (!canCompleteAssessment(preview, getQuestionnaireQuestions(preview.language)))
-      throw new Error('The preview could not prepare a complete questionnaire.')
-    return preview
   },
   getProgress(session: AssessmentSession) {
     return {

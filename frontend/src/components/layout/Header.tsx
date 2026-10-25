@@ -2,6 +2,7 @@ import { ArrowUpRight, BookOpen, Menu } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAura } from "../../contexts/AppContext";
 import { AuraMascot } from "../branding/AuraMascot";
+import { AssessmentProgress } from "../assessment/AssessmentProgress";
 import { Button } from "../ui/Button";
 import "../../styles/welcome-header.css";
 
@@ -32,7 +33,7 @@ export function Header({ onMenu }: { onMenu: () => void }) {
           <div className="welcome-header-actions">
             <span className="welcome-header-badge">
               <span aria-hidden="true" />
-              Pre-screening demo
+              Model-assisted pre-screening
             </span>
             <button
               type="button"
@@ -53,6 +54,13 @@ export function Header({ onMenu }: { onMenu: () => void }) {
             <h1>AuRA</h1>
             <p>{isAssessment ? (assessment.session?.language === "fil" ? "Paunang pagtatasa" : "Pre-assessment") : "Autism Risk Assessment Assistant"}</p>
           </div>
+          {isAssessment && assessment.session && (
+            <AssessmentProgress
+              current={Math.min(assessment.session.currentQuestionIndex + 1, assessment.questions.length || 13)}
+              total={assessment.questions.length || 13}
+              language={assessment.session.language}
+            />
+          )}
           {!isAssessment && <Button
             className="header-assessment"
             disabled={assessment.busy}

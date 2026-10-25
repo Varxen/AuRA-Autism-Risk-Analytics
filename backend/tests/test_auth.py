@@ -251,10 +251,12 @@ def test_secure_cookie_prefix_and_sessions_survive_backend_restart(make_app):
         assert restarted.post("/api/v1/auth/login", json=CREDS).status_code == 200
 
 
-def test_openapi_marks_password_write_only_and_no_screening_endpoints_exist(client):
+def test_openapi_marks_password_write_only_and_exposes_owned_assessment_storage(client):
     schema = client.get("/openapi.json").json()
     assert schema["components"]["schemas"]["Credentials"]["properties"]["password"]["writeOnly"]
-    assert not any("assessment" in path or "onboarding" in path for path in schema["paths"])
+    assert "/api/v1/assessments" in schema["paths"]
+    assert any("onboarding" in path for path in schema["paths"])
+    assert not any("result" in path or "classification" in path for path in schema["paths"])
     assert client.post("/api/v1/auth/register", json={**CREDS, "consent": True}).status_code == 422
 
 

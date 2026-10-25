@@ -19,6 +19,14 @@ export interface ChatMessage {
 export interface Conversation {
   id: string
   messages: ChatMessage[]
+  customTitle?: string | null
+  isPinned?: boolean
+  isArchived?: boolean
+}
+
+export interface ChatTurn {
+  userMessage: ChatMessage
+  assistantMessages: ChatMessage[]
 }
 
 export interface ChatIntroduction {

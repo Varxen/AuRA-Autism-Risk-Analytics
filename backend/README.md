@@ -1,8 +1,8 @@
 # AuRA backend
 
-FastAPI authentication API for parent/guardian accounts, backed by PostgreSQL. The selected login method is email + password with server-side opaque sessions in HttpOnly cookies.
+FastAPI authentication, onboarding and assessment API for parent/guardian accounts, backed by PostgreSQL. The selected login method is email + password with server-side opaque sessions in HttpOnly cookies.
 
-All backend source, migrations, configuration and tests live here. The React frontend now calls these auth endpoints through the Vite `/api` proxy. Screening, onboarding persistence, NLP and ML endpoints are not implemented.
+All backend source, versioned questionnaire content, migrations, configuration and tests live here. The React frontend calls auth, onboarding and assessment endpoints through the Vite `/api` proxy. Assessment inference loads the saved machine-learning artifacts from `../machine-learning/artifacts/`.
 
 ## Setup and run
 
@@ -28,8 +28,10 @@ Create the empty database first, then run the versioned migration:
 
 ```powershell
 .\.venv\Scripts\python.exe -m alembic upgrade head
-.\.venv\Scripts\python.exe -m uvicorn aura_api.main:create_app --factory --host 127.0.0.1 --port 8000 --reload --no-access-log
+.\.venv\Scripts\python.exe -m uvicorn aura_api.main:create_app --factory --host 127.0.0.1 --port 8001 --reload --no-access-log
 ```
+
+After pulling assessment consistency changes, rerun `alembic upgrade head` before restarting the API. The rule checker imports the shared source in the repository's `machine-learning/` folder.
 
 Linux/macOS uses `.venv/bin/python`. Health is `/api/v1/health`; interactive OpenAPI is `/docs`.
 
@@ -44,14 +46,36 @@ Startup verifies PostgreSQL and required tables. It does not create tables autom
 | POST | `/api/v1/auth/login` | Verify credentials and rotate current browser session |
 | GET | `/api/v1/auth/session` | Restore identity, CSRF value and session expiry |
 | POST | `/api/v1/auth/logout` | Validate CSRF, revoke the database session and clear its cookie |
+| GET | `/api/v1/onboarding` | Load authenticated account's persisted onboarding state |
+| POST | `/api/v1/onboarding/about` | Record review of pre-assessment information |
+| POST | `/api/v1/onboarding/consent` | Record acceptance of the server-versioned demonstration notice |
+| PUT | `/api/v1/onboarding/eligibility` | Validate and save guardian relationship, regular interaction and age (12-36 months) |
+| POST | `/api/v1/onboarding/complete` | Complete setup only after server-validated consent and eligibility |
+| GET | `/api/v1/assessments` | List only the signed-in user's saved sessions and answer history |
+| POST | `/api/v1/assessments` | Start versioned English/Filipino session after current consent and eligibility |
+| GET | `/api/v1/assessments/{id}` | Restore a saved session and its immutable questionnaire wording snapshot |
+| PUT | `/api/v1/assessments/{id}/answers/{question_id}` | Check the structured option against its follow-up with pipeline stage 2.3; save both only when consistent, otherwise request both again |
+| POST | `/api/v1/assessments/{id}/advance` | Enforce the answer/follow-up sequence and progress or complete the session |
+| POST | `/api/v1/assessments/{id}/processing` | Classify the accepted 13-value vector using saved models and equal-weight soft voting |
+| GET | `/api/v1/assessments/{id}/processing` | Read persisted classification result and job status |
+| POST | `/api/v1/assessments/{id}/processing/retry` | Retry a failed model inference |
+| DELETE | `/api/v1/assessments/{id}` | Permanently delete only the owner's assessment and answer rows |
+| GET | `/api/v1/chats` | List only the signed-in user's chat transcripts |
+| POST | `/api/v1/chats` | Create a saved chat with AuRA's initial greeting and actions |
+| GET | `/api/v1/chats/{id}` | Restore an owned transcript in message order |
+| POST | `/api/v1/chats/{id}/turns` | Atomically save a user message and its fixed assistant replies |
+| DELETE | `/api/v1/chats/{id}` | Permanently delete only the owner's chat and messages |
 
-See [the HTTP contract](docs/auth-api.md). Authentication alone does not establish screening consent, age eligibility or completed onboarding. Client-supplied roles/consent/setup flags are rejected.
+See [the HTTP contract](docs/auth-api.md). Authentication alone does not establish screening consent, age eligibility or completed onboarding. Consent version, scope, acceptance time, eligibility, and setup completion are stored in a user-owned record. The server enforces step order and current consent version; client-supplied setup flags are rejected.
 
 ## Security and persistence
 
 - Passwords: 15-128 characters; no composition rule or trimming; whitespace-only values rejected. Standard-library scrypt uses N=32768, r=8, p=3, a 16-byte random salt and a 64-byte derived key.
 - Email: normalized ASCII mailbox with lowercase matching; ownership verification is not connected. Responses explicitly return `emailVerified: false`.
 - `users` stores identity and password hashes. PostgreSQL enforces unique normalized email, including concurrent registrations.
+- `onboarding_records` has one account-owned row for pre-assessment acknowledgement, consent evidence, minimal eligibility fields, and completion time. It stores no child name. Deleting the account cascades to this record.
+- `assessment_sessions` stores owner, language, questionnaire version, progress, clarification retry count, timestamps, legacy preview marker and full wording/options snapshot. `assessment_answers` stores one server-scored selected option and verbatim follow-up per item after stage 2.3 accepts the pair. `assessment_processing_jobs` stores status, retry attempt and the score-derived model category/probabilities; assessment deletion cascades to all three.
+- `chat_conversations` stores account-owned chats. `chat_messages` stores ordered user/assistant messages, fixed action buttons, knowledge sources and timestamps. Ownership is checked on reads and mutations; deleting a chat cascades to its messages.
 - `auth_sessions` stores a SHA-256 token digest, account foreign key, CSRF value and timestamps. Raw authentication tokens are never stored in the database or returned in JSON.
 - Cookies: host-only, Path=/, HttpOnly, SameSite=Lax. Local HTTP uses `aura_session`. Secure-cookie mode uses `__Host-aura_session` and requires HTTPS.
 - Default expiry: eight hours absolute and thirty minutes idle. Successful session reads renew idle activity within the absolute limit. Login rotates the current browser token; logout revokes it server-side. Other browsers have independent sessions.
@@ -61,7 +85,7 @@ See [the HTTP contract](docs/auth-api.md). Authentication alone does not establi
 
 Use matching hostnames for Vite and the API, for example both `127.0.0.1`, so cookie same-site rules work across ports. Never copy authentication tokens to localStorage/sessionStorage.
 
-Accounts and unexpired sessions survive API restarts. A database outage returns safe errors rather than changing to mock authentication. Database backups and approved retention/deletion procedures remain deployment work. The local postgres administrator connection is for development; a limited application role is required before production.
+Accounts, onboarding state, chats, assessments, answers, model results and unexpired sessions survive API restarts. Processing loads the three saved Stage 3.1 artifacts and applies the Stage 3.2 equal-weight mean of class probabilities. Accepted structured scores are the only model features; follow-up text remains stored but is not sent to the classifier. Low/Moderate/High labels and probabilities are score-derived and are not ASD-risk estimates or diagnoses. Install backend model dependencies and run `python -m alembic upgrade head` after pulling this change. No automatic deletion schedule or backup retention is configured. Chat and assessment deletion is available in History; account/onboarding deletion remains an operator action. Use fictional child information. The local postgres administrator connection is for development; a limited application role and reviewed privacy/deletion procedures are required before production.
 
 ## Checks
 
@@ -78,7 +102,7 @@ With Vite and Uvicorn running, run from repository root:
 
 ```powershell
 $env:AURA_TEST_URL='http://127.0.0.1:5173'
-$env:AURA_BACKEND_TEST_URL='http://127.0.0.1:8000'
+$env:AURA_BACKEND_TEST_URL='http://127.0.0.1:8001'
 node backend/tests/browser_auth.mjs
 ```
 
@@ -89,6 +113,9 @@ Set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH when using an existing browser. This smo
 ```text
 aura_api/
   main.py          App factory and safe public errors
+  onboarding.py    Account-owned onboarding and consent API
+  assessments.py   Owned assessment storage, sequence validation and History API
+  questionnaire.py Server-owned bilingual wording, versions and scoring
   config.py        Environment, PostgreSQL and session settings
   database.py      Engine, transactions and schema availability checks
   middleware.py    Origin, JSON/body-size and cache boundaries
@@ -97,11 +124,11 @@ aura_api/
     schemas.py     Request/public response models
     security.py    Password hashing and rate limits
     service.py     Credential/session lifecycle
-    store.py       SQLAlchemy user/session models
-migrations/        Alembic revisions
+    store.py       SQLAlchemy account/session/onboarding/assessment models
+migrations/        Alembic revisions 20261023_01 through 20261025_05
 alembic.ini
 tests/             PostgreSQL, migration and browser tests
 docs/auth-api.md
 ```
 
-Pending: server-owned onboarding/consent/eligibility, email verification/reset, screening/history persistence, production privacy/deletion policies, distributed throttling and production deployment. PostgreSQL currently stores authentication records only, not parent/child screening responses.
+Pending: email verification/reset, Phase 4/5 NLP and result-template decisions, approved production privacy/deletion policy, self-service account deletion, distributed throttling and production deployment. PostgreSQL stores account-owned chat transcripts, assessment answers and provisional model classifications. Apply the latest Alembic migration before starting the backend.

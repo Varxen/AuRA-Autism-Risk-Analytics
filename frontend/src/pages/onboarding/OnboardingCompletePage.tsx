@@ -6,7 +6,7 @@ import { Button } from "../../components/ui/Button";
 import { useOnboarding } from "../../hooks/useOnboarding";
 
 export function OnboardingCompletePage() {
-  const { complete, backToEligibility } = useOnboarding();
+  const { complete, backToEligibility, busy, error } = useOnboarding();
   return (
     <section className="onboarding-complete" aria-labelledby="complete-title">
       <AuraGreetingBubble
@@ -22,7 +22,8 @@ export function OnboardingCompletePage() {
         and begin the pre-assessment whenever you choose.
       </p>
       <br />
-      <Button variant="primary" className="entry-primary" onClick={complete}>
+      {error && <p className="entry-error" role="alert">{error}</p>}
+      <Button variant="primary" className="entry-primary" onClick={complete} disabled={busy}>
         Continue to AuRA
         <ArrowRight size={18} aria-hidden="true" />
       </Button>

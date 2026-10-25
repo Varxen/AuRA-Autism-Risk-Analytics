@@ -8,7 +8,8 @@ from .config import Settings
 
 
 class APIBoundaryMiddleware:
-    MAX_BODY_BYTES = 16_384
+    MAX_BODY_BYTES = 65_536
+    MAX_CREDENTIAL_BODY_BYTES = 16_384
 
     def __init__(self, app: ASGIApp, settings: Settings):
         self.app = app
@@ -44,6 +45,7 @@ class APIBoundaryMiddleware:
         credential_path = scope["path"] in {
             "/api/v1/auth/register", "/api/v1/auth/login"
         }
+        max_body_bytes = self.MAX_CREDENTIAL_BODY_BYTES if credential_path else self.MAX_BODY_BYTES
         content_type = headers.get("content-type", "").split(";", 1)[0].strip().lower()
         if credential_path and content_type != "application/json":
             await reject(415, "json_required", "Send credentials as application/json.")
@@ -56,7 +58,7 @@ class APIBoundaryMiddleware:
             if message["type"] != "http.request":
                 continue
             chunk = message.get("body", b"")
-            if len(body) + len(chunk) > self.MAX_BODY_BYTES:
+            if len(body) + len(chunk) > max_body_bytes:
                 await reject(413, "request_too_large", "The request body is too large.")
                 return
             body.extend(chunk)

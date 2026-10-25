@@ -19,12 +19,14 @@ export function getHistoryEntries(
     return {
       id: conversation.id,
       kind: 'chat',
-      title: firstUser ? excerpt(firstUser.content, 68) : 'ASD information chat',
+      title: conversation.customTitle ?? (firstUser ? excerpt(firstUser.content, 68) : 'ASD information chat'),
       summary: excerpt(lastMessage?.content ?? '', 150),
       details: `${conversation.messages.length} messages`,
       status: 'Ready to continue',
       updatedAt: lastMessage?.timestamp ?? '',
       isDemoPreview: false,
+      isPinned: Boolean(conversation.isPinned),
+      isArchived: Boolean(conversation.isArchived),
     }
   })
   const sessions = assessments.map((session): HistorySessionEntry => {
@@ -33,16 +35,18 @@ export function getHistoryEntries(
     return {
       id: session.id,
       kind: 'assessment',
-      title: `Pre-assessment \u00b7 ${language}`,
+      title: session.customTitle ?? `Pre-assessment \u00b7 ${language}`,
       summary: session.status === 'completed'
         ? 'Your questionnaire and conversation are available to review.'
         : 'Continue from your saved question and follow-up conversation.',
       details: `Question ${Math.min(session.currentQuestionIndex + 1, QUESTION_COUNT)} of ${QUESTION_COUNT} \u00b7 ${explanations}/${QUESTION_COUNT} explanations`,
       status: session.status === 'completed'
-        ? (completedProcessingIds.includes(session.id) ? 'Completed' : 'Processing preview')
+        ? (session.isDemoPreview ? 'Legacy preview · no result' : completedProcessingIds.includes(session.id) ? 'Classified' : 'Completed')
         : session.status === 'awaiting-content' ? 'Awaiting content' : 'In progress',
       updatedAt: session.completedAt ?? session.answers.at(-1)?.answeredAt ?? session.startedAt,
       isDemoPreview: Boolean(session.isDemoPreview),
+      isPinned: Boolean(session.isPinned),
+      isArchived: Boolean(session.isArchived),
     }
   })
   return [...chats, ...sessions].sort((left, right) => (Date.parse(right.updatedAt) || 0) - (Date.parse(left.updatedAt) || 0))

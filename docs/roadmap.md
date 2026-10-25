@@ -1,6 +1,6 @@
 # AuRA development roadmap
 
-Last reviewed: 2026-10-23
+Last reviewed: 2026-10-25
 
 This is the current completion roadmap. It distinguishes working frontend demonstrations from production functionality. The database blueprint remains in [AuRA_Database_Development_Plan.md](../documentation/AuRA_Database_Development_Plan.md); its schemas and technical recommendations are proposals, not completed infrastructure.
 
@@ -14,8 +14,8 @@ Run application and test commands from `frontend/`; `docs/` and `documentation/`
 - [x] Isolate the complete frontend in `frontend/`, including source, public assets, tests, dependencies, package/config files and build output; shared project/research documents remain at the root. See [frontend guide](../frontend/README.md).
 - [x] Shared sidebar/header, desktop and mobile layouts, design tokens, rounded containers and subtle depth.
 - [x] Supplied animated AuRA mascot and animated robot head, with reduced-motion/static fallback handling.
-- [x] Email/password registration and sign-in connected to PostgreSQL-backed sessions; post-login onboarding transition remains a frontend demonstration.
-- [x] Separate About, Consent, Parent/Child Information and All Set screens, with validated frontend route access.
+- [x] Email/password registration and sign-in connected to PostgreSQL-backed sessions.
+- [x] Separate About, Consent, Parent/Child Information and All Set screens, with server-owned progress and validated frontend route access.
 - [x] Parent/legal guardian, regular-interaction and 12-36-month eligibility validation.
 - [x] Welcome/Start Chat, then information chat with thinking dots, typed greeting and integrated actions.
 - [x] Deterministic educational replies using local reference content; no generated medical answers.
@@ -25,13 +25,13 @@ Run application and test commands from `frontend/`; `docs/` and `documentation/`
 - [x] One scoring configuration: Q1-Q9 use 0/1/2 for Always/Sometimes/Never; Q10-Q13 use 2/1/0 for Yes/Sometimes/No.
 - [x] Continuous assessment transcript, selected-answer bubbles, verbatim explanations and automatic question advancement.
 - [x] Saved explanation recovery after failed advancement, duplicate-submission guards and progress tracking.
-- [x] Completion processing preview with changing labels and an explicit simulation notice.
-- [x] Demo skip shortcut with clearly marked fictional filler responses; no clinical prediction.
+- [x] Live completion processing using the saved Logistic Regression, Random Forest and XGBoost artifacts with equal-weight soft voting.
+- [x] Remove fictional skip responses and timer-based processing preview; legacy preview sessions remain ineligible for inference.
 - [x] History lists multiple information chats and assessments; opening an entry restores that session.
-- [x] New Chat/New Assessment preserve earlier in-memory records, language and questionnaire snapshots.
-- [x] Processing preview state retained by assessment ID; completed previews do not replay.
-- [x] Typed domain models, reusable hooks and separate asynchronous mock service adapters.
-- [x] Temporary memory only: refresh/sign-out clears main-app records; no screening data in localStorage/sessionStorage.
+- [x] New Chat keeps earlier conversations; chat transcripts and assessment sessions remain server-owned in PostgreSQL.
+- [x] Persist inference status and result by assessment ID; completed classifications restore from History.
+- [x] Typed domain models, reusable hooks, mock information-chat service and API-backed onboarding/assessment services.
+- [x] Persist screening consent, eligibility, assessment answers and History in PostgreSQL; keep child names out of scope and avoid browser storage.
 
 The first screenshot's label discrepancy is resolved by the revised questionnaire: Q1 is Response to Name; Q2 is Eye Contact. Original responses stay separate from any future NLP interpretation. Structured scores stay internal.
 
@@ -45,7 +45,7 @@ The first screenshot's label discrepancy is resolved by the revised questionnair
 
 Backend auth update: 42 tests passed against real PostgreSQL using disposable schemas; browser registration/login, HttpOnly cookies, CSRF, session rotation, refresh and logout also passed. Applied revision: `20261023_01`. Frontend checks below are the earlier frontend runs, not new auth-integration claims.
 
-The 2026-10-23 frontend completion work reran strict TypeScript/production build, ESLint and 12 domain/onboarding tests. Browser checks cover the new frontend pages, onboarding, full English/Filipino questionnaire, processing and multiple History sessions, including narrow mobile viewports. Captures are in `design-review/` (historical captures are no longer retained in this checkout).
+The 2026-10-23 frontend completion work reran strict TypeScript/production build, ESLint and 12 domain/onboarding tests. The onboarding and assessment backend follow-up passes 48 backend PostgreSQL tests, 11 frontend domain tests, lint, build, and a browser flow that checks persistence through refresh and login. Browser checks cover the new frontend pages, onboarding, full English/Filipino questionnaire, processing and multiple History sessions, including narrow mobile viewports. Captures are in `design-review/` (historical captures are no longer retained in this checkout).
 
 The latest Assessment header follow-up passed strict TypeScript/production build, ESLint, assessment introduction/animation checks and the complete Filipino assessment browser journey. Header dimensions were checked at 1917, 1024, 390 and 320px; desktop/mobile captures were visually reviewed. Other suite results above belong to the preceding frontend completion run.
 
@@ -77,7 +77,7 @@ Acceptance: implemented destinations work within the frontend demo. Policy/conta
 
 The frontend implementation milestone is delivered. Remaining frontend work is external source verification, clinical/Filipino resource review, approved policy/contact content and physical-device keyboard testing. These remain unchecked above.
 
-The backend authentication slice is implemented in `backend/`: FastAPI, email/password, PostgreSQL-backed HttpOnly sessions, CSRF and versioned auth migrations. The local `aura_db` database is connected. The frontend now calls the authentication API through Vite. The next integration slice is server-owned onboarding/consent/eligibility. Screening/history persistence, email verification/reset, NLP and ML remain pending.
+The backend auth, onboarding and assessment-storage slices are implemented in `backend/`: FastAPI, PostgreSQL-backed sessions, versioned consent, eligibility, bilingual questionnaire snapshots, answer progression and owner-scoped History. Migration `20261024_03` is applied to local `aura_db`. The frontend calls these APIs through Vite. Model inference now uses saved Stage 3.1 artifacts and Stage 3.2 soft voting; NLP interpretation and clinical validation remain pending.
 
 ## 3. Backend API and real identity
 
@@ -89,18 +89,18 @@ Authentication method selected by the user: email + password with server-side Ht
 - [x] Implement PostgreSQL-backed session restoration, idle/absolute expiry, token rotation and server-side logout revocation.
 - [x] Add exact-origin/CSRF checks, credentialed CORS, request throttling, JSON/body limits and no-store responses.
 - [x] Verify self-session account isolation, concurrent registration, restart persistence, secure-cookie flags and database failure handling.
-- [x] Pass 42 PostgreSQL/configuration/migration tests and actual-browser cookie/CORS/CSRF/refresh/logout smoke checks.
+- [x] Pass 48 PostgreSQL/configuration/migration/assessment tests and browser auth/onboarding/assessment persistence checks.
 - [x] Connect frontend registration/login forms, session restoration and sign out to the real auth API.
 - [ ] Implement email verification/reset through an agreed email provider.
-- [ ] Implement server-owned onboarding status, consent version/scope, eligibility and completion checks before screening access.
-- [ ] Implement questionnaire, answer/follow-up, assessment resume/completion and History contracts/endpoints.
-- [ ] Implement real processing-job status, failure/retry and result contracts.
+- [x] Implement server-owned onboarding status, consent version/scope, eligibility and completion checks before screening access.
+- [x] Implement questionnaire, answer/follow-up, assessment resume/completion, deletion and History contracts/endpoints.
+- [x] Connect assessment processing to saved-model inference, persist classifications, and expose failed-inference retry.
 
-Acceptance: the authentication API slice is verified against PostgreSQL. The whole backend phase remains incomplete until server-enforced onboarding and owned screening workflows are implemented. A login does not establish valid screening consent or eligibility.
+Acceptance: auth, onboarding, owner-scoped assessment APIs and model-result persistence are implemented. Migration 20261025_08 is applied and the user has observed a live model result. A login alone does not establish valid screening consent or eligibility.
 
 ## 4. PostgreSQL and durable sessions
 
-Implemented authentication persistence only; the rest of the database blueprint remains proposed.
+Implemented authentication, onboarding and assessment persistence; the rest of the database blueprint remains proposed.
 
 - [x] Connect the separate local `aura_db` PostgreSQL database without modifying other project databases.
 - [x] Add Alembic revision `20261023_01` for `users` and `auth_sessions`, including normalized-email uniqueness, session ownership/cascade and indexes.
@@ -108,54 +108,59 @@ Implemented authentication persistence only; the rest of the database blueprint 
 - [x] Keep credentials in ignored backend/.env and use the same validated settings for API/migrations. No in-memory fallback.
 - [x] Validate migration/model consistency, upgrade and rollback using disposable test schemas. No application downgrade was run.
 - [ ] Add a limited application database role and reviewed deployment/backup/restore setup before production; the current local connection uses the existing development postgres role.
-- [ ] Seed versioned English/Filipino questionnaire content and canonical scoring/indicator relationships.
-- [ ] Persist minimal parent/child profiles, versioned consent, onboarding progress and assessment-specific snapshots.
-- [ ] Persist original structured/textual answers, question/version/language and assessment progress.
-- [ ] Persist agreed information-chat/History scope with ownership and concurrency enforcement.
+- [x] Add versioned English/Filipino questionnaire snapshots and server-owned item scoring for the approved questionnaire.
+- [x] Persist minimal guardian eligibility, versioned consent and onboarding progress.
+- [x] Persist original structured/textual answers, question/version/language snapshots and assessment progress.
+- [x] Persist account-owned information chats with ordered messages, replay-safe turns, History restore and deletion.
 - [ ] Implement approved retention, withdrawal, deletion and operational access procedures.
 
-Acceptance: users and cookie sessions are durable today. Durable onboarding, screening and conversation History still require their own schemas/endpoints. The frontend currently retains its in-memory demo behavior.
+Acceptance: users, cookie sessions, onboarding, chat transcripts, assessment History and model results are durable. The frontend restores processing results from PostgreSQL. Inference is synchronous in the API process; no background worker is configured.
 
-## 5. Rule-based NLP and feature mapping
+## 5. NLP processing and feature mapping
 
-Dependencies: expert-reviewed rules for both languages and a documented structured-answer/NLP reconciliation policy.
+Dependencies: client review of the working lexicon and the 2.3 consistency rules; approved questionnaire scoring and shared training/inference feature order.
 
-- [ ] Define normalization/tokenization while retaining the original explanation separately.
-- [ ] Build versioned English/Filipino behavioral rules, including context, polarity, negation and frequency handling.
-- [ ] Define low-information, unmatched and conflicting-answer behavior; do not silently invent a feature value.
-- [ ] Approve how selected-option scores and follow-up interpretations combine into each behavioral feature.
-- [ ] Produce the exact ordered numerical feature vector shared by training and inference.
-- [ ] Test representative bilingual examples, ambiguous input, negation and rule conflicts against reviewed expected outputs.
-- [ ] Store interpretation/rule/feature versions separately from parent responses.
+- [x] Implement baseline text preprocessing while retaining the parent's original follow-up response (Stage 2.1).
+- [x] Implement question-specific matching against the client's behavioral lexicon as a working baseline (Stage 2.2); coverage and clinical validity remain unapproved.
+- [x] Connect a rule-based consistency gate that can request both the structured choice and follow-up again (Stage 2.3); the interpretation rules remain partially done pending review.
+- [x] Encode the accepted Q1-Q13 structured choices into one ordered 13-value vector using the approved scoring rules (Stage 2.4).
+- [x] Use that same vector schema for training and live model inference. Follow-up text is stored and used by the current consistency gate, but is not a classifier feature.
+- [ ] Review Stage 2.3 interpretation, unmatched/low-information handling, retries, and bilingual examples with the client.
+- [ ] As future refinement, evaluate a context-aware NLP model for varied parent wording, frequency, polarity and negation in English, Filipino and Taglish. Keep the current keyword/phrase matching and simple rules as the interim baseline until reviewed examples, confidence handling and validation are agreed.
+- [ ] Version and document the approved NLP rules and feature schema after review.
 
-Acceptance: reviewed fixtures produce reproducible features. Unresolved interpretations follow an approved handling policy. Raw score sums never become an undocumented clinical class.
-
+Acceptance: the current baseline has reproducible preprocessing, lexicon lookup, consistency checks and ordinal encoding. These do not establish clinical NLP validity. Unresolved rule cases and the role of follow-up text in later phases remain open.
 ## 6. Dataset, training and model evaluation
 
 Dependencies: approved labeling protocol, appropriately consented research data and stable feature definitions. Dataset preparation can proceed alongside NLP rule work once these decisions are settled.
 
 - [ ] Document dataset provenance, permitted use, expert-reviewed labels and class definitions.
 - [ ] Prevent leakage between training/validation/test sets, including repeated records from the same child.
-- [ ] Train Logistic Regression, Random Forest and XGBoost using the agreed feature schema.
-- [ ] Evaluate each model and soft voting using appropriate held-out validation and class-specific recall, precision, F1 and confusion matrices.
+- [x] Train Logistic Regression, Random Forest and XGBoost using the current 13-score schema and fixed stratified 70/15/15 split.
+- [x] Compare individual models on validation; average their class probabilities with equal-weight soft voting and evaluate the ensemble on the held-out test split.
 - [ ] Review generalization, bilingual input behavior and screening limitations; document thresholds and failure conditions where applicable.
 - [ ] Version model artifacts, preprocessing, feature schema, training configuration and evaluation evidence.
 
-Acceptance: reproducible evaluation supports the intended pre-screening use. Reviewers approve labels and limitations. Labels mechanically derived from input scores are not evidence of independent clinical validity.
+Acceptance: the provisional 3.1/3.2 pipeline runs reproducibly and reports held-out metrics. This does not establish pre-screening validity: labels are derived from input scores, dataset expansion is pending, and independent labels, clinical review and intended-use approval remain open.
 
-## 7. Real processing and result integration
+## 7. Live model inference and thesis Phases 4-5
 
-Dependencies: validated NLP/features, approved models and reviewed result templates.
+Dependencies: verify History restoration after navigation/refresh; client agreement on the post-ML NLP and final result-summary flow.
 
-- [ ] Replace timed processing simulation with actual backend job status and retry/failure handling.
-- [ ] Run LR, RF and XGBoost on the same feature vector; average class probabilities for soft voting as specified in the paper.
-- [ ] Save result provenance, model/feature versions, class and available probabilities.
-- [ ] Show the result inside the assessment conversation after successful processing; retain the full transcript in History.
-- [ ] Add reviewed explanation templates, professional evaluation guidance and the non-diagnostic limitation.
-- [ ] Agree the thesis visualization requirement and its presentation before implementation.
-- [ ] Keep demo preview records distinguishable and prevent fictional skip responses from entering real clinical processing or research datasets.
+- [x] Replace timer-only processing with synchronous saved-model inference, failure reporting and retry handling.
+- [x] Connect saved Logistic Regression, Random Forest and XGBoost models to the completed 13-score vector; compute equal-weight soft voting.
+- [x] Select the highest-support Low/Moderate/High category and persist the category, model version, class-support probabilities and generated time in the processing result.
+- [x] Show the provisional score category in the assessment conversation; legacy fictional preview sessions are blocked from inference.
+- [ ] Verify that the saved result restores from History after navigation or refresh.
+- [x] Apply migration `20261025_08`; the user confirmed a live model result appeared in the assessment UI.
+- [ ] Agree with the client on the Phase 4 post-ML NLP inputs, outputs, wording rules, and whether it only explains the model category. Do not change the model category without a separately approved rule.
+- [ ] Agree with the client on the Phase 5 result-summary fields and presentation. Phase 5 is the summary/presentation step unless the client specifies more analysis.
+- [ ] Update the flowchart after agreement, then implement the approved Phase 4 and Phase 5 behavior.
+- [ ] Add reviewed explanation templates and professional evaluation guidance.
 
-Acceptance: displayed risk class comes only from the reviewed inference workflow. Processing failures never appear as successful results. No fabricated prediction or unsupported medical advice is shown.
+Expected conceptual sequence, pending client confirmation: Stages 2.1-2.3 pre-ML NLP -> Stages 3.1-3.2 ML -> Phase 4 post-ML NLP -> Phase 5 result summary. The current result is a score-derived category, not an ASD probability or diagnosis; training labels come from the same 13 scores supplied to the models.
+
+Acceptance: current Stage 3.2 produces and persists a provisional score category through the saved ensemble after migration; a live result has been observed, while History restoration still needs a manual check. The complete NLP-ML-NLP and summary flow remains pending Phase 4/5 agreement and implementation; no clinical risk validity is claimed.
 
 ## 8. Release and study readiness
 
@@ -170,12 +175,20 @@ Acceptance: agreed release checks pass; reviewed research and privacy requiremen
 
 ## Decisions still needed
 
-1. Backend framework, authentication provider and secure session mechanism.
-2. Minimal profile fields, consent wording/versioning, renewal, withdrawal, retention and deletion procedures.
-3. Final instrument/version sign-off, question-to-indicator mapping and bilingual label review.
-4. Structured-answer/NLP conflict rules, unmatched-input handling and feature order.
-5. Dataset access, labeling protocol, class justification and evaluation criteria.
-6. Reviewed Medical Library sources, result templates, Support/Settings scope and result visualization.
-7. Durable information-chat scope, assessment history lifecycle and deployment environment.
+1. Phase 4 post-ML NLP inputs, outputs, explanation rules, and whether it only explains or may affect the category.
+2. Phase 5 result-summary fields and presentation; confirm the proposed NLP-ML-NLP sequence with the client.
+3. Stage 2.3 bilingual interpretation rules, unclear/unmatched handling, approved examples, and whether to adopt a context-aware NLP model after baseline review.
+4. Final questionnaire/version sign-off, question-to-indicator mapping, and Filipino wording review.
+5. Dataset expansion, provenance, target-label rationale, class balance, and evaluation criteria.
+6. Reviewed Medical Library sources, result explanation templates, and result visualization.
+7. Retention/deletion procedures, production database access, and deployment environment.
 
-Current boundary: the React UI still uses demo auth/chat/assessment state. A separate development auth API now persists accounts and cookie sessions in PostgreSQL; it is not wired to the UI yet. No real NLP, trained classification or clinical risk result is implemented.
+Current boundary: the React UI uses real authentication, onboarding, chat and assessment APIs. PostgreSQL stores chats, versioned questions, original responses, scores, progress and model output after migration 20261025_08 is applied. Chat and assessment deletion are self-service; account/onboarding deletion remains an operator action, auto-expiry and backup retention are undefined. Privacy wording is a development draft. Phase 4 post-ML NLP, Phase 5 result summary, independent target labels and clinical risk validation remain open.
+
+
+## Backend onboarding integration (2026-10-23)
+
+- [x] Connect About acknowledgement, versioned demonstration consent, guardian eligibility and completion to authenticated PostgreSQL records.
+- [x] Enforce onboarding order and 12-36 month eligibility on the server; restore the required step after login or refresh.
+- [x] Persist authenticated chat transcripts and assessment History in PostgreSQL; support owner-scoped History restore and deletion.
+- [x] Persist assessment sessions and answer History; [ ] complete production policy, account deletion, retention and backup review.

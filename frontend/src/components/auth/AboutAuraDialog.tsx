@@ -27,7 +27,7 @@ export function AboutAuraDialog({
       <span className="entry-eyebrow">AUTISM RISK ANALYTICS</span>
       <h2 id="about-aura-title">A little understanding starts here.</h2>
       <p>
-        AuRA is an ASD educational support and pre-screening demonstration for
+        AuRA is an ASD educational support and pre-screening research system for
         parents and legal guardians of toddlers aged 12–36 months.
       </p>
       <p>
@@ -35,8 +35,10 @@ export function AboutAuraDialog({
         developmental evaluation.
       </p>
       <div className="entry-notice">
-        Accounts use the AuRA authentication API. Onboarding and screening
-        responses stay in temporary browser memory; NLP and ML are not connected.
+        AuRA stores consent, eligibility, chat messages, and assessment
+        responses in the project database. Use fictional child details;
+        follow-up text is not used by the current model. Model categories are
+        based on preliminary score-derived labels and are not diagnoses.
       </div>
     </dialog>
   )
