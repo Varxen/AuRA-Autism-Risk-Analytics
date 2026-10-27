@@ -158,7 +158,7 @@ Acceptance: the provisional 3.1/3.2 pipeline runs reproducibly and reports held-
 
 ## 7. Live model inference and thesis Phases 4-5
 
-History restoration after navigation/refresh is verified. Client agreement on the post-ML NLP and final result-summary flow remains pending.
+History restoration after navigation/refresh is verified. The user approved Phase 4 post-ML explanation and indicator support analysis. The backend compares each recorded answer with a Sometimes reference while holding others fixed, then maps the largest support changes to exact indicator labels and selected answers. Ollama receives only this structured evidence, category and language; it cannot change the category or access follow-up text. Phase 5 now presents the saved explanation with the existing result summary.
 
 - [x] Replace timer-only processing with synchronous saved-model inference, failure reporting and retry handling.
 - [x] Connect saved Logistic Regression, Random Forest and XGBoost models to the completed 13-score vector; compute equal-weight soft voting.
@@ -166,14 +166,16 @@ History restoration after navigation/refresh is verified. Client agreement on th
 - [x] Show the provisional score category in the assessment conversation; legacy fictional preview sessions are blocked from inference.
 - [x] Verify that the saved result restores from History after navigation or refresh.
 - [x] Apply migration `20261025_08`; the user confirmed a live model result appeared in the assessment UI.
-- [ ] Agree with the client on the Phase 4 post-ML NLP inputs, outputs, wording rules, and whether it only explains the model category. Do not change the model category without a separately approved rule.
-- [ ] Agree with the client on the Phase 5 result-summary fields and presentation. Phase 5 is the summary/presentation step unless the client specifies more analysis.
-- [ ] Update the flowchart after agreement, then implement the approved Phase 4 and Phase 5 behavior.
-- [ ] Add reviewed explanation templates and professional evaluation guidance.
+- [x] Implement Phase 4 post-ML NLP. Compute one-at-a-time model-support changes against a Sometimes reference for all 13 indicators, select the five largest changes of at least one percentage point, and map them to the selected answer and approved indicator label. Ollama explains only that structured evidence; it cannot alter the category or read parent follow-up text. Save localized fallback text if generation fails.
+- [x] Use the existing category, support percentages, limitation notice and saved Phase 4 explanation as the Phase 5 result summary.
+- [x] Display the category, support bars, influential indicator answers, Phase 4 explanation, category-based recommendation and score-derived/non-diagnostic limitation in the Phase 5 result UI.
+- [x] Add localized Download PDF and Print actions using the same A4 result-only layout, with app navigation/chat and browser print headers hidden. Include a pale, slanted AuRA logo watermark. Download PDF opens the browser print dialog; choose Save as PDF there.
+- [x] Persist support changes, indicator labels, selected answers, explanation and category-based recommendation beside the model result in the existing processing-result JSON; no migration is needed.
+- [ ] Review Ollama-generated explanations in English and Filipino for factual consistency and wording before research use.
 
-Expected conceptual sequence, pending client confirmation: Stages 2.1-2.3 pre-ML NLP -> Stages 3.1-3.2 ML -> Phase 4 post-ML NLP -> Phase 5 result summary. The current result is a score-derived category, not an ASD probability or diagnosis; training labels come from the same 13 scores supplied to the models.
+Current sequence: Stages 2.1-2.3 pre-ML NLP -> Stages 3.1-3.2 ML -> Phase 4 post-ML NLP -> Phase 5 result summary. Phase 4 reports one-at-a-time indicator support changes and a constrained explanation; Phase 5 presents them with a fixed category-based recommendation. The current result is a score-derived category, not an ASD probability or diagnosis; training labels come from the same 13 scores supplied to the models.
 
-Acceptance: current Stage 3.2 produces and persists a provisional score category through the saved ensemble after migration; a live result and History restoration after navigation/refresh have been verified. The complete NLP-ML-NLP and summary flow remains pending Phase 4/5 agreement and implementation; no clinical risk validity is claimed.
+Acceptance: Stage 3.2 produces a provisional score category. Phase 4 stores per-indicator support changes, constrained explanation and fixed category-based recommendation; Phase 5 displays them while preserving score-derived and non-diagnostic boundaries. No clinical risk validity is claimed.
 
 ## 8. Release and study readiness
 
@@ -188,15 +190,15 @@ Acceptance: agreed release checks pass; reviewed research and privacy requiremen
 
 ## Decisions still needed
 
-1. Phase 4 post-ML NLP inputs, outputs, explanation rules, and whether it only explains or may affect the category.
-2. Phase 5 result-summary fields and presentation; confirm the proposed NLP-ML-NLP sequence with the client.
+1. Review Phase 4 explanation wording and output quality with English and Filipino examples.
+2. Review the Phase 5 result summary in a new assessment and History, including the generated explanation and fallback notice for older results.
 3. Stage 2.3 prototype evaluation using human-reviewed bilingual examples, plus client review of unclear handling and retries.
 4. Final questionnaire/version sign-off, question-to-indicator mapping, and Filipino wording review.
 5. Dataset expansion, provenance, target-label rationale, class balance, and evaluation criteria.
-6. Reviewed Medical Library sources, result explanation templates, and result visualization.
+6. Review Medical Library sources and result-summary wording and visualization.
 7. Define backup deletion/retention and production database access safeguards and deployment environment.
 
-Current boundary: the React UI uses real authentication, onboarding, chat and assessment APIs. PostgreSQL stores chats, versioned questions, original responses, scores, progress and model output after migration 20261025_08 is applied. Chat, assessment and account deletion are self-service. Account-linked application data is retained while the account is active; Settings deletion requires password confirmation and removes the account plus linked application records through PostgreSQL cascades. Database handling is developer-only. Backup erasure/retention and production access controls remain undefined. Privacy wording is a development draft. Phase 4 post-ML NLP, Phase 5 result summary, independent target labels and clinical risk validation remain open.
+Current boundary: the React UI uses real authentication, onboarding, chat and assessment APIs. PostgreSQL stores chats, versioned questions, original responses, scores, progress and model output after migration 20261025_08 is applied. Phase 4 stores structured support changes, indicator answers, Ollama explanation and category-based recommendation with the result; Phase 5 displays them with the category and support values. Chat, assessment and account deletion are self-service. Account-linked application data is retained while the account is active; Settings deletion requires password confirmation and removes the account plus linked application records through PostgreSQL cascades. Database handling is developer-only. Backup erasure/retention and production access controls remain undefined. Privacy wording is a development draft. Independent target labels and clinical risk validation remain open.
 
 ## Backend onboarding integration (2026-10-23)
 

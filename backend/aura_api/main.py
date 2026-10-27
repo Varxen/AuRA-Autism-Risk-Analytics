@@ -21,6 +21,7 @@ from .middleware import APIBoundaryMiddleware
 from .assessments import router as assessments_router
 from .chats import router as chats_router
 from .onboarding import router as onboarding_router
+from .result_explanation import OllamaResultExplanation
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -52,6 +53,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.database = database
     app.state.auth = AuthService(settings, database)
     app.state.consistency_model = OllamaConsistencyModel(settings)
+    app.state.result_explainer = OllamaResultExplanation(settings)
     app.state.auth_limiter = AuthRateLimiter(settings.auth_rate_limit, settings.auth_rate_window_seconds)
     app.add_middleware(APIBoundaryMiddleware, settings=settings)
     hosts = ["localhost", "127.0.0.1", "[::1]"]

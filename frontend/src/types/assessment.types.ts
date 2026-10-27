@@ -52,6 +52,15 @@ export interface AssessmentResult {
   modelVersion: string
   probabilities: Record<'Low' | 'Moderate' | 'High', number>
   generatedAt: string
+  explanation?: string | null
+  recommendation?: string | null
+  influentialIndicators?: Array<{
+    indicatorId: string
+    indicatorLabel: string
+    selectedAnswer: string
+    supportChangePercentagePoints: number
+  }>
+  influenceMethod?: 'sometimes-one-at-a-time' | null
 }
 
 export interface AssessmentProcessingJob {

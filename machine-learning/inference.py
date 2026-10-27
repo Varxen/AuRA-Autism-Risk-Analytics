@@ -22,6 +22,7 @@ class Prediction(TypedDict):
     category: str
     model_version: str
     probabilities: dict[str, float]
+    support_changes: list[dict[str, int | float]]
 
 
 class ModelInferenceError(RuntimeError):
@@ -57,6 +58,10 @@ def predict_with_soft_voting(values: list[int] | tuple[int, ...]) -> Prediction:
         models, model_version = _load_models()
         probabilities = average_class_probabilities(models, features)[0]
         predicted_index = int(predict_categories(probabilities.reshape(1, -1))[0])
+        reference_features = np.repeat(features, len(vector), axis=0)
+        for feature_index in range(len(vector)):
+            reference_features[feature_index, feature_index] = 1
+        reference_probabilities = average_class_probabilities(models, reference_features)
     except ModelInferenceError:
         raise
     except Exception as error:
@@ -69,4 +74,14 @@ def predict_with_soft_voting(values: list[int] | tuple[int, ...]) -> Prediction:
             label: float(probabilities[index])
             for index, label in enumerate(CLASS_LABELS)
         },
+        "support_changes": [
+            {
+                "feature_index": feature_index,
+                "support_change": float(
+                    probabilities[predicted_index]
+                    - reference_probabilities[feature_index, predicted_index]
+                ),
+            }
+            for feature_index in range(len(vector))
+        ],
     }

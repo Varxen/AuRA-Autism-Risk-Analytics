@@ -65,8 +65,17 @@ async function readProcessingJob(response: Response): Promise<AssessmentProcessi
     if (typeof result.assessmentId !== 'string' ||
       (result.category !== 'Low' && result.category !== 'Moderate' && result.category !== 'High') ||
       typeof result.modelVersion !== 'string' || typeof result.generatedAt !== 'string' ||
+      ('explanation' in result && result.explanation !== null && typeof result.explanation !== 'string') ||
+      ('recommendation' in result && result.recommendation !== null && typeof result.recommendation !== 'string') ||
+      ('influenceMethod' in result && result.influenceMethod !== null && result.influenceMethod !== 'sometimes-one-at-a-time') ||
       !probabilities || typeof probabilities !== 'object')
       throw new Error('AuRA returned an invalid model result.')
+    if ('influentialIndicators' in result && (!Array.isArray(result.influentialIndicators) ||
+      result.influentialIndicators.some((item) => !item || typeof item !== 'object' ||
+        typeof item.indicatorId !== 'string' || typeof item.indicatorLabel !== 'string' ||
+        typeof item.selectedAnswer !== 'string' || typeof item.supportChangePercentagePoints !== 'number' ||
+        !Number.isFinite(item.supportChangePercentagePoints))))
+      throw new Error('AuRA returned invalid indicator explanation data.')
     const values = ['Low', 'Moderate', 'High'].map((label) => (probabilities as Record<string, unknown>)[label])
     if (values.some((value) => typeof value !== 'number' || !Number.isFinite(value) || value < 0 || value > 1) ||
       Math.abs((values as number[]).reduce((sum, value) => sum + value, 0) - 1) > 0.001)

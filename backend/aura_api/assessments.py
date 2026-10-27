@@ -27,6 +27,11 @@ from .consistency_model import (
 from .errors import APIError
 from .onboarding import require_storage_consent
 from .questionnaire import QUESTION_COUNT, QUESTIONNAIRE_VERSION, get_questionnaire, option_score
+from .result_explanation import (
+    OllamaResultExplanation,
+    fallback_explanation,
+    recommendation_for_category,
+)
 
 router = APIRouter(prefix="/api/v1/assessments", tags=["assessments"])
 
@@ -149,6 +154,14 @@ class ProcessingJobResponse(BaseModel):
     result: "AssessmentResultResponse | None" = None
 
 
+class InfluentialIndicatorResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+    indicator_id: str
+    indicator_label: str
+    selected_answer: str
+    support_change_percentage_points: float
+
+
 class AssessmentResultResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
     assessment_id: UUID
@@ -156,6 +169,10 @@ class AssessmentResultResponse(BaseModel):
     model_version: str
     probabilities: dict[Literal["Low", "Moderate", "High"], float]
     generated_at: datetime
+    explanation: str | None = None
+    recommendation: str | None = None
+    influential_indicators: list[InfluentialIndicatorResponse] = Field(default_factory=list)
+    influence_method: Literal["sometimes-one-at-a-time"] | None = None
 
 
 def _user_id(request: Request, auth: AuthService) -> UUID:
@@ -582,16 +599,58 @@ def _run_model_inference(
     job: AssessmentProcessingJobRecord,
     assessment_id: UUID,
     feature_vector: list[int],
+    questions_snapshot: list[dict],
+    language: str,
+    result_explainer: OllamaResultExplanation,
 ) -> None:
     now = datetime.now(UTC)
     try:
         prediction = predict_with_soft_voting(feature_vector)
+        support_changes = prediction["support_changes"]
+        influential_indicators = []
+        for change in support_changes:
+            index = change["feature_index"]
+            change_points = round(float(change["support_change"]) * 100, 1)
+            if abs(change_points) < 1.0 or index >= len(questions_snapshot):
+                continue
+            question = questions_snapshot[index]
+            selected_option = next(
+                option for option in question["options"] if option["score"] == feature_vector[index]
+            )
+            influential_indicators.append({
+                "indicator_id": question["indicatorId"],
+                "indicator_label": question["indicatorLabel"],
+                "selected_answer": selected_option["label"],
+                "support_change_percentage_points": change_points,
+            })
+        influential_indicators.sort(
+            key=lambda item: abs(item["support_change_percentage_points"]),
+            reverse=True,
+        )
+        influential_indicators = influential_indicators[:5]
+        try:
+            explanation = result_explainer.explain(
+                category=prediction["category"],
+                probabilities=prediction["probabilities"],
+                indicators=influential_indicators,
+                language=language,
+            )
+        except (RuntimeError, ValueError):
+            logging.getLogger(__name__).exception(
+                "Post-ML explanation failed; saving the localized fallback."
+            )
+            explanation = fallback_explanation(prediction["category"], language, influential_indicators)
+
         job.result = AssessmentResultResponse(
             assessment_id=assessment_id,
             category=prediction["category"],
             model_version=prediction["model_version"],
             probabilities=prediction["probabilities"],
             generated_at=now,
+            explanation=explanation,
+            recommendation=recommendation_for_category(prediction["category"], language),
+            influential_indicators=influential_indicators,
+            influence_method="sometimes-one-at-a-time",
         ).model_dump(mode="json", by_alias=True)
         job.status = "completed"
         job.failure_code = None
@@ -634,7 +693,10 @@ def start_processing(
         if job.status == "completed" or job.status == "failed":
             return _processing_response(job)
         job.stage_id = "soft-voting"
-        _run_model_inference(job, record.id, feature_vector)
+        _run_model_inference(
+            job, record.id, feature_vector, record.questions_snapshot, record.language,
+            request.app.state.result_explainer,
+        )
         return _processing_response(job)
 
 
@@ -674,10 +736,14 @@ def retry_processing(
         job.completed_at = None
         job.failure_code = None
         job.result = None
-        feature_vector = _feature_vector(db, _session_for_update(db, user_id, assessment_id))
+        record = _session_for_update(db, user_id, assessment_id)
+        feature_vector = _feature_vector(db, record)
         if feature_vector is None:
             raise APIError(409, "feature_vector_incomplete", "This assessment does not contain an eligible feature vector.")
-        _run_model_inference(job, assessment_id, feature_vector)
+        _run_model_inference(
+            job, assessment_id, feature_vector, record.questions_snapshot, record.language,
+            request.app.state.result_explainer,
+        )
         return _processing_response(job)
 
 
