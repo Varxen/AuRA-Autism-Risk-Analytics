@@ -29,9 +29,10 @@ export interface AssessmentSession {
 
 export interface AssessmentConsistencyGate {
   status: 'consistent' | 'contradiction' | 'unclear'
-  nextAction: 'continue' | 'repeat_frequency_and_follow_up' | 'stop_unresolved'
+  nextAction: 'continue' | 'approve_suggestion' | 'repeat_frequency_and_follow_up' | 'stop_unresolved'
   attemptsUsed: number
   maxAttempts: number
+  suggestedOptionId: string | null
 }
 
 export interface AssessmentAnswerSubmission extends AssessmentSessionRecord {
@@ -41,6 +42,8 @@ export interface AssessmentAnswerSubmission extends AssessmentSessionRecord {
 export interface AssessmentConsistencyAttempt {
   selectedOptionId: string
   followUpText: string
+  outcome: 'contradiction' | 'unclear'
+  suggestedOptionId: string | null
 }
 
 export interface AssessmentResult {

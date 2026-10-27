@@ -39,11 +39,11 @@ class APIBoundaryMiddleware:
         headers = Headers(scope=scope)
         origin = headers.get("origin")
         same_origin = f"{scope['scheme']}://{headers.get('host', '')}"
-        if origin not in self.settings.frontend_origins and origin != same_origin:
+        if not self.settings.allows_frontend_origin(origin) and origin != same_origin:
             await reject(403, "untrusted_origin", "Use an allowed application origin.")
             return
         credential_path = scope["path"] in {
-            "/api/v1/auth/register", "/api/v1/auth/login"
+            "/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/account"
         }
         max_body_bytes = self.MAX_CREDENTIAL_BODY_BYTES if credential_path else self.MAX_BODY_BYTES
         content_type = headers.get("content-type", "").split(";", 1)[0].strip().lower()

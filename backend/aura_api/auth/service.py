@@ -104,6 +104,50 @@ class AuthService:
         with self.database.sessions.begin() as db:
             db.execute(delete(SessionRecord).where(SessionRecord.token_hash == token_digest(raw_token)))
 
+    def delete_account(
+        self, raw_token: str | None, password: str, csrf_token: str | None
+    ) -> None:
+        if not raw_token or not re.fullmatch(r"[A-Za-z0-9_-]{43}", raw_token):
+            raise APIError(401, "session_required", "Sign in to continue.", clear_cookie=True)
+        if not csrf_token or not re.fullmatch(r"[A-Za-z0-9_-]{43}", csrf_token):
+            raise APIError(403, "invalid_csrf", "Refresh the session and try again.")
+
+        session_hash = token_digest(raw_token)
+        with self.database.sessions.begin() as db:
+            token_session = db.scalar(
+                select(SessionRecord).where(SessionRecord.token_hash == session_hash)
+            )
+            if token_session is None:
+                raise APIError(401, "session_required", "Sign in to continue.", clear_cookie=True)
+
+            user = db.scalar(
+                select(UserRecord).where(UserRecord.id == token_session.user_id).with_for_update()
+            )
+            if user is None:
+                raise APIError(401, "session_required", "Sign in to continue.", clear_cookie=True)
+
+            session = db.scalar(
+                select(SessionRecord)
+                .where(SessionRecord.token_hash == session_hash, SessionRecord.user_id == user.id)
+                .with_for_update()
+            )
+            if session is None:
+                raise APIError(401, "session_required", "Sign in to continue.", clear_cookie=True)
+            now = utcnow()
+            if (
+                now >= session.expires_at
+                or now >= session.last_seen_at + timedelta(seconds=self.settings.session_idle_seconds)
+            ):
+                raise APIError(401, "session_required", "Sign in to continue.", clear_cookie=True)
+            if not secrets.compare_digest(csrf_token, session.csrf_token):
+                raise APIError(403, "invalid_csrf", "Refresh the session and try again.")
+            if not verify_password(password, user.password_hash):
+                raise APIError(403, "invalid_password_confirmation", "The password confirmation did not match.")
+
+            # PostgreSQL cascades this deletion through sessions, onboarding,
+            # assessments, answers, processing results, chats and chat messages.
+            db.delete(user)
+
     def response(self, session: SessionRecord) -> SessionResponse:
         with self.database.sessions() as db:
             user = db.get(UserRecord, session.user_id)

@@ -13,7 +13,8 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from .auth.routes import clear_session_cookie, router as auth_router
 from .auth.security import AuthRateLimiter
 from .auth.service import AuthService
-from .config import Settings
+from .config import TRYCLOUDFLARE_ORIGIN_REGEX, Settings
+from .consistency_model import OllamaConsistencyModel
 from .database import Database
 from .errors import APIError
 from .middleware import APIBoundaryMiddleware
@@ -50,6 +51,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = settings
     app.state.database = database
     app.state.auth = AuthService(settings, database)
+    app.state.consistency_model = OllamaConsistencyModel(settings)
     app.state.auth_limiter = AuthRateLimiter(settings.auth_rate_limit, settings.auth_rate_window_seconds)
     app.add_middleware(APIBoundaryMiddleware, settings=settings)
     hosts = ["localhost", "127.0.0.1", "[::1]"]
@@ -59,6 +61,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=list(settings.frontend_origins),
+        allow_origin_regex=TRYCLOUDFLARE_ORIGIN_REGEX,
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
         allow_headers=["Content-Type", "X-CSRF-Token"],

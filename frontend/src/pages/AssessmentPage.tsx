@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ClipboardCheck, PartyPopper } from 'lucide-react'
 import type { AssessmentLanguage } from '../types/questionnaire.types'
 import { assessmentCopy } from '../data/assessmentCopy'
 import { AssessmentLanguageSelection } from '../components/assessment/AssessmentLanguageSelection'
@@ -71,7 +72,10 @@ export function AssessmentPage() {
               failedAttempts={failedAttempts}
               consistencyBlocked={consistencyBlocked}
               busy={busy}
+              approvedAnswerId={assessment.approvedSuggestions[question.id] ?? null}
               onSelect={(id) => void assessment.select(id)}
+              onApproveSuggestedAnswer={(id, text) => void assessment.approveSuggestion(id, text)}
+              onKeepCurrentAnswer={(id, text) => assessment.reviewSuggestedAnswer(id, text)}
             />
           ))}
         {processing.active && processing.step && (
@@ -79,8 +83,14 @@ export function AssessmentPage() {
         )}
         {session && completed && !processing.active && (
           <ChatMessage className="assessment-complete-message">
-            <h2>{copy.completionTitle}</h2>
-            <p>{copy.completionMessage}</p>
+            <header className="assessment-completion-header">
+              <PartyPopper className="assessment-completion-icon" aria-hidden="true" />
+              <div className="assessment-completion-copy">
+                <h2>{copy.completionTitle}</h2>
+                <p>{copy.completionMessage}</p>
+              </div>
+              <ClipboardCheck className="assessment-completion-decoration" aria-hidden="true" />
+            </header>
             <AssessmentResult language={language} result={processing.result} legacyPreview={session.isDemoPreview} />
           </ChatMessage>
         )}
@@ -92,7 +102,7 @@ export function AssessmentPage() {
             </p>
           </section>
         )}
-        {busy && !presenting && !pendingFollowUpText && (
+        {busy && !presenting && (
           <ChatMessage className="message--typing"><LoadingIndicator label={copy.typingStatus} /></ChatMessage>
         )}
       </ChatWindow>
@@ -122,6 +132,7 @@ export function AssessmentPage() {
       )}
       {!hasModelResult && <ChatInput
         onSend={assessment.followUp}
+        initialValue={assessment.followUpDraft ?? ''}
         responseLabel={copy.responseLabel}
         sendLabel={copy.sendLabel}
         disabled={busy || presenting || stage !== 'follow-up' || consistencyBlocked}

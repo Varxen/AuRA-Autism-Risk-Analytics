@@ -10,8 +10,10 @@ export const AuthDemoContext = createContext<{
   dispatch: Dispatch<AuthDemoAction>
   busy: boolean
   error: string
+  accountDeleteError: string
   signIn: (email: string, password: string, mode: 'login' | 'register') => Promise<string | null>
   exit: () => Promise<boolean>
+  deleteAccount: (password: string) => Promise<boolean>
 } | null>(null)
 
 export function useAuthDemo() {

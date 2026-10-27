@@ -7,9 +7,11 @@ import { LoadingIndicator } from '../ui/LoadingIndicator'
 import { AssessmentQuestion } from './AssessmentQuestion'
 import { AnswerOptions } from './AnswerOptions'
 import { FollowUpQuestion } from './FollowUpQuestion'
+import { SuggestedAnswerCard } from './SuggestedAnswerCard'
+import { Check } from 'lucide-react'
 
 export function AssessmentExchange({
-  question, session, introduction, pendingOptionId, pendingFollowUpText, failedAttempts, consistencyBlocked, busy, onSelect,
+  question, session, introduction, pendingOptionId, pendingFollowUpText, failedAttempts, consistencyBlocked, busy, approvedAnswerId, onSelect, onApproveSuggestedAnswer, onKeepCurrentAnswer,
 }: {
   question: QuestionnaireQuestion
   session: AssessmentSession
@@ -19,7 +21,10 @@ export function AssessmentExchange({
   failedAttempts: AssessmentConsistencyAttempt[]
   consistencyBlocked: boolean
   busy: boolean
+  approvedAnswerId: string | null
   onSelect: (id: string) => void
+  onApproveSuggestedAnswer: (optionId: string, followUpText: string) => void
+  onKeepCurrentAnswer: (optionId: string, followUpText: string) => void
 }) {
   const copy = assessmentCopy[session.language]
   const assessmentIntroduction = copy.introduction
@@ -37,6 +42,7 @@ export function AssessmentExchange({
   const optionId = answer?.selectedOptionId ?? (current ? pendingOptionId : null)
   const followUpText = answer?.followUpText || (current ? pendingFollowUpText : null)
   const selectedOption = question.options.find((option) => option.id === optionId)
+  const showFollowUp = (selectedOption?.score ?? answer?.structuredScore) !== 0 || Boolean(answer?.followUpText.trim())
 
   return (
     <section className="assessment-exchange" aria-label={copy.conversationLabel(question.questionNumber)}>
@@ -58,30 +64,53 @@ export function AssessmentExchange({
       )}
       {failedAttempts.map((attempt, index) => (
         <div className="assessment-consistency-attempt" key={`${question.id}-retry-${index}`}>
-          <ChatMessage role="user" className="structured-response">
+          <ChatMessage role="user" className="structured-response" filled>
             {question.options.find((option) => option.id === attempt.selectedOptionId)?.label ?? attempt.selectedOptionId}
           </ChatMessage>
+          <FollowUpQuestion
+            language={session.language}
+            content={question.followUpQuestion ?? ''}
+          />
           <ChatMessage role="user" filled><p>{attempt.followUpText}</p></ChatMessage>
-          <ChatMessage>
-            <p>{consistencyBlocked && index === failedAttempts.length - 1 ? copy.consistencyStop : copy.consistencyRetryPrompt}</p>
-          </ChatMessage>
+          {attempt.suggestedOptionId ? (
+            index === failedAttempts.length - 1 ? (
+              <ChatMessage className="suggested-answer-message">
+                <SuggestedAnswerCard
+                  answer={question.options.find((option) => option.id === attempt.suggestedOptionId)?.label ?? attempt.suggestedOptionId}
+                  language={session.language}
+                  disabled={busy}
+                  onApprove={() => onApproveSuggestedAnswer(attempt.suggestedOptionId!, attempt.followUpText)}
+                  onKeepCurrent={() => onKeepCurrentAnswer(attempt.selectedOptionId, attempt.followUpText)}
+                />
+              </ChatMessage>
+            ) : (
+              <ChatMessage><p>{copy.suggestedAnswerDescription}</p></ChatMessage>
+            )
+          ) : (
+            <ChatMessage>
+              <p>{consistencyBlocked && index === failedAttempts.length - 1 ? copy.consistencyStop : copy.consistencyUnclearPrompt}</p>
+            </ChatMessage>
+          )}
         </div>
       ))}
       {consistencyBlocked && failedAttempts.length === 0 && (
         <ChatMessage><p>{copy.consistencyStop}</p></ChatMessage>
       )}
-      {current && !presenting && !selectedOption && !consistencyBlocked && (
+      {current && !presenting && !selectedOption && !consistencyBlocked && !failedAttempts.at(-1)?.suggestedOptionId && (
         <AnswerOptions language={session.language} options={question.options} onSelect={onSelect} disabled={busy} />
       )}
       {selectedOption && (
-        <ChatMessage role="user" className="structured-response" timestamp={answer?.answeredAt}>
-          {selectedOption.label}
+        <ChatMessage role="user" className="structured-response" filled timestamp={answer?.answeredAt}>
+          <span>{selectedOption.label}</span>
+          {approvedAnswerId === selectedOption.id && (
+            <span className="approved-answer-label"><Check aria-hidden="true" size={14} />{copy.approved}</span>
+          )}
         </ChatMessage>
       )}
       {(questionAnimating || followUpAnimating) && introduction.phase === 'thinking' && (
         <ChatMessage className="message--typing"><LoadingIndicator label={copy.typingStatus} /></ChatMessage>
       )}
-      {(answer || (current && pendingOptionId)) && question.followUpQuestion && !(followUpAnimating && waiting) && (
+      {showFollowUp && (answer || (current && pendingOptionId)) && question.followUpQuestion && !(followUpAnimating && waiting) && (
         <FollowUpQuestion
           language={session.language}
           content={followUpTyping ? question.followUpQuestion.slice(0, introduction.characters) : question.followUpQuestion}

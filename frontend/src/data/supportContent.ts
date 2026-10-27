@@ -6,7 +6,7 @@ export const supportQuestions = [
   },
   {
     question: 'Can I answer in English or Tagalog?',
-    answer: 'Yes. Choose English or Tagalog before starting an assessment. Each question includes a choice and a written follow-up. Your original explanation is kept as you entered it.',
+    answer: 'Yes. Choose English or Tagalog before starting an assessment. Every question has a structured choice. AuRA asks a written follow-up only for answers scored 1 or 2; score 0 proceeds without one. Your original explanation is kept as entered.',
   },
   {
     question: 'How do I return to an earlier session?',

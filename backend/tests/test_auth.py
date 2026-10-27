@@ -1,13 +1,23 @@
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime, timedelta
+from uuid import UUID, uuid4
 
 from fastapi.testclient import TestClient
 import pytest
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from aura_api.auth.schemas import Credentials
-from aura_api.auth.store import SessionRecord, UserRecord
+from aura_api.auth.store import (
+    AssessmentAnswerRecord,
+    AssessmentProcessingJobRecord,
+    AssessmentRecord,
+    ChatConversationRecord,
+    ChatMessageRecord,
+    OnboardingRecord,
+    SessionRecord,
+    UserRecord,
+)
 from aura_api.auth.security import hash_password, token_digest, verify_password
 from aura_api.errors import APIError
 from aura_api.main import create_app
@@ -144,6 +154,79 @@ def test_logout_requires_csrf_and_revokes_server_record(client):
     assert client.get("/api/v1/auth/session", headers={"Cookie": f"aura_session={token}"}).status_code == 401
     assert not stored_sessions(client)
     assert client.post("/api/v1/auth/logout").status_code == 204
+
+
+def test_account_deletion_requires_csrf_and_password_and_cascades_all_owned_records(client):
+    account = register(client, "delete@example.test").json()
+    user_id = account["user"]["id"]
+    other_user = UserRecord(
+        id=uuid4(), email="keep@example.test", password_hash=hash_password(PASSWORD),
+        email_verified=False, created_at=datetime.now(UTC),
+    )
+    now = datetime.now(UTC)
+    assessment = AssessmentRecord(
+        id=uuid4(), user_id=UUID(user_id),
+        questionnaire_version="revised-pilot-testing-2-v1", language="en",
+        status="in-progress", current_question_index=0,
+        current_clarification_attempts=0, current_consistency_blocked=False,
+        questions_snapshot=[], is_demo_preview=False, started_at=now, updated_at=now,
+    )
+    conversation = ChatConversationRecord(
+        id=uuid4(), user_id=assessment.user_id, started_at=now, updated_at=now,
+    )
+    with client.app.state.database.sessions.begin() as db:
+        db.add_all([
+            other_user,
+            OnboardingRecord(user_id=assessment.user_id),
+            assessment,
+            conversation,
+        ])
+        db.flush()
+        db.add_all([
+            AssessmentAnswerRecord(
+                assessment_id=assessment.id, question_id="q1", question_number=1,
+                selected_option_id="always", structured_score=0,
+                follow_up_text="A fictional response.", answered_at=now,
+            ),
+            AssessmentProcessingJobRecord(
+                id=uuid4(), assessment_id=assessment.id, attempt=1,
+                status="failed", stage_id=None, started_at=now, updated_at=now,
+            ),
+            ChatMessageRecord(
+                id=uuid4(), conversation_id=conversation.id, sequence_number=0,
+                turn_id=None, turn_position=None, role="assistant", message_type="text",
+                content="A fictional chat message.", actions=None, sources=None, created_at=now,
+            ),
+        ])
+
+    endpoint = "/api/v1/auth/account"
+    csrf = account["csrfToken"]
+    assert client.request("DELETE", endpoint, json={"password": PASSWORD}).status_code == 403
+    assert client.request(
+        "DELETE", endpoint, json={"password": PASSWORD}, headers={"X-CSRF-Token": "wrong"}
+    ).status_code == 403
+    assert client.request(
+        "DELETE", endpoint, json={"password": "a fictional wrong password"},
+        headers={"X-CSRF-Token": csrf},
+    ).status_code == 403
+    assert client.get("/api/v1/auth/session").status_code == 200
+
+    deleted = client.request(
+        "DELETE", endpoint, json={"password": PASSWORD}, headers={"X-CSRF-Token": csrf}
+    )
+    assert deleted.status_code == 204
+    assert "Max-Age=0" in deleted.headers["set-cookie"]
+    assert client.cookies.get("aura_session") is None
+    assert client.get("/api/v1/auth/session").status_code == 401
+
+    with client.app.state.database.sessions() as db:
+        assert db.scalar(select(func.count()).select_from(UserRecord)) == 1
+        assert db.scalar(select(UserRecord.email)) == "keep@example.test"
+        for model in (
+            SessionRecord, OnboardingRecord, AssessmentRecord, AssessmentAnswerRecord,
+            AssessmentProcessingJobRecord, ChatConversationRecord, ChatMessageRecord,
+        ):
+            assert db.scalar(select(func.count()).select_from(model)) == 0
 
 
 def test_authentication_isolated_by_cookie_not_supplied_user_id(client):

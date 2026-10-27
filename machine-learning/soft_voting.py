@@ -14,8 +14,7 @@ from joblib import load
 from config import (
     CLASS_LABELS,
     RANDOM_STATE,
-    SOURCE_SHEET,
-    SOURCE_WORKBOOK,
+    SOURCE_DATASETS,
     TEST_SIZE,
     TRAIN_SIZE,
     VALIDATION_SIZE,
@@ -74,8 +73,9 @@ def run_stage_3_2() -> dict[str, object]:
     from data_splits import split_dataset
     from evaluate import evaluate_predictions, print_metrics
     from prepare_dataset import load_dataset
+    from report_visuals import print_comparison_table, save_ensemble_dashboard
 
-    dataset = load_dataset(SOURCE_WORKBOOK)
+    dataset = load_dataset()
     split = split_dataset(dataset.features, dataset.target)
     models = {}
     for name in MODEL_NAMES:
@@ -98,11 +98,16 @@ def run_stage_3_2() -> dict[str, object]:
     print(f"Method: arithmetic mean of class probabilities; class order = {', '.join(CLASS_LABELS)}")
     print_metrics("Ensemble validation results", validation_metrics)
     print_metrics("Final held-out test results", test_metrics)
+    print_comparison_table(
+        "Stage 3.2 validation and held-out test comparison",
+        {"validation": validation_metrics, "held_out_test": test_metrics},
+    )
 
     report: dict[str, object] = {
         "stage": "3.2 equal-weight soft voting",
         "created_at": datetime.now(UTC).isoformat(),
-        "source_sheet": SOURCE_SHEET,
+        "source_workbooks": [path.name for path, _ in SOURCE_DATASETS],
+        "source_sheets": {path.name: list(sheets) for path, sheets in SOURCE_DATASETS},
         "records_used": dataset.rows_used,
         "split": {
             "train_rows": int(len(split.target_train)),
@@ -132,7 +137,15 @@ def run_stage_3_2() -> dict[str, object]:
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     report_path = REPORTS_DIR / "stage_3_2_soft_voting.json"
     report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    chart_path = save_ensemble_dashboard(
+        validation_metrics,
+        test_metrics,
+        REPORTS_DIR / "stage_3_2_soft_voting_dashboard.png",
+    )
     print(f"Aggregate report: {report_path}")
+    if chart_path:
+        print(f"Evaluation dashboard: {chart_path[0]}")
+        print(f"Held-out test confusion matrix: {chart_path[1]}")
     print("Categories and class probabilities are score-derived, not ASD risk estimates.")
     return report
 

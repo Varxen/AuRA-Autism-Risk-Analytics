@@ -31,7 +31,13 @@ Create the empty database first, then run the versioned migration:
 .\.venv\Scripts\python.exe -m uvicorn aura_api.main:create_app --factory --host 127.0.0.1 --port 8001 --reload --no-access-log
 ```
 
-After pulling assessment consistency changes, rerun `alembic upgrade head` before restarting the API. The rule checker imports the shared source in the repository's `machine-learning/` folder.
+Stage 2.3 calls a local Ollama model. This integration adds no database migration; apply migrations only when the checked-out revision adds one. Install and start Ollama yourself, then download the configured model:
+
+```powershell
+ollama pull llama3.2:3b
+```
+
+The API only accepts the loopback Ollama URL `http://127.0.0.1:11434`. The model call has a 90-second timeout. If Ollama is unavailable or returns invalid output, the API saves no answer and returns an error; it does not fall back to keyword matching. No Ollama dependency is installed in Python.
 
 Linux/macOS uses `.venv/bin/python`. Health is `/api/v1/health`; interactive OpenAPI is `/docs`.
 
@@ -46,6 +52,7 @@ Startup verifies PostgreSQL and required tables. It does not create tables autom
 | POST | `/api/v1/auth/login` | Verify credentials and rotate current browser session |
 | GET | `/api/v1/auth/session` | Restore identity, CSRF value and session expiry |
 | POST | `/api/v1/auth/logout` | Validate CSRF, revoke the database session and clear its cookie |
+| DELETE | `/api/v1/auth/account` | Require current password and CSRF, delete account-linked records, and clear the session cookie |
 | GET | `/api/v1/onboarding` | Load authenticated account's persisted onboarding state |
 | POST | `/api/v1/onboarding/about` | Record review of pre-assessment information |
 | POST | `/api/v1/onboarding/consent` | Record acceptance of the server-versioned demonstration notice |
@@ -85,7 +92,7 @@ See [the HTTP contract](docs/auth-api.md). Authentication alone does not establi
 
 Use matching hostnames for Vite and the API, for example both `127.0.0.1`, so cookie same-site rules work across ports. Never copy authentication tokens to localStorage/sessionStorage.
 
-Accounts, onboarding state, chats, assessments, answers, model results and unexpired sessions survive API restarts. Processing loads the three saved Stage 3.1 artifacts and applies the Stage 3.2 equal-weight mean of class probabilities. Accepted structured scores are the only model features; follow-up text remains stored but is not sent to the classifier. Low/Moderate/High labels and probabilities are score-derived and are not ASD-risk estimates or diagnoses. Install backend model dependencies and run `python -m alembic upgrade head` after pulling this change. No automatic deletion schedule or backup retention is configured. Chat and assessment deletion is available in History; account/onboarding deletion remains an operator action. Use fictional child information. The local postgres administrator connection is for development; a limited application role and reviewed privacy/deletion procedures are required before production.
+Accounts, onboarding state, chats, assessments, answers, model results and unexpired sessions survive API restarts. Processing loads the three saved Stage 3.1 artifacts and applies the Stage 3.2 equal-weight mean of class probabilities. Accepted structured scores are the only model features; follow-up text remains stored but is not sent to the classifier. Low/Moderate/High labels and probabilities are score-derived and are not ASD-risk estimates or diagnoses. Install backend model dependencies and run `python -m alembic upgrade head` after pulling this change. Account-linked application data is retained while the account is active. Account deletion from Settings requires password re-entry and cascades through onboarding, chats, assessments, answers, model results and sessions. Backup retention and deletion are not configured. Use fictional child information. The local postgres administrator connection is for development; a limited application role and reviewed privacy/deletion procedures are required before production.
 
 ## Checks
 
@@ -131,4 +138,4 @@ tests/             PostgreSQL, migration and browser tests
 docs/auth-api.md
 ```
 
-Pending: email verification/reset, Phase 4/5 NLP and result-template decisions, approved production privacy/deletion policy, self-service account deletion, distributed throttling and production deployment. PostgreSQL stores account-owned chat transcripts, assessment answers and provisional model classifications. Apply the latest Alembic migration before starting the backend.
+Pending: email verification/reset, Phase 4/5 NLP and result-template decisions, approved production privacy policy, backup retention/deletion, distributed throttling and production deployment. Account deletion is self-service; PostgreSQL cascades it through linked application records. PostgreSQL stores account-owned chat transcripts, assessment answers and provisional model classifications. Apply the latest Alembic migration before starting the backend.

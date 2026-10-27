@@ -38,11 +38,11 @@ export function PolicyLinks() {
             </section>
             <section>
               <h3>Purpose and access</h3>
-              <p>AuRA uses these records to sign you in, check setup eligibility, restore chats and assessments, and show your History. Records are in this project's development PostgreSQL database. Project database operators can access them.</p>
+              <p>AuRA uses these records to sign you in, check setup eligibility, restore chats and assessments, and show your History. Records are in this project's development PostgreSQL database, which is handled by the developer.</p>
             </section>
             <section>
               <h3>Retention and deletion</h3>
-              <p>No automatic deletion schedule is configured. Saved chats and assessments remain until you delete them from History. Account and onboarding records remain until a project database operator removes the account; self-service account deletion is not available. Retention for database backups has not been defined.</p>
+              <p>Account-linked data is retained while your account is active. You can delete your account in Settings after entering your password to confirm; this removes its onboarding, chats, assessments, answers, results and sessions from the application database. Backup retention has not been defined.</p>
             </section>
             <section>
               <h3>Development limits</h3>
@@ -61,7 +61,7 @@ export function PolicyLinks() {
             </section>
             <section>
               <h3>Storage and deletion</h3>
-              <p>Chat messages and assessment answers are saved to the project's development database and remain until deleted from History. Account and onboarding deletion requires a project database operator. No automatic retention period or production service commitment is set.</p>
+              <p>Chat messages and assessment answers are saved to the project's development database and remain until deleted from History or you delete your account in Settings after confirming with your password. Account deletion removes linked application records. Backup retention and production service commitments have not been defined.</p>
             </section>
           </div>
         )}

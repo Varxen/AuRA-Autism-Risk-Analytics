@@ -82,7 +82,7 @@ export const mockAssessmentService = {
   },
   async nextQuestion(session: AssessmentSession): Promise<AssessmentSession> {
     if (getAssessmentStage(session) !== 'ready-next')
-      throw new Error('Please answer the follow-up before continuing.')
+      throw new Error('Please complete this item before continuing.')
     await delay()
     if (session.currentQuestionIndex === mockQuestions.length - 1) {
       if (!canCompleteAssessment(session, getQuestionnaireQuestions(session.language)))
@@ -105,8 +105,7 @@ export const mockAssessmentService = {
     return {
       current: session.currentQuestionIndex + 1,
       total: mockQuestions.length,
-      answered: session.answers.filter((answer) => answer.followUpText.trim())
-        .length,
+      answered: session.answers.length,
       canComplete: canCompleteAssessment(session, getQuestionnaireQuestions(session.language)),
     }
   },

@@ -88,9 +88,16 @@ function isConsistencyGate(value: unknown): value is AssessmentConsistencyGate |
   if (value === null) return true
   if (!value || typeof value !== 'object') return false
   const gate = value as Record<string, unknown>
-  return (gate.status === 'consistent' || gate.status === 'contradiction' || gate.status === 'unclear') &&
-    (gate.nextAction === 'continue' || gate.nextAction === 'repeat_frequency_and_follow_up' || gate.nextAction === 'stop_unresolved') &&
-    Number.isInteger(gate.attemptsUsed) && Number.isInteger(gate.maxAttempts)
+  const validStatus = gate.status === 'consistent' || gate.status === 'contradiction' || gate.status === 'unclear'
+  const validSuggestion = gate.suggestedOptionId === null || typeof gate.suggestedOptionId === 'string'
+  const validAttempts = Number.isInteger(gate.attemptsUsed) && Number.isInteger(gate.maxAttempts)
+  if (!validStatus || !validSuggestion || !validAttempts) return false
+  if (gate.status === 'contradiction')
+    return gate.nextAction === 'approve_suggestion' && typeof gate.suggestedOptionId === 'string'
+  if (gate.status === 'consistent')
+    return gate.nextAction === 'continue' && gate.suggestedOptionId === null
+  return (gate.nextAction === 'repeat_frequency_and_follow_up' || gate.nextAction === 'stop_unresolved') &&
+    gate.suggestedOptionId === null
 }
 
 export const assessmentService = {
@@ -139,11 +146,12 @@ export const assessmentService = {
     session: AssessmentSession,
     optionId: string,
     text: string,
+    approvedSuggestion = false,
   ): Promise<AssessmentAnswerSubmission> {
     const response = await write(
       `/${session.id}/answers/q${session.currentQuestionIndex + 1}`,
       'PUT',
-      { selectedOptionId: optionId, followUpText: text },
+      { selectedOptionId: optionId, followUpText: text, approvedSuggestion },
     )
     const body: unknown = await response.json().catch(() => null)
     if (!response.ok) {

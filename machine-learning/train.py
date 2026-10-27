@@ -13,8 +13,7 @@ from config import (
     LOW_MAX_SCORE,
     MODERATE_MAX_SCORE,
     RANDOM_STATE,
-    SOURCE_SHEET,
-    SOURCE_WORKBOOK,
+    SOURCE_DATASETS,
     TRAIN_SIZE,
     TEST_SIZE,
     VALIDATION_SIZE,
@@ -23,6 +22,7 @@ from data_splits import split_dataset
 from evaluate import evaluate_predictions, print_metrics
 from models import build_models
 from prepare_dataset import load_dataset
+from report_visuals import print_comparison_table, save_validation_dashboard
 
 ROOT = Path(__file__).resolve().parent
 ARTIFACTS_DIR = ROOT / "artifacts"
@@ -30,11 +30,12 @@ REPORTS_DIR = ROOT / "reports"
 
 
 def train_baselines() -> dict[str, object]:
-    dataset = load_dataset(SOURCE_WORKBOOK)
+    dataset = load_dataset()
     split = split_dataset(dataset.features, dataset.target)
 
     models = build_models()
     evaluations: dict[str, object] = {}
+    chart_metrics: dict[str, dict[str, object]] = {}
     total_models = len(models)
     for index, (name, model) in enumerate(models.items(), start=1):
         print(f"\nTraining model {index}/{total_models}: {name.replace('_', ' ').title()} ({len(split.target_train)} rows)")
@@ -52,12 +53,16 @@ def train_baselines() -> dict[str, object]:
         validation_prediction = model.predict(split.features_validation)
         validation_metrics = evaluate_predictions(split.target_validation, validation_prediction)
         evaluations[name] = {"validation": validation_metrics}
+        chart_metrics[name] = validation_metrics
         print_metrics(f"Validation results: {name.replace('_', ' ').title()}", validation_metrics)
+
+    print_comparison_table("Stage 3.1 validation comparison", chart_metrics)
 
     report: dict[str, object] = {
         "stage": "3.1 multi-model classification baseline",
         "created_at": datetime.now(UTC).isoformat(),
-        "source_sheet": SOURCE_SHEET,
+        "source_workbooks": [path.name for path, _ in SOURCE_DATASETS],
+        "source_sheets": {path.name: list(sheets) for path, sheets in SOURCE_DATASETS},
         "training_rows": dataset.rows_used,
         "excluded_without_consent": dataset.rows_excluded_without_consent,
         "train_rows": int(len(split.target_train)),
@@ -67,7 +72,7 @@ def train_baselines() -> dict[str, object]:
         "class_order": list(CLASS_LABELS),
         "class_counts": dataset.label_counts,
         "class_encoding": {label: index for index, label in enumerate(CLASS_LABELS)},
-        "target_source": "RAW DATA / Ground Truth Labels",
+        "target_source": "Ground Truth Labels; category worksheets checked where present",
         "target_cutoffs": {
             "Low": f"0-{LOW_MAX_SCORE}",
             "Moderate": f"{LOW_MAX_SCORE + 1}-{MODERATE_MAX_SCORE}",
@@ -94,8 +99,11 @@ def train_baselines() -> dict[str, object]:
         dump(model, ARTIFACTS_DIR / f"{name}.joblib")
     report_path = REPORTS_DIR / "stage_3_1_baseline.json"
     report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    chart_path = save_validation_dashboard(chart_metrics, REPORTS_DIR / "stage_3_1_validation_dashboard.png")
     print(f"Trained {len(models)} models on {dataset.rows_used} consented records.")
     print(f"Aggregate evaluation report: {report_path}")
+    if chart_path:
+        print(f"Validation charts: {chart_path}")
     print("Target labels are provisional score-derived categories, not clinical outcomes.")
     return report
 

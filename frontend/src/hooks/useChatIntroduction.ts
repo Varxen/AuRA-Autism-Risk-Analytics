@@ -41,7 +41,7 @@ export function useChatIntroduction() {
     } else if (phase === 'thinking') {
       timer = window.setTimeout(() => {
         setIntroduction({ messageId, phase: 'typing', characters: 0 })
-      }, 900)
+      }, 650)
     } else {
       let characters = 0
       function typeCharacter() {
@@ -50,9 +50,9 @@ export function useChatIntroduction() {
         const finished = characters >= firstMessage.content.length
         setIntroduction({ messageId, phase: finished ? 'ready' : 'typing', characters })
         if (!finished)
-          timer = window.setTimeout(typeCharacter, /[.!?,\n]/.test(firstMessage.content[characters - 1]) ? 160 : 26)
+          timer = window.setTimeout(typeCharacter, /[.!?,\n]/.test(firstMessage.content[characters - 1]) ? 75 : 12)
       }
-      timer = window.setTimeout(typeCharacter, 26)
+      timer = window.setTimeout(typeCharacter, 12)
     }
     return () => window.clearTimeout(timer)
   }, [firstMessage, messageId, phase, reducedMotion])

@@ -56,4 +56,15 @@ export const authService = {
     })
     await requireSuccess(response)
   },
+  async deleteAccount(password: string, csrfToken: string): Promise<void> {
+    const response = await request('/account', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken,
+      },
+      body: JSON.stringify({ password }),
+    })
+    await requireSuccess(response)
+  },
 }

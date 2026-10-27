@@ -48,6 +48,10 @@ POST `/logout` returns 204, revokes the database session and clears its cookie. 
 
 Mutations require an exact configured frontend Origin or the API's own origin after trusted-host checks. Missing/null/untrusted Origin is rejected. Browser fetch supplies Origin; command-line clients must set it explicitly. Swagger's same-origin UI can also exercise the endpoints.
 
+## Delete account
+
+DELETE `/account` requires the active HttpOnly session cookie, the current `X-CSRF-Token`, and an application/json body containing the account password. The server verifies the session, CSRF token and password inside a transaction, then deletes the user record. PostgreSQL cascades deletion through sessions, onboarding/consent, chats/messages, assessments/answers and processing results. Success returns 204 and clears the session cookie. Wrong password returns 403 without deleting data. The frontend exposes this through Settings > Delete account; backups are outside the current application database deletion flow and have no defined retention schedule.
+
 ## Onboarding
 
 Base path: `/api/v1/onboarding`. Every endpoint requires the HttpOnly session cookie. The server derives account ownership from that session; requests cannot supply a user ID, consent version, consent timestamp, eligibility flag, or completion flag.
@@ -73,14 +77,14 @@ Base path: `/api/v1/assessments`. Every request requires the HttpOnly session co
 | GET `/` | List only this account's sessions, answer records and question snapshots |
 | POST `/` | Create a session using approved version `revised-pilot-testing-2-v1` and language `en` or `fil` |
 | GET `/{id}` | Restore the owned session and its immutable wording snapshot |
-| PUT `/{id}/answers/{question_id}` | Submit one choice with its follow-up; stage 2.3 accepts and saves the pair or returns a retry action |
-| POST `/{id}/advance` | Require an accepted answer/follow-up pair before advancing; complete after item 13 |
-| POST `/{id}/processing` | Run saved Logistic Regression, Random Forest, and XGBoost artifacts with equal-weight soft voting; requires all 13 accepted answers and follow-ups |
+| PUT `/{id}/answers/{question_id}` | Submit a choice; score 0 saves without follow-up, while scores 1 and 2 require Stage 2.3 acceptance |
+| POST `/{id}/advance` | Require saved score-0 answer or accepted score-1/2 answer with follow-up; complete after item 13 |
+| POST `/{id}/processing` | Run saved Logistic Regression, Random Forest, and XGBoost artifacts with equal-weight soft voting; requires all 13 answers and follow-ups for scores 1 and 2 |
 | GET `/{id}/processing` | Read persisted model status and category/probabilities |
 | POST `/{id}/processing/retry` | Retry failed model inference |
 | DELETE `/{id}` | Permanently delete only the owned session and its answers |
 
-The server validates item ID, option ID, sequence and 4,000-character follow-up limit. Stage 2.3 uses the selected question's bilingual lexicon entry and conservative rules. `consistency` returns `consistent`/`continue`, `contradiction` or `unclear` with `repeat_frequency_and_follow_up`, or `stop_unresolved` after two clarification retries. A non-consistent pair is not saved; the session persists retry count and unresolved state. Only accepted pairs can advance. Scoring is Q1-Q9 Always/Sometimes/Never = 0/1/2 and Q10-Q13 Yes/Sometimes/No = 2/1/0. The server stores the selected option, calculated item score and unmodified accepted parent text. It never accepts a client-supplied score. Identical writes are safe; conflicting changes return 409. A response lost after a committed write can be recovered with GET `/{id}`.
+The server validates item ID, option ID, sequence and 4,000-character follow-up limit. Score 0 advances without follow-up; scores 1 and 2 require one. Stage 2.3 sends the question ID, approved question and indicator, selected option and unmodified follow-up to the loopback Ollama model. The model returns `consistent`, `contradiction` or `unclear`; decisive outcomes require an exact contiguous evidence span, up to the full response when needed to preserve context. A clear contradiction returns a permitted suggested option; the parent must approve it, then the backend revalidates the original text against that choice before saving its server-calculated score. `consistency` returns `continue`, `approve_suggestion`, `repeat_frequency_and_follow_up`, or `stop_unresolved`; only unclear outcomes use the two-retry clarification limit. A contradictory submission is not saved until the parent approves a suggested option and the backend revalidates it. Unclear submissions are not saved; the session persists clarification retry count and unresolved state. Ollama errors return 502/503 without consuming a retry or saving the response. There is no keyword-matching fallback. Score-0 answers and accepted score-1/2 answer-follow-up pairs can advance. Scoring is Q1-Q9 Always/Sometimes/Never = 0/1/2 and Q10-Q13 Yes/Sometimes/No = 2/1/0. The server stores the selected option, calculated item score and unmodified accepted parent text. It never accepts a client-supplied score. Identical writes are safe; conflicting changes return 409. A response lost after a committed write can be recovered with GET `/{id}`.
 
 Each session stores language, questionnaire version and full question/option snapshot. PostgreSQL keeps the session, answers and snapshots until the user deletes the assessment in History. Accepted structured scores form the only model feature vector; parent follow-up text is stored unchanged but is not sent to these models. Processing loads the three saved Stage 3.1 artifacts and applies Stage 3.2 equal-weight soft voting. Jobs persist the returned category, model support probabilities, model version and generation time. Low/Moderate/High are provisional score-derived categories, not ASD probabilities or a diagnosis. Legacy preview records remain ineligible. Processing results and answers are deleted with their assessment. Model dependencies and artifacts must exist in the backend runtime; failed inference can be retried.
 
@@ -98,9 +102,9 @@ Base path: `/api/v1/chats`. Requests require an authenticated session and curren
 
 Chat writes accept 1-2 assistant reply messages per turn, enforce the 4,000-character message limit, and use a client turn ID for safe retry. A conflicting replay returns 409. Conversation history is capped at 500 messages; start a new chat to continue after the cap. The frontend's fixed local knowledge-base adapter still selects educational replies; this API stores and restores them but does not run NLP or generate answers.
 
-PostgreSQL retains chats and assessments until deleted in History. No automatic expiry or backup retention is configured. Account/onboarding deletion remains an operator action. The development privacy notice covers chat storage and requires users to use fictional child details.
+PostgreSQL retains chats and assessments until deleted in History or the account is deleted. Account-linked application records can be removed in Settings after password confirmation. No automatic expiry or backup retention is configured. The development privacy notice covers chat storage and requires users to use fictional child details.
 
-The development privacy notice describes stored fields, purpose, local database access, retention and deletion. Assessment deletion is self-service. Account/onboarding deletion remains an operator action; backup retention is undefined. The notice is a development draft, not legally or clinically approved policy. Use fictional child information.
+The development privacy notice describes stored fields, purpose, local database access, retention and deletion. Assessment and account deletion are self-service; backup retention is undefined. The notice is a development draft, not legally or clinically approved policy. Use fictional child information.
 
 ## Error contract
 

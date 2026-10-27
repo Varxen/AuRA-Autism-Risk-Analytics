@@ -19,6 +19,8 @@ export function useAssessment() {
   const [error, setError] = useState('')
   const [pendingOptionId, setPendingOptionId] = useState<string | null>(null)
   const [pendingFollowUpText, setPendingFollowUpText] = useState<string | null>(null)
+  const [followUpDraft, setFollowUpDraft] = useState<string | null>(null)
+  const [approvedSuggestions, setApprovedSuggestions] = useState<Record<string, string>>({})
   const [failedAttempts, setFailedAttempts] = useState<AssessmentConsistencyAttempt[]>([])
   const [consistencyBlocked, setConsistencyBlocked] = useState(false)
   const lock = useRef(false)
@@ -48,6 +50,10 @@ export function useAssessment() {
     if (lock.current || !records.some((record) => record.session.id === id)) return false
     if (id !== activeId) {
       reset()
+      setFollowUpDraft(null)
+      setApprovedSuggestions((current) => Object.fromEntries(
+        Object.entries(current).filter(([key]) => key.startsWith(`${id}:`)),
+      ))
       setFailedAttempts([])
       setConsistencyBlocked(false)
     }
@@ -62,6 +68,8 @@ export function useAssessment() {
     setActiveId(null)
     setPendingOptionId(null)
     setPendingFollowUpText(null)
+    setFollowUpDraft(null)
+    setApprovedSuggestions({})
     setFailedAttempts([])
     setConsistencyBlocked(false)
     setError('')
@@ -86,36 +94,35 @@ export function useAssessment() {
     }
   }
 
-  async function run(task: () => Promise<AssessmentSessionRecord>, interruptIntroduction = false) {
-    if (loading || lock.current || (!interruptIntroduction && introduction.phase !== 'ready')) return
+  async function run(task: () => Promise<AssessmentSessionRecord>, interruptIntroduction = false): Promise<boolean> {
+    if (loading || lock.current || (!interruptIntroduction && introduction.phase !== 'ready')) return false
     if (interruptIntroduction) reset()
     lock.current = true
     setBusy(true)
     setError('')
+    let succeeded = false
     try {
       saveRecord(await task())
+      succeeded = true
     } catch (cause) {
       reset()
+      const message = cause instanceof Error ? cause.message : 'Something went wrong. Please try again.'
       if (session) {
         try {
           saveRecord(await assessmentService.getSession(session.id))
-          setError('')
-        } catch {
-          setError(cause instanceof Error ? cause.message : 'Something went wrong. Please try again.')
-        }
-      } else {
-        setError(
-          cause instanceof Error
-            ? cause.message
-            : 'Something went wrong. Please try again.',
-        )
+        } catch { /* Keep the original submission error visible. */ }
       }
+      setPendingFollowUpText(null)
+      setError(message)
     } finally {
       lock.current = false
       setBusy(false)
-      setPendingOptionId(null)
-      setPendingFollowUpText(null)
+      if (succeeded) {
+        setPendingOptionId(null)
+        setPendingFollowUpText(null)
+      }
     }
+    return succeeded
   }
 
   async function start(language: AssessmentLanguage) {
@@ -146,9 +153,65 @@ export function useAssessment() {
     return updated
   }
 
+  async function submitFollowUp(
+    optionId: string,
+    text: string,
+    approvedSuggestion = false,
+  ): Promise<boolean> {
+    if (!session || consistencyBlocked || session.consistencyBlocked) return false
+    const question = questions[session.currentQuestionIndex]
+    if (!question?.options.some((option) => option.id === optionId)) return false
+    setPendingOptionId(optionId)
+    setPendingFollowUpText(text)
+    setFollowUpDraft(null)
+    const succeeded = await run(async () => {
+      const submission = await assessmentService.submitAnswer(session, optionId, text, approvedSuggestion)
+      if (approvedSuggestion && !submission.consistency) {
+        setApprovedSuggestions((current) => ({
+          ...current,
+          [`${session.id}:${question.id}`]: optionId,
+        }))
+        setFailedAttempts([])
+        setConsistencyBlocked(false)
+        return { session: await advance(submission.session), questions: submission.questions }
+      }
+      if (!submission.consistency)
+        throw new Error('AuRA did not return a consistency check. Please try again.')
+      if (submission.consistency.nextAction !== 'continue') {
+        setFailedAttempts((current) => [...current, {
+          selectedOptionId: optionId,
+          followUpText: text,
+          outcome: submission.consistency!.status === 'contradiction' ? 'contradiction' : 'unclear',
+          suggestedOptionId: submission.consistency!.suggestedOptionId,
+        }])
+        setConsistencyBlocked(submission.consistency.nextAction === 'stop_unresolved')
+        return {
+          session: submission.session,
+          questions: submission.questions,
+          consistency: submission.consistency,
+        }
+      }
+      setFailedAttempts([])
+      setConsistencyBlocked(false)
+      return { session: await advance(submission.session), questions: submission.questions }
+    })
+    if (!succeeded && approvedSuggestion) {
+      setPendingOptionId(null)
+      setPendingFollowUpText(null)
+    }
+    return succeeded
+  }
+
   return {
     session,
     sessions: records.map((record) => record.session),
+    approvedSuggestions: session
+      ? Object.fromEntries(
+          Object.entries(approvedSuggestions)
+            .filter(([key]) => key.startsWith(`${session.id}:`))
+            .map(([key, optionId]) => [key.slice(session.id.length + 1), optionId]),
+        )
+      : {},
     loading,
     resume,
     newSession,
@@ -162,7 +225,13 @@ export function useAssessment() {
     failedAttempts,
     consistencyBlocked: consistencyBlocked || Boolean(session?.consistencyBlocked),
     start,
-    stage: session ? (pendingOptionId ? 'follow-up' : getAssessmentStage(session)) : null,
+    stage: session
+      ? pendingOptionId
+        ? questions[session.currentQuestionIndex]?.options.find((option) => option.id === pendingOptionId)?.score === 0
+          ? 'ready-next'
+          : 'follow-up'
+        : getAssessmentStage(session)
+      : null,
     question: session ? questions[session.currentQuestionIndex] : undefined,
     answer: session?.answers.find(
       (answer) =>
@@ -171,9 +240,24 @@ export function useAssessment() {
     select: (optionId: string) => {
       if (!session || lock.current || consistencyBlocked || session.consistencyBlocked) return
       const question = questions[session.currentQuestionIndex]
-      if (!question?.options.some((option) => option.id === optionId)) return
+      const selectedOption = question?.options.find((option) => option.id === optionId)
+      if (!question || !selectedOption) return
+      if (selectedOption.score === 0) {
+        setPendingOptionId(optionId)
+        setPendingFollowUpText(null)
+        setFollowUpDraft(null)
+        setError('')
+        void run(async () => {
+          const answered = await assessmentService.saveStructuredAnswer(session, optionId)
+          return { session: await advance(answered), questions }
+        }).then((succeeded) => {
+          if (!succeeded) setPendingOptionId(null)
+        })
+        return
+      }
       setPendingOptionId(optionId)
       setPendingFollowUpText(null)
+      setFollowUpDraft(null)
       setError('')
       const messageId = `${session.id}:${question.id}:follow-up`
       begin(messageId)
@@ -184,22 +268,21 @@ export function useAssessment() {
       const savedOptionId = session?.answers.find((answer) => answer.questionId === activeQuestionId)?.selectedOptionId
       const optionId = pendingOptionId ?? savedOptionId ?? null
       if (!session || !optionId || consistencyBlocked || session.consistencyBlocked)
-        return Promise.resolve()
-      return run(async () => {
-        setPendingFollowUpText(text)
-        const submission = await assessmentService.submitAnswer(session, optionId, text)
-        if (!submission.consistency)
-          throw new Error('AuRA did not return a consistency check. Please try again.')
-        if (submission.consistency.nextAction !== 'continue') {
-          setFailedAttempts((current) => [...current, { selectedOptionId: optionId, followUpText: text }])
-          setConsistencyBlocked(submission.consistency.nextAction === 'stop_unresolved')
-          return { session: submission.session, questions: submission.questions }
-        }
-        setFailedAttempts([])
-        setConsistencyBlocked(false)
-        return { session: await advance(submission.session), questions: submission.questions }
-      })
+        return Promise.resolve(false)
+      return submitFollowUp(optionId, text)
     },
+    approveSuggestion: (optionId: string, text: string) =>
+      submitFollowUp(optionId, text, true),
+    reviewSuggestedAnswer: (optionId: string, text: string) => {
+      if (!session || !questions[session.currentQuestionIndex]?.options.some((option) => option.id === optionId)) return
+      setFailedAttempts([])
+      setConsistencyBlocked(false)
+      setPendingOptionId(optionId)
+      setPendingFollowUpText(null)
+      setFollowUpDraft(text)
+      setError('')
+    },
+    followUpDraft,
     deleteSession: async (id: string) => {
       if (loading || lock.current) return false
       lock.current = true
@@ -212,6 +295,9 @@ export function useAssessment() {
           reset()
           setActiveId(null)
         }
+        setApprovedSuggestions((current) => Object.fromEntries(
+          Object.entries(current).filter(([key]) => !key.startsWith(`${id}:`)),
+        ))
         return true
       } catch (cause) {
         setError(cause instanceof Error ? cause.message : 'AuRA could not delete this assessment.')

@@ -1,6 +1,6 @@
 # AuRA development roadmap
 
-Last reviewed: 2026-10-25
+Last reviewed: 2026-10-27
 
 This is the current completion roadmap. It distinguishes working frontend demonstrations from production functionality. The database blueprint remains in [AuRA_Database_Development_Plan.md](../documentation/AuRA_Database_Development_Plan.md); its schemas and technical recommendations are proposals, not completed infrastructure.
 
@@ -22,10 +22,13 @@ Run application and test commands from `frontend/`; `docs/` and `documentation/`
 - [x] Separate assessment workflow with explicit English or Tagalog selection before starting.
 - [x] Compact Assessment header across language selection and questionnaire: 8px vertical padding, 76px desktop / 68px mobile, animated robot head and contextual English/Filipino subtitle; redundant Pre-assessment header button removed.
 - [x] All 13 main questions and follow-ups from the supplied revised English PDF and Filipino DOCX.
+- [x] Ask follow-ups only for score 1 or 2; save score 0 and advance directly without text or Ollama validation.
 - [x] One scoring configuration: Q1-Q9 use 0/1/2 for Always/Sometimes/Never; Q10-Q13 use 2/1/0 for Yes/Sometimes/No.
 - [x] Continuous assessment transcript, selected-answer bubbles, verbatim explanations and automatic question advancement.
 - [x] Saved explanation recovery after failed advancement, duplicate-submission guards and progress tracking.
 - [x] Live completion processing using the saved Logistic Regression, Random Forest and XGBoost artifacts with equal-weight soft voting.
+- [x] Restyle completed-assessment summary to match the supplied reference: responsive completion panel, model-support bars and a separate New Assessment action.
+- [x] Make chat response bubbles size to their content within the available width and add inner spacing for readability.
 - [x] Remove fictional skip responses and timer-based processing preview; legacy preview sessions remain ineligible for inference.
 - [x] History lists multiple information chats and assessments; opening an entry restores that session.
 - [x] New Chat keeps earlier conversations; chat transcripts and assessment sessions remain server-owned in PostgreSQL.
@@ -43,7 +46,7 @@ The first screenshot's label discrepancy is resolved by the revised questionnair
 
 ### Existing validation evidence
 
-Backend auth update: 42 tests passed against real PostgreSQL using disposable schemas; browser registration/login, HttpOnly cookies, CSRF, session rotation, refresh and logout also passed. Applied revision: `20261023_01`. Frontend checks below are the earlier frontend runs, not new auth-integration claims.
+Backend auth update: 42 tests passed against real PostgreSQL using disposable schemas; browser registration/login, HttpOnly cookies, CSRF, session rotation, refresh and logout also passed. Applied revision: `20261023_01`. On 2026-10-27, account-deletion/auth passed 30 tests, covering CSRF and wrong-password rejection, successful deletion, cookie clearing, cascaded linked-record deletion, and preservation of another account. Frontend production build and ESLint passed. These are focused checks, not a new full browser auth run.
 
 The 2026-10-23 frontend completion work reran strict TypeScript/production build, ESLint and 12 domain/onboarding tests. The onboarding and assessment backend follow-up passes 48 backend PostgreSQL tests, 11 frontend domain tests, lint, build, and a browser flow that checks persistence through refresh and login. Browser checks cover the new frontend pages, onboarding, full English/Filipino questionnaire, processing and multiple History sessions, including narrow mobile viewports. Captures are in `design-review/` (historical captures are no longer retained in this checkout).
 
@@ -55,13 +58,13 @@ Physical mobile devices and real virtual keyboards remain unverified. See [front
 
 ## 2. Frontend gaps: implementation delivered, approvals pending
 
-Updated 2026-10-23. See [frontend completion notes](frontend-completion.md) for scope, verification and handoff details.
+Updated 2026-10-27. See [frontend completion notes](frontend-completion.md) for scope, verification and handoff details.
 
 - [x] Build Resources with search, topic filters, CDC/WHO source cards, developmental milestone reference and an assessment/consultation guide.
 - [x] Display source links, publishers, English language, added dates and an honest pending-review status. Keep resource content separate from behavioral NLP rules.
 - [ ] Verify current external source content and obtain stakeholder/clinical review plus approved Filipino resource summaries. Added dates are not clinical review dates.
 - [x] Replace Support placeholder with keyboard-accessible FAQs, chat/resource navigation and an explicit unavailable contact service.
-- [x] Replace Settings placeholder with demo session details, History access, language guidance, device motion status, privacy notices and working sign out.
+- [x] Replace Settings placeholder with session details, History access, language guidance, device motion status, privacy notices, working sign out and account deletion with password confirmation.
 - [x] Update login privacy/terms copy and provide reusable under-development policy dialogs without implying accepted or approved terms.
 - [x] Review consent transitions and remove the redundant Decline / Exit button. Unchecked consent and direct-URL guards still block setup bypass.
 - [x] Correct stale About copy that claimed only one question; review bilingual UI labels without changing the supplied question/follow-up wording.
@@ -71,13 +74,13 @@ Updated 2026-10-23. See [frontend completion notes](frontend-completion.md) for 
 - [x] Run strict TypeScript/production build, lint, 12 unit tests, new frontend page browser checks, onboarding, full English/Filipino assessments and History regressions. Visually review desktop/mobile captures.
 - [ ] Obtain approved Privacy Policy/Terms wording and real support contact details. User confirmed these are not available yet; the UI identifies them as under development.
 
-Acceptance: implemented destinations work within the frontend demo. Policy/contact approval, clinical resource review/Filipino resources and physical-device verification remain open. No real account settings, contact delivery or production policies are claimed.
+Acceptance: implemented destinations work within the frontend; account deletion uses the backend and removes linked application records. Policy/contact approval, clinical resource review/Filipino resources and physical-device verification remain open. No contact delivery or production policies are claimed.
 
 ### Current handoff
 
 The frontend implementation milestone is delivered. Remaining frontend work is external source verification, clinical/Filipino resource review, approved policy/contact content and physical-device keyboard testing. These remain unchecked above.
 
-The backend auth, onboarding and assessment-storage slices are implemented in `backend/`: FastAPI, PostgreSQL-backed sessions, versioned consent, eligibility, bilingual questionnaire snapshots, answer progression and owner-scoped History. Migration `20261024_03` is applied to local `aura_db`. The frontend calls these APIs through Vite. Model inference now uses saved Stage 3.1 artifacts and Stage 3.2 soft voting; NLP interpretation and clinical validation remain pending.
+The backend auth, onboarding and assessment-storage slices are implemented in `backend/`: FastAPI, PostgreSQL-backed sessions, versioned consent, eligibility, bilingual questionnaire snapshots, answer progression and owner-scoped History. Migration `20261024_03` is applied to local `aura_db`. The frontend calls these APIs through Vite. HTTPS origins under `*.trycloudflare.com` are now accepted dynamically by the request-origin guard and credentialed CORS; the backend cookie must be Secure and the current tunnel must be opened with HTTPS. Stage 3.1 and 3.2 artifacts were regenerated locally from 2,900 consented records on 2026-10-27; restart backend and check a new live result before claiming the backend loaded those artifacts. Training scripts now print metric comparison tables and save PNG dashboards to ignored `machine-learning/reports/`. Stage 2.3 model evaluation and clinical validation remain pending.
 
 ## 3. Backend API and real identity
 
@@ -87,7 +90,7 @@ Authentication method selected by the user: email + password with server-side Ht
 - [x] Define strict credential/public-session schemas and auth REST contracts.
 - [x] Implement register/login, salted scrypt hashes, normalized unique email and public error redaction.
 - [x] Implement PostgreSQL-backed session restoration, idle/absolute expiry, token rotation and server-side logout revocation.
-- [x] Add exact-origin/CSRF checks, credentialed CORS, request throttling, JSON/body limits and no-store responses.
+- [x] Add configured-origin/CSRF checks, credentialed CORS, request throttling, JSON/body limits and no-store responses; allow generated HTTPS `*.trycloudflare.com` origins dynamically.
 - [x] Verify self-session account isolation, concurrent registration, restart persistence, secure-cookie flags and database failure handling.
 - [x] Pass 48 PostgreSQL/configuration/migration/assessment tests and browser auth/onboarding/assessment persistence checks.
 - [x] Connect frontend registration/login forms, session restoration and sign out to the real auth API.
@@ -112,46 +115,56 @@ Implemented authentication, onboarding and assessment persistence; the rest of t
 - [x] Persist minimal guardian eligibility, versioned consent and onboarding progress.
 - [x] Persist original structured/textual answers, question/version/language snapshots and assessment progress.
 - [x] Persist account-owned information chats with ordered messages, replay-safe turns, History restore and deletion.
-- [ ] Implement approved retention, withdrawal, deletion and operational access procedures.
+- [x] Define retention: keep account-linked data while the account remains active.
+- [x] Define withdrawal: Settings will provide Delete Account with a second confirmation using password re-entry; deletion will erase all application data linked to that account.
+- [x] Define operational access: database handling is limited to the developer.
+- [x] Implement Settings account deletion with password confirmation, CSRF validation, session-cookie clearing and PostgreSQL cascade deletion of all linked application records.
+- [x] Verify account deletion with 30 backend auth tests; frontend production build and ESLint passed (2026-10-27).
+- [ ] Define backup deletion/retention and operational access controls before production.
 
 Acceptance: users, cookie sessions, onboarding, chat transcripts, assessment History and model results are durable. The frontend restores processing results from PostgreSQL. Inference is synchronous in the API process; no background worker is configured.
 
 ## 5. NLP processing and feature mapping
 
-Dependencies: client review of the working lexicon and the 2.3 consistency rules; approved questionnaire scoring and shared training/inference feature order.
+Dependencies: approved questionnaire scoring and shared training/inference feature order. Stage 2.3 model evaluation still needs human-reviewed labels and client review.
 
 - [x] Implement baseline text preprocessing while retaining the parent's original follow-up response (Stage 2.1).
 - [x] Implement question-specific matching against the client's behavioral lexicon as a working baseline (Stage 2.2); coverage and clinical validity remain unapproved.
-- [x] Connect a rule-based consistency gate that can request both the structured choice and follow-up again (Stage 2.3); the interpretation rules remain partially done pending review.
+- [x] Connect Stage 2.3 to a loopback Ollama model. It receives question/indicator, selected answer, permitted choices and follow-up; returns `consistent`, `contradiction` or `unclear`.
+- [x] For clear contradictions, suggest a permitted answer option. After parent approval, save that option with its server-calculated score and advance without a second Ollama check; the user confirmed this flow works after restarting the backend. Unclear responses still require clarification.
 - [x] Encode the accepted Q1-Q13 structured choices into one ordered 13-value vector using the approved scoring rules (Stage 2.4).
-- [x] Use that same vector schema for training and live model inference. Follow-up text is stored and used by the current consistency gate, but is not a classifier feature.
-- [ ] Review Stage 2.3 interpretation, unmatched/low-information handling, retries, and bilingual examples with the client.
-- [ ] As future refinement, evaluate a context-aware NLP model for varied parent wording, frequency, polarity and negation in English, Filipino and Taglish. Keep the current keyword/phrase matching and simple rules as the interim baseline until reviewed examples, confidence handling and validation are agreed.
-- [ ] Version and document the approved NLP rules and feature schema after review.
+- [x] Use that same vector schema for training and live model inference. Follow-up text is stored and checked by Stage 2.3, but is not a classifier feature. A parent-approved suggestion replaces the earlier frequency answer; the backend saves the suggested option and calculates its score.
+- [x] Require structured model output and exact response evidence for decisive outcomes. Model/network failures save no answer, consume no retry and do not fall back to keyword matching.
+- [ ] Evaluate the Llama 3.2 3B prototype using human-reviewed, consented English/Filipino/Taglish examples and respondent-separated holdout; report per-outcome precision/recall, false acceptance, false retry and latency.
+- [ ] Review suggested-answer approval, unclear handling, retry behavior and evidence quotes with the client. Confirm Ollama availability on development machines.
+- [ ] Keep the Stage 2.2 lexicon as a documented reference baseline. Do not describe the model prototype as clinically validated.
+- [x] Revise the Stage 2.3 candidate prompt with follow-up-intent rules and item-specific semantic guidance for all 13 questions, including concise examples and clear absence responses.
 
-Acceptance: the current baseline has reproducible preprocessing, lexicon lookup, consistency checks and ordinal encoding. These do not establish clinical NLP validity. Unresolved rule cases and the role of follow-up text in later phases remain open.
+Acceptance: preprocessing, lexicon reference matching, model-based consistency prototype and ordinal encoding work. Model quality and clinical validity remain unestablished until reviewed-example evaluation and client review are complete.
+
 ## 6. Dataset, training and model evaluation
 
 Dependencies: approved labeling protocol, appropriately consented research data and stable feature definitions. Dataset preparation can proceed alongside NLP rule work once these decisions are settled.
 
 - [ ] Document dataset provenance, permitted use, expert-reviewed labels and class definitions.
-- [ ] Prevent leakage between training/validation/test sets, including repeated records from the same child.
-- [x] Train Logistic Regression, Random Forest and XGBoost using the current 13-score schema and fixed stratified 70/15/15 split.
-- [x] Compare individual models on validation; average their class probabilities with equal-weight soft voting and evaluate the ensemble on the held-out test split.
+- [x] Combine the original 500-record workbook and additional 2,400-record workbook in the loader; validate consent, score totals, labels, category sheets and cutoffs. The user confirmed repeated codes in the new workbook refer to different people; duplicate-code checks are scoped to workbook and sheet.
+- [x] Verify duplicate respondent codes do not represent repeated people in the current data, based on the user's confirmation. Future sources still need stable identifiers or documented deduplication.
+- [x] Train Logistic Regression, Random Forest and XGBoost on 2,900 consented records using the 13-score schema and fixed stratified 70/15/15 split. Print a comparison table and save validation metric/confusion-matrix charts in ignored `reports/`.
+- [x] Compare individual models on validation; equal-weight soft voting reached 98.39% validation accuracy and 97.48% held-out test accuracy (Macro F1 0.9744).
 - [ ] Review generalization, bilingual input behavior and screening limitations; document thresholds and failure conditions where applicable.
 - [ ] Version model artifacts, preprocessing, feature schema, training configuration and evaluation evidence.
 
-Acceptance: the provisional 3.1/3.2 pipeline runs reproducibly and reports held-out metrics. This does not establish pre-screening validity: labels are derived from input scores, dataset expansion is pending, and independent labels, clinical review and intended-use approval remain open.
+Acceptance: the provisional 3.1/3.2 pipeline runs reproducibly and reports held-out metrics. The 2,900-record pool meets the working 500-per-category target, but that target is not statistician-approved. Labels are derived from input scores; metrics show reproduction of the cutoff rule, not ASD-risk validity. Independent labels, clinical review and intended-use approval remain open.
 
 ## 7. Live model inference and thesis Phases 4-5
 
-Dependencies: verify History restoration after navigation/refresh; client agreement on the post-ML NLP and final result-summary flow.
+History restoration after navigation/refresh is verified. Client agreement on the post-ML NLP and final result-summary flow remains pending.
 
 - [x] Replace timer-only processing with synchronous saved-model inference, failure reporting and retry handling.
 - [x] Connect saved Logistic Regression, Random Forest and XGBoost models to the completed 13-score vector; compute equal-weight soft voting.
 - [x] Select the highest-support Low/Moderate/High category and persist the category, model version, class-support probabilities and generated time in the processing result.
 - [x] Show the provisional score category in the assessment conversation; legacy fictional preview sessions are blocked from inference.
-- [ ] Verify that the saved result restores from History after navigation or refresh.
+- [x] Verify that the saved result restores from History after navigation or refresh.
 - [x] Apply migration `20261025_08`; the user confirmed a live model result appeared in the assessment UI.
 - [ ] Agree with the client on the Phase 4 post-ML NLP inputs, outputs, wording rules, and whether it only explains the model category. Do not change the model category without a separately approved rule.
 - [ ] Agree with the client on the Phase 5 result-summary fields and presentation. Phase 5 is the summary/presentation step unless the client specifies more analysis.
@@ -160,7 +173,7 @@ Dependencies: verify History restoration after navigation/refresh; client agreem
 
 Expected conceptual sequence, pending client confirmation: Stages 2.1-2.3 pre-ML NLP -> Stages 3.1-3.2 ML -> Phase 4 post-ML NLP -> Phase 5 result summary. The current result is a score-derived category, not an ASD probability or diagnosis; training labels come from the same 13 scores supplied to the models.
 
-Acceptance: current Stage 3.2 produces and persists a provisional score category through the saved ensemble after migration; a live result has been observed, while History restoration still needs a manual check. The complete NLP-ML-NLP and summary flow remains pending Phase 4/5 agreement and implementation; no clinical risk validity is claimed.
+Acceptance: current Stage 3.2 produces and persists a provisional score category through the saved ensemble after migration; a live result and History restoration after navigation/refresh have been verified. The complete NLP-ML-NLP and summary flow remains pending Phase 4/5 agreement and implementation; no clinical risk validity is claimed.
 
 ## 8. Release and study readiness
 
@@ -177,18 +190,17 @@ Acceptance: agreed release checks pass; reviewed research and privacy requiremen
 
 1. Phase 4 post-ML NLP inputs, outputs, explanation rules, and whether it only explains or may affect the category.
 2. Phase 5 result-summary fields and presentation; confirm the proposed NLP-ML-NLP sequence with the client.
-3. Stage 2.3 bilingual interpretation rules, unclear/unmatched handling, approved examples, and whether to adopt a context-aware NLP model after baseline review.
+3. Stage 2.3 prototype evaluation using human-reviewed bilingual examples, plus client review of unclear handling and retries.
 4. Final questionnaire/version sign-off, question-to-indicator mapping, and Filipino wording review.
 5. Dataset expansion, provenance, target-label rationale, class balance, and evaluation criteria.
 6. Reviewed Medical Library sources, result explanation templates, and result visualization.
-7. Retention/deletion procedures, production database access, and deployment environment.
+7. Define backup deletion/retention and production database access safeguards and deployment environment.
 
-Current boundary: the React UI uses real authentication, onboarding, chat and assessment APIs. PostgreSQL stores chats, versioned questions, original responses, scores, progress and model output after migration 20261025_08 is applied. Chat and assessment deletion are self-service; account/onboarding deletion remains an operator action, auto-expiry and backup retention are undefined. Privacy wording is a development draft. Phase 4 post-ML NLP, Phase 5 result summary, independent target labels and clinical risk validation remain open.
-
+Current boundary: the React UI uses real authentication, onboarding, chat and assessment APIs. PostgreSQL stores chats, versioned questions, original responses, scores, progress and model output after migration 20261025_08 is applied. Chat, assessment and account deletion are self-service. Account-linked application data is retained while the account is active; Settings deletion requires password confirmation and removes the account plus linked application records through PostgreSQL cascades. Database handling is developer-only. Backup erasure/retention and production access controls remain undefined. Privacy wording is a development draft. Phase 4 post-ML NLP, Phase 5 result summary, independent target labels and clinical risk validation remain open.
 
 ## Backend onboarding integration (2026-10-23)
 
 - [x] Connect About acknowledgement, versioned demonstration consent, guardian eligibility and completion to authenticated PostgreSQL records.
 - [x] Enforce onboarding order and 12-36 month eligibility on the server; restore the required step after login or refresh.
 - [x] Persist authenticated chat transcripts and assessment History in PostgreSQL; support owner-scoped History restore and deletion.
-- [x] Persist assessment sessions and answer History; [ ] complete production policy, account deletion, retention and backup review.
+- [x] Persist assessment sessions and answer History; [x] implement agreed account deletion; [ ] complete backup retention/access review.

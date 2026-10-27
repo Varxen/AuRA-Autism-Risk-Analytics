@@ -1,6 +1,6 @@
 ﻿# AuRA machine-learning workspace
 
-Pipeline workspace. Stages 2.1 and 2.2 are implemented. Stage 2.3 has a backend-connected consistency prototype, with interpretation rules still awaiting review. Stage 2.4 returns one validated Q1–Q13 vector on real assessment completion. Stages 3.1 and 3.2 have a reproducible baseline training and soft-voting evaluation pipeline, and the backend uses their saved artifacts for live assessment inference.
+Pipeline workspace. Stage 2.1 preprocessing and the Stage 2.2 lexicon baseline remain available for reference and comparison. Live Stage 2.3 now uses the backend's loopback Ollama integration with Llama 3.2 3B by default; it returns consistent, contradiction or unclear and does not alter structured scores. This model integration is a prototype pending human-reviewed evaluation. Stage 2.4 returns one validated Q1–Q13 vector on real assessment completion. Stages 3.1 and 3.2 have a reproducible baseline training and soft-voting evaluation pipeline, and the backend uses their saved artifacts for live assessment inference.
 
 ## Stage 2.1 behavior
 
@@ -20,7 +20,22 @@ Pipeline workspace. Stages 2.1 and 2.2 are implemented. Stage 2.3 has a backend-
 - A match is lexical evidence only. It does not infer behavior, judge follow-up consistency, assign frequency, score an answer, or predict risk.
 - Caller passes the selected language. Original response remains unchanged outside this module.
 
-## Stage 2.3 behavior
+## Legacy Stage 2.3 lexicon rules
+
+`consistency.py` documents the superseded rule-based prototype. The live API no longer calls it. Keep it for comparison and do not treat its decisions as the current assessment behavior.
+
+## Live Stage 2.3 behavior
+
+- The backend sends the approved question/indicator, selected answer and original follow-up text to the local Ollama model (`llama3.2:3b` by default).
+- The model returns `consistent`, `contradiction` or `unclear` plus an exact contiguous evidence span. The span may include the full response when needed to preserve decisive context.
+- The model checks meaning across English, Filipino and Taglish; the interface language is context, not a restriction on response wording.
+- The model cannot change the selected answer, score, 13-value vector or ASD-risk category.
+- Ollama must be available on loopback. Model/network errors do not save the response, consume a clarification attempt or fall back to keyword matching.
+- The behavior remains a prototype. It needs human-reviewed examples, per-outcome evaluation and latency testing before it can be described as validated.
+
+### Legacy rule details
+
+The old lexicon details below describe the Stage 2.2 reference module, not the live Stage 2.3 decision path.
 
 - `check_answer_consistency(question_number, selected_answer, follow_up_text, language)` checks follow-up text against the answer selected for the same item.
 - Q1-Q9 accept `Always`/`Palagi`, `Sometimes`/`Minsan`, or `Never`/`Hindi kailanman`; Q10-Q13 accept `Yes`/`Oo`, `Sometimes`/`Minsan`, or `No`/`Hindi`.
@@ -48,14 +63,18 @@ Pipeline workspace. Stages 2.1 and 2.2 are implemented. Stage 2.3 has a backend-
 
 Run from this folder after installing `requirements.txt` with `python train.py`.
 
-- Reads only the `RAW DATA` worksheet in `../documentation/AURA-DATASET.xlsx`.
+- Reads `RAW DATA` from `dataset/AURA-DATASET.xlsx` and the `Low`, `Moderate`, and `High` worksheets from `dataset/AURA-DATASET-2.xlsx`.
+- Combines consented records in memory. Reused respondent codes are scoped to their workbook and worksheet; the user confirmed they refer to different people across the new category sheets.
 - Includes rows marked `Yes` for data privacy consent. It does not use the child-status field as a model target.
 - Uses the existing Q1–Q13 score cells as features and checks that their sum matches `TOTAL SCORE`.
-- Uses `Ground Truth Labels` only after confirming each label matches the workbook's preliminary score cutoffs: Low 0–8, Moderate 9–11, High 12–26.
+- Checks each `Ground Truth Labels` value against its category worksheet and the preliminary score cutoffs: Low 0–8, Moderate 9–11, High 12–26.
 - Splits the records into stratified 70% training, 15% validation, and 15% test sets with a fixed random seed. Validation metrics support Stage 3.1 model comparison; Stage 3.1 does not inspect test metrics, reserving the test set for the final Stage 3.2 ensemble evaluation. Duplicate respondent codes stop preparation to prevent repeated records crossing the split.
 - Trains Logistic Regression, Random Forest, and XGBoost on the same feature order and class order: Low, Moderate, High.
 - Writes model artifacts and an aggregate metrics report under ignored `artifacts/` and `reports/` directories. It does not save raw responses, IDs, or row-level predictions.
+- Prints a validation comparison table and saves `reports/stage_3_1_validation_dashboard.png` with metric comparison and per-model confusion matrices. Install requirements to enable chart generation.
 - These labels are derived from the same 13 scores used as input. Metrics show how well models reproduce the preliminary arithmetic cutoffs, not independent clinical or ASD-risk prediction. Soft voting belongs to Stage 3.2.
+
+The source workbooks contain respondent data and are ignored by Git. Keep local copies at the paths above; do not commit them.
 
 ## Stage 3.2 soft voting
 
@@ -66,6 +85,7 @@ Run from this folder with `python soft_voting.py` after Stage 3.1 has created mo
 - Prints validation and final held-out test accuracy, macro F1, confusion matrices, and per-class precision/recall/F1/support.
 - Uses validation for a consistency check. Reports test results once as final ensemble evaluation; do not tune from test results.
 - Saves aggregate metrics only to ignored `reports/stage_3_2_soft_voting.json`; does not save row predictions, IDs, or raw responses.
+- Prints a validation/test comparison table and saves `reports/stage_3_2_soft_voting_dashboard.png` plus `reports/stage_3_2_soft_voting_dashboard_held_out_test.png` for metrics and confusion matrices.
 - Outputs are support across provisional score-derived categories, not probabilities of ASD.
 
 Because the provisional target is computed from the same 13 scores, any trained model would reproduce the scoring rule. It would not demonstrate independent clinical risk prediction.

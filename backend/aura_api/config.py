@@ -15,6 +15,7 @@ DEFAULT_ORIGINS = (
     "http://localhost:5174",
     "http://127.0.0.1:5174",
 )
+TRYCLOUDFLARE_ORIGIN_REGEX = r"^https://[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.trycloudflare\.com$"
 
 
 @dataclass(frozen=True, slots=True)
@@ -28,6 +29,9 @@ class Settings:
     cookie_secure: bool = False
     auth_rate_limit: int = 10
     auth_rate_window_seconds: int = 60
+    ollama_base_url: str = "http://127.0.0.1:11434"
+    consistency_model: str = "llama3.2:3b"
+    consistency_timeout_seconds: int = 90
 
     def __post_init__(self) -> None:
         if self.environment not in {"development", "test"}:
@@ -66,15 +70,35 @@ class Settings:
             self.session_idle_seconds,
             self.auth_rate_limit,
             self.auth_rate_window_seconds,
+            self.consistency_timeout_seconds,
         ):
             if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
                 raise ValueError("Session and request limits must be positive integers.")
         if self.session_idle_seconds > self.session_ttl_seconds:
             raise ValueError("Idle expiry cannot exceed absolute session expiry.")
+        ollama = urlsplit(self.ollama_base_url)
+        if (
+            ollama.scheme != "http"
+            or ollama.hostname != "127.0.0.1"
+            or ollama.port != 11434
+            or ollama.username is not None
+            or ollama.password is not None
+            or ollama.path
+            or ollama.query
+            or ollama.fragment
+        ):
+            raise ValueError("Ollama must use the local 127.0.0.1:11434 endpoint.")
+        if not self.consistency_model.strip() or len(self.consistency_model) > 120:
+            raise ValueError("Consistency model name must be non-empty and at most 120 characters.")
 
     @property
     def cookie_name(self) -> str:
         return "__Host-aura_session" if self.cookie_secure else "aura_session"
+
+    def allows_frontend_origin(self, origin: str | None) -> bool:
+        if origin in self.frontend_origins:
+            return True
+        return bool(origin and re.fullmatch(TRYCLOUDFLARE_ORIGIN_REGEX, origin))
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -112,4 +136,7 @@ class Settings:
             cookie_secure=secure == "true",
             auth_rate_limit=int(os.getenv("AURA_AUTH_RATE_LIMIT", "10")),
             auth_rate_window_seconds=int(os.getenv("AURA_AUTH_RATE_WINDOW_SECONDS", "60")),
+            ollama_base_url=os.getenv("AURA_OLLAMA_BASE_URL", "http://127.0.0.1:11434"),
+            consistency_model=os.getenv("AURA_CONSISTENCY_MODEL", "llama3.2:3b"),
+            consistency_timeout_seconds=int(os.getenv("AURA_CONSISTENCY_TIMEOUT_SECONDS", "90")),
         )

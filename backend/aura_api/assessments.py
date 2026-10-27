@@ -15,11 +15,14 @@ from .auth.routes import service as auth_service
 from .auth.service import AuthService
 from .auth.store import AssessmentAnswerRecord, AssessmentProcessingJobRecord, AssessmentRecord
 from .assessment_pipeline import (
-    MAX_CLARIFICATION_ATTEMPTS,
-    check_answer_consistency,
     encode_feature_vector,
     ModelInferenceError,
     predict_with_soft_voting,
+)
+from .consistency_model import (
+    MAX_CLARIFICATION_ATTEMPTS,
+    ConsistencyModelInvalidResponse,
+    ConsistencyModelUnavailable,
 )
 from .errors import APIError
 from .onboarding import require_storage_consent
@@ -31,6 +34,7 @@ class AnswerInput(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True, populate_by_name=True, alias_generator=to_camel)
     selected_option_id: str = Field(min_length=1, max_length=16)
     follow_up_text: str | None = Field(default=None, max_length=4000)
+    approved_suggestion: bool = False
 
 
 class AssessmentCreateInput(BaseModel):
@@ -117,9 +121,10 @@ class AssessmentRecordResponse(BaseModel):
 class ConsistencyGateResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
     status: Literal["consistent", "contradiction", "unclear"]
-    next_action: Literal["continue", "repeat_frequency_and_follow_up", "stop_unresolved"]
+    next_action: Literal["continue", "approve_suggestion", "repeat_frequency_and_follow_up", "stop_unresolved"]
     attempts_used: int
     max_attempts: int
+    suggested_option_id: str | None = None
 
 
 class AnswerSubmissionResponse(AssessmentRecordResponse):
@@ -276,8 +281,11 @@ def _completed_assessment_for_update(db: Session, user_id: UUID, assessment_id: 
     if record.is_demo_preview:
         raise APIError(409, "demo_preview_ineligible", "Demo preview answers cannot be classified. Complete a real assessment first.")
     answers = _answers(db, record.id)
-    if len(answers) != QUESTION_COUNT or any(not answer.follow_up_text.strip() for answer in answers):
-        raise APIError(409, "assessment_incomplete", "Complete all answers and follow-up responses before processing.")
+    if len(answers) != QUESTION_COUNT or any(
+        answer.structured_score != 0 and not answer.follow_up_text.strip()
+        for answer in answers
+    ):
+        raise APIError(409, "assessment_incomplete", "Complete each answer and any required follow-up before processing.")
     return record
 
 
@@ -375,6 +383,10 @@ def save_answer(
     auth: AuthService = Depends(auth_service),
 ) -> AnswerSubmissionResponse:
     user_id = _user_id(request, auth)
+    model_input = None
+    model_attempts = None
+    preflight_option_id = None
+    model_language = "en"
     with request.app.state.database.sessions.begin() as db:
         require_storage_consent(db, user_id)
         record = _session_for_update(db, user_id, assessment_id)
@@ -387,37 +399,112 @@ def save_answer(
             score = option_score(question_number, body.selected_option_id)
         except ValueError:
             raise APIError(422, "invalid_answer", "Choose one of the available answer options.") from None
+        if body.approved_suggestion and (body.follow_up_text is None or not body.follow_up_text.strip()):
+            raise APIError(422, "invalid_suggestion_approval", "The original follow-up response is required to approve a suggested answer.")
+        if score == 0 and body.follow_up_text is not None and not body.approved_suggestion:
+            raise APIError(422, "follow_up_not_needed", "A follow-up is not required for this answer.")
         existing = db.get(AssessmentAnswerRecord, (record.id, question_id))
-        now = datetime.now(UTC)
-        if existing and existing.follow_up_text and (
+        preflight_option_id = existing.selected_option_id if existing is not None else None
+        if existing and (existing.structured_score == 0 or existing.follow_up_text) and (
             existing.selected_option_id != body.selected_option_id
             or existing.follow_up_text != (body.follow_up_text or "")
         ):
             raise APIError(409, "answer_immutable", "This completed answer is already saved.")
         consistency = None
-        if body.follow_up_text is not None:
+        if body.follow_up_text is not None and not body.approved_suggestion:
             if not body.follow_up_text.strip():
                 raise APIError(422, "empty_follow_up", "Please enter a response before sending.")
-            result = check_answer_consistency(
-                question_number,
-                body.selected_option_id,
-                body.follow_up_text,
-                "tl" if record.language == "fil" else "en",
-                clarification_attempts_used=record.current_clarification_attempts,
+            selected_option = next(
+                (option for option in question["options"] if option["id"] == body.selected_option_id),
+                None,
+            )
+            if selected_option is None:
+                raise APIError(422, "invalid_answer", "Choose one of the available answer options.")
+            model_input = {
+                "question_id": question_id,
+                "question_number": question_number,
+                "indicator": question["indicatorLabel"],
+                "main_question": question["mainQuestion"],
+                "follow_up_question": question["followUpQuestion"],
+                "selected_answer": selected_option["label"],
+                "selected_option_id": selected_option["id"],
+                "answer_options": [
+                    {"id": option["id"], "label": option["label"]}
+                    for option in question["options"]
+                ],
+                "follow_up_text": body.follow_up_text,
+                "language": "fil" if record.language == "fil" else "en",
+            }
+            model_language = model_input["language"]
+            model_attempts = record.current_clarification_attempts
+        elif body.approved_suggestion and not body.follow_up_text.strip():
+            raise APIError(422, "empty_follow_up", "The original follow-up response is required to approve the suggestion.")
+
+    decision = None
+    next_action = None
+    if model_input is not None:
+        try:
+            decision, next_action = request.app.state.consistency_model.evaluate(
+                **model_input,
+                clarification_attempts_used=model_attempts,
                 max_clarification_attempts=MAX_CLARIFICATION_ATTEMPTS,
             )
+        except ConsistencyModelUnavailable:
+            message = (
+                "Hindi maabot ang lokal na language model. Tiyaking tumatakbo ang Ollama at naka-load ang model, saka subukan muli."
+                if model_language == "fil"
+                else "The local language model is unavailable. Make sure Ollama is running and the model is loaded, then try again."
+            )
+            raise APIError(503, "consistency_model_unavailable", message) from None
+        except ConsistencyModelInvalidResponse as error:
+            logging.getLogger(__name__).warning(
+                "Stage 2.3 rejected Ollama output: %s", error
+            )
+            message = (
+                "Hindi ma-validate nang maayos ng lokal na model ang sagot. Walang na-save; subukan muli."
+                if model_language == "fil"
+                else "The local model returned an unusable validation result. Nothing was saved; please try again."
+            )
+            raise APIError(502, "consistency_model_invalid_response", message) from None
+
+    with request.app.state.database.sessions.begin() as db:
+        require_storage_consent(db, user_id)
+        record = _session_for_update(db, user_id, assessment_id)
+        if record.current_consistency_blocked:
+            raise APIError(409, "consistency_unresolved", "This item remains unresolved after the allowed clarification attempts.")
+        question_number, question = _current_question(record)
+        if question_id != question["id"]:
+            raise APIError(409, "assessment_step_conflict", "Answer the current question first.")
+        if model_input is not None and record.current_clarification_attempts != model_attempts:
+            raise APIError(409, "assessment_step_conflict", "This answer changed while it was being checked. Please submit it again.")
+        try:
+            score = option_score(question_number, body.selected_option_id)
+        except ValueError:
+            raise APIError(422, "invalid_answer", "Choose one of the available answer options.") from None
+        existing = db.get(AssessmentAnswerRecord, (record.id, question_id))
+        if model_input is not None and (existing.selected_option_id if existing is not None else None) != preflight_option_id:
+            raise APIError(409, "assessment_step_conflict", "This answer changed while it was being checked. Please submit it again.")
+        now = datetime.now(UTC)
+        if existing and (existing.structured_score == 0 or existing.follow_up_text) and (
+            existing.selected_option_id != body.selected_option_id
+            or existing.follow_up_text != (body.follow_up_text or "")
+        ):
+            raise APIError(409, "answer_immutable", "This completed answer is already saved.")
+        consistency = None
+        if decision is not None and next_action is not None:
             consistency = ConsistencyGateResponse(
-                status=result.status.value,
-                next_action=result.next_action.value,
+                status=decision.outcome.value,
+                next_action=next_action,
                 attempts_used=record.current_clarification_attempts,
                 max_attempts=MAX_CLARIFICATION_ATTEMPTS,
+                suggested_option_id=decision.suggested_option_id,
             )
-            if not result.may_continue:
+            if next_action != "continue":
                 if existing and not existing.follow_up_text:
                     db.delete(existing)
-                if result.next_action.value == "repeat_frequency_and_follow_up":
+                if next_action == "repeat_frequency_and_follow_up":
                     record.current_clarification_attempts += 1
-                else:
+                elif next_action == "stop_unresolved":
                     record.current_consistency_blocked = True
                 record.updated_at = now
                 db.flush()
@@ -476,8 +563,8 @@ def advance_assessment(
             raise APIError(409, "consistency_unresolved", "This item remains unresolved after the allowed clarification attempts.")
         question_number, question = _current_question(record)
         answer = db.get(AssessmentAnswerRecord, (record.id, question["id"]))
-        if answer is None or not answer.follow_up_text.strip():
-            raise APIError(409, "follow_up_required", "Save your follow-up response before advancing.")
+        if answer is None or (answer.structured_score != 0 and not answer.follow_up_text.strip()):
+            raise APIError(409, "follow_up_required", "Save the required follow-up before advancing.")
         now = datetime.now(UTC)
         record.updated_at = now
         record.current_clarification_attempts = 0

@@ -53,6 +53,16 @@
 .settings-signout { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center; }
 .settings-signout > div { flex: 1 1 280px; }
 .settings-signout .button { font-size: 13px; min-height: 44px; padding: 10px 16px; }
+.settings-delete-account > p { max-width: 720px; }
+.button--danger { color: #fff; background: #a6323b; border-color: #a6323b; box-shadow: 0 3px 9px #a6323b24; }
+.button--danger:hover:not(:disabled) { color: #fff; background: #8e2630; }
+.account-delete-dialog form { display: grid; gap: 12px; }
+.account-delete-dialog h2 { margin-bottom: 0; }
+.account-delete-dialog label { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.account-delete-dialog input { width: 100%; min-height: 44px; padding: 10px 12px; color: var(--text-primary); background: #fff; border: 1px solid var(--border); border-radius: 10px; }
+.account-delete-dialog input:focus-visible { outline: 3px solid #2879bc66; outline-offset: 2px; }
+.account-delete-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.account-delete-dialog .error-message { margin: 0; }
 @media (max-width: 900px) {
   .content-grid, .resource-grid { grid-template-columns: minmax(0, 1fr); }
 }

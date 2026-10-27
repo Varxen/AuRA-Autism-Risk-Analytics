@@ -31,9 +31,9 @@ export function AboutPreAssessmentPage() {
               <div>
                 <h2>13 questions, plus your observations</h2>
                 <p>
-                  Structured choices and open-ended follow-ups describe
-                  observable behavior. All 13 revised questions are available
-                  in English or Tagalog.
+                  Choose an answer for each item. AuRA asks a follow-up only
+                  when its score is 1 or 2; score 0 moves to the next question.
+                  All 13 revised questions are available in English or Tagalog.
                 </p>
               </div>
             </li>

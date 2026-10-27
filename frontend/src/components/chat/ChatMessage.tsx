@@ -17,7 +17,7 @@ export function ChatMessage({
 }) {
   return (
     <div className={`message message--${role} ${className}`}>
-      <Avatar role={role} />
+      {role === 'assistant' && <Avatar />}
       <div className="message-body">
         <div
           className={`message-bubble ${filled ? 'message-bubble--filled' : ''}`}

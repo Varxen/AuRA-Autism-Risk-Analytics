@@ -110,14 +110,16 @@ export function useChat() {
   }
 
   async function send(text: string, action?: ChatAction) {
-    if (!text.trim() || !conversation || lock.current || introduction.phase !== 'ready') return
+    if (!text.trim() || !conversation || lock.current || introduction.phase !== 'ready') return false
     lock.current = true
     setBusy(true)
     setError('')
     try {
       await appendReply(conversation, text, action)
+      return true
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'AuRA could not reply. Please try sending your message again.')
+      return false
     } finally {
       lock.current = false
       setBusy(false)

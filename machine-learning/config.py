@@ -3,11 +3,12 @@
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-SOURCE_WORKBOOK = ROOT.parent / "documentation" / "AURA-DATASET.xlsx"
-SOURCE_SHEET = "RAW DATA"
-
 CLASS_LABELS = ("Low", "Moderate", "High")
 CLASS_TO_INDEX = {label: index for index, label in enumerate(CLASS_LABELS)}
+SOURCE_DATASETS: tuple[tuple[Path, tuple[str, ...]], ...] = (
+    (ROOT / "dataset" / "AURA-DATASET.xlsx", ("RAW DATA",)),
+    (ROOT / "dataset" / "AURA-DATASET-2.xlsx", CLASS_LABELS),
+)
 
 # Preliminary cutoffs from the workbook's Ground Truth Label Guide.
 LOW_MAX_SCORE = 8

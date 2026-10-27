@@ -30,6 +30,7 @@ export function AuthDemoProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(authDemoReducer, initialAuthDemoState)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [accountDeleteError, setAccountDeleteError] = useState('')
   const [restoreError, setRestoreError] = useState('')
   const [restoring, setRestoring] = useState(true)
   const [restoreAttempt, setRestoreAttempt] = useState(0)
@@ -98,6 +99,25 @@ export function AuthDemoProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function deleteAccount(password: string): Promise<boolean> {
+    if (lock.current) return false
+    lock.current = true
+    setBusy(true)
+    setAccountDeleteError('')
+    try {
+      await authService.deleteAccount(password, csrfToken.current ?? '')
+      csrfToken.current = null
+      dispatch({ type: 'EXIT' })
+      return true
+    } catch (cause) {
+      setAccountDeleteError(cause instanceof Error ? cause.message : 'AuRA could not delete this account.')
+      return false
+    } finally {
+      lock.current = false
+      setBusy(false)
+    }
+  }
+
   if (restoring) {
     return (
       <main className="auth-session-state" role="status" aria-live="polite">
@@ -137,7 +157,7 @@ export function AuthDemoProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthDemoContext.Provider value={{ state, dispatch, busy, error, signIn, exit }}>
+    <AuthDemoContext.Provider value={{ state, dispatch, busy, error, accountDeleteError, signIn, exit, deleteAccount }}>
       {children}
     </AuthDemoContext.Provider>
   )

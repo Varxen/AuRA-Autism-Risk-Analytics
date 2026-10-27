@@ -23,7 +23,9 @@ export function getAssessmentStage(
     (item) => item.questionId === `q${session.currentQuestionIndex + 1}`,
   )
   if (!answer) return 'question'
-  return answer.followUpText.trim() ? 'ready-next' : 'follow-up'
+  return answer.structuredScore === 0 || answer.followUpText.trim()
+    ? 'ready-next'
+    : 'follow-up'
 }
 
 export function canCompleteAssessment(
@@ -38,16 +40,17 @@ export function canCompleteAssessment(
         question.language === session.language &&
         question.questionnaireVersion === session.questionnaireVersion &&
         Boolean(question.mainQuestion && question.followUpQuestion) &&
-        session.answers.some(
-          (answer) =>
-            answer.questionId === question.id &&
-            question.options.some(
-              (option) =>
-                option.id === answer.selectedOptionId &&
-                option.score === answer.structuredScore,
-            ) &&
-            Boolean(answer.followUpText.trim()),
-        ),
+        session.answers.some((answer) => {
+          if (answer.questionId !== question.id) return false
+          const selectedOption = question.options.find(
+            (option) => option.id === answer.selectedOptionId,
+          )
+          return Boolean(
+            selectedOption &&
+              selectedOption.score === answer.structuredScore &&
+              (answer.structuredScore === 0 || answer.followUpText.trim()),
+          )
+        }),
     )
   )
 }

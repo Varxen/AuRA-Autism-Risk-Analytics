@@ -31,7 +31,7 @@ export function getHistoryEntries(
   })
   const sessions = assessments.map((session): HistorySessionEntry => {
     const language = session.language === 'fil' ? 'Tagalog' : 'English'
-    const explanations = session.answers.filter((answer) => answer.followUpText.trim()).length
+    const answered = session.answers.length
     return {
       id: session.id,
       kind: 'assessment',
@@ -39,7 +39,7 @@ export function getHistoryEntries(
       summary: session.status === 'completed'
         ? 'Your questionnaire and conversation are available to review.'
         : 'Continue from your saved question and follow-up conversation.',
-      details: `Question ${Math.min(session.currentQuestionIndex + 1, QUESTION_COUNT)} of ${QUESTION_COUNT} \u00b7 ${explanations}/${QUESTION_COUNT} explanations`,
+      details: `Question ${Math.min(session.currentQuestionIndex + 1, QUESTION_COUNT)} of ${QUESTION_COUNT} \u00b7 ${answered}/${QUESTION_COUNT} answered`,
       status: session.status === 'completed'
         ? (session.isDemoPreview ? 'Legacy preview · no result' : completedProcessingIds.includes(session.id) ? 'Classified' : 'Completed')
         : session.status === 'awaiting-content' ? 'Awaiting content' : 'In progress',

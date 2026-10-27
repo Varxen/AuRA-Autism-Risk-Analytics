@@ -1,6 +1,6 @@
 # AuRA 2.3 Consistency Rules — Draft
 
-**Status:** Working implementation for future review and adjustment. These rules are not yet approved as final research or clinical interpretation rules.
+**Status:** Legacy rule-based prototype, retained for comparison. The live API now uses a local Ollama model for Stage 2.3. These rules are not active runtime behavior and are not approved as final research or clinical interpretation rules.
 
 This document records the current behavior in `consistency.py` and its connection to the assessment API. Update this document when the study team or reviewer approves changes.
 

@@ -1,6 +1,6 @@
 import { assessmentCopy } from '../../data/assessmentCopy'
 import type { AssessmentLanguage } from '../../types/questionnaire.types'
-import { ShieldCheck } from 'lucide-react'
+import { Info, ShieldCheck } from 'lucide-react'
 import type { AssessmentResult as AssessmentResultData } from '../../types/assessment.types'
 
 export function AssessmentResult({
@@ -30,6 +30,7 @@ export function AssessmentResult({
           <h3>{copy.resultHeading}</h3>
           <p className="result-subheading">{copy.resultSubtitle}</p>
         </div>
+        <span className="result-badge">{copy.resultBadge}</span>
       </div>
       <section className={`result-feature result-feature--${result.category.toLowerCase()}`} aria-label={copy.resultHeading}>
         <span className="result-feature-label">{copy.resultSelectedCategory}</span>
@@ -38,16 +39,14 @@ export function AssessmentResult({
       <section className="result-probabilities" aria-label={copy.resultSupport}>
         <div className="result-section-heading">
           <h4>{copy.resultSupport}</h4>
-          <span>{copy.resultSupportCaption}</span>
+          <span><Info aria-hidden="true" />{copy.resultSupportCaption}</span>
         </div>
         {(['Low', 'Moderate', 'High'] as const).map((category) => {
           const support = Math.max(0, Math.min(100, result.probabilities[category] * 100))
           return (
             <div className={`result-probability result-probability--${category.toLowerCase()}`} key={category}>
-              <div className="result-probability-label">
-                <span>{category}</span>
-                <strong>{support.toFixed(1)}%</strong>
-              </div>
+              <span className="result-probability-category">{category}</span>
+              <strong className="result-probability-value">{support.toFixed(1)}%</strong>
               <div className="result-bar" role="progressbar" aria-label={`${category} ${copy.resultSupport.toLowerCase()}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Number(support.toFixed(1))}>
                 <span style={{ width: `${support}%` }} />
               </div>

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Header, Request, Response
 
-from .schemas import Credentials, SessionResponse
+from .schemas import Credentials, DeleteAccountInput, SessionResponse
 from .service import AuthService
 from ..config import Settings
 
@@ -96,6 +96,24 @@ def logout(
 ) -> Response:
     settings = request.app.state.settings
     auth.logout(request.cookies.get(settings.cookie_name), csrf_token)
+    response = Response(status_code=204)
+    clear_session_cookie(response, settings)
+    return response
+
+
+@router.delete("/account", status_code=204, dependencies=[Depends(limit_credentials)])
+def delete_account(
+    credentials: DeleteAccountInput,
+    request: Request,
+    csrf_token: str | None = Header(default=None, alias="X-CSRF-Token", max_length=128),
+    auth: AuthService = Depends(service),
+) -> Response:
+    settings = request.app.state.settings
+    auth.delete_account(
+        request.cookies.get(settings.cookie_name),
+        credentials.password.get_secret_value(),
+        csrf_token,
+    )
     response = Response(status_code=204)
     clear_session_cookie(response, settings)
     return response

@@ -50,6 +50,18 @@ class Credentials(BaseModel):
         return value
 
 
+class DeleteAccountInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    password: SecretStr = Field(min_length=1, max_length=128)
+
+    @field_validator("password")
+    @classmethod
+    def reject_blank_password(cls, value: SecretStr) -> SecretStr:
+        if not value.get_secret_value().strip():
+            raise ValueError("Enter your password to confirm account deletion.")
+        return value
+
+
 class PublicUser(BaseModel):
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
     id: UUID
