@@ -161,7 +161,7 @@ export function AssessmentResult({
       <div className="result-limitation-box">
         <p className="result-limitation">{copy.resultLimitation}</p>
       </div>
-      <footer className="result-metadata karris">
+      <footer className="result-metadata">
         <span>{copy.resultGeneratedAt}</span>
         <time dateTime={result.generatedAt}>
           {new Intl.DateTimeFormat(language === "fil" ? "fil-PH" : "en-US", {

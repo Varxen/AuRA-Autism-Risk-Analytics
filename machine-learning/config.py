@@ -8,6 +8,7 @@ CLASS_TO_INDEX = {label: index for index, label in enumerate(CLASS_LABELS)}
 SOURCE_DATASETS: tuple[tuple[Path, tuple[str, ...]], ...] = (
     (ROOT / "dataset" / "AURA-DATASET.xlsx", ("RAW DATA",)),
     (ROOT / "dataset" / "AURA-DATASET-2.xlsx", CLASS_LABELS),
+    (ROOT / "dataset" / "AURA-DATASET-3.xlsx", ("RAW DATA",)),
 )
 
 # Preliminary cutoffs from the workbook's Ground Truth Label Guide.

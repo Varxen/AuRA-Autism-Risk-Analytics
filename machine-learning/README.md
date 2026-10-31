@@ -63,7 +63,7 @@ The old lexicon details below describe the Stage 2.2 reference module, not the l
 
 Run from this folder after installing `requirements.txt` with `python train.py`.
 
-- Reads `RAW DATA` from `dataset/AURA-DATASET.xlsx` and the `Low`, `Moderate`, and `High` worksheets from `dataset/AURA-DATASET-2.xlsx`.
+- Reads `RAW DATA` from `dataset/AURA-DATASET.xlsx` the `Low`, `Moderate`, and `High` worksheets from `dataset/AURA-DATASET-2.xlsx`, and `RAW DATA` from `dataset/AURA-DATASET-3.xlsx` (ID column `File Number Code` or `Parent/Respondent Code`).
 - Combines consented records in memory. Reused respondent codes are scoped to their workbook and worksheet; the user confirmed they refer to different people across the new category sheets.
 - Includes rows marked `Yes` for data privacy consent. It does not use the child-status field as a model target.
 - Uses the existing Q1–Q13 score cells as features and checks that their sum matches `TOTAL SCORE`.
@@ -89,3 +89,14 @@ Run from this folder with `python soft_voting.py` after Stage 3.1 has created mo
 - Outputs are support across provisional score-derived categories, not probabilities of ASD.
 
 Because the provisional target is computed from the same 13 scores, any trained model would reproduce the scoring rule. It would not demonstrate independent clinical risk prediction.
+
+## Information-chat intent classifier
+
+`info_chat/` holds the model behind the information chat: the `bge-m3` encoder (run locally through Ollama, `ollama pull bge-m3`) embeds a message, and a Logistic Regression head trained on our own labelled questions picks one of the 53 knowledge-base intents, three small-talk intents (greeting, thanks, goodbye) or `none` (out of scope).
+
+- `intents.json` – the 53 intents (ids `kb-01`…`kb-53`), exported from `frontend/src/data/informationKnowledgeBase.ts`.
+- `data/collected_questions.csv` – real questions: `text,intent_id,source` (use `none` for out-of-scope). Split per intent 60/20/20 with a fixed seed.
+- `data/paraphrases.csv` – `text,intent_id,seed_text`; used only when the seed question is in train, so held-out data never leaks.
+- `python -m info_chat.train` (run from `machine-learning/`) writes `artifacts/info_chat_intent.joblib` and `reports/info_chat_metrics.json`.
+
+Until `collected_questions.csv` has real rows, the model trains on the 106 knowledge-base questions only and reports no accuracy; the thresholds are defaults, not tuned. The backend serves it at `POST /api/v1/chats/intent`; the frontend falls back to keyword matching if that call fails.

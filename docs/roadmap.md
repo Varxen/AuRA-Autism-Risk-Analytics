@@ -1,6 +1,6 @@
 # AuRA development roadmap
 
-Last reviewed: 2026-10-27
+Last reviewed: 2026-10-31
 
 This is the current completion roadmap. It distinguishes working frontend demonstrations from production functionality. The database blueprint remains in [AuRA_Database_Development_Plan.md](../documentation/AuRA_Database_Development_Plan.md); its schemas and technical recommendations are proposals, not completed infrastructure.
 
@@ -18,7 +18,7 @@ Run application and test commands from `frontend/`; `docs/` and `documentation/`
 - [x] Separate About, Consent, Parent/Child Information and All Set screens, with server-owned progress and validated frontend route access.
 - [x] Parent/legal guardian, regular-interaction and 12-36-month eligibility validation.
 - [x] Welcome/Start Chat, then information chat with thinking dots, typed greeting and integrated actions.
-- [x] Deterministic educational replies using local reference content; no generated medical answers.
+- [x] Deterministic educational replies using local reference content; no generated medical answers. Reply selection now uses a trained intent classifier (section 5a) with the keyword matcher as fallback; the reply engine moved from `services/mock/` to `services/api/chatReplyService.ts`.
 - [x] Separate assessment workflow with explicit English or Tagalog selection before starting.
 - [x] Compact Assessment header across language selection and questionnaire: 8px vertical padding, 76px desktop / 68px mobile, animated robot head and contextual English/Filipino subtitle; redundant Pre-assessment header button removed.
 - [x] All 13 main questions and follow-ups from the supplied revised English PDF and Filipino DOCX.
@@ -33,7 +33,7 @@ Run application and test commands from `frontend/`; `docs/` and `documentation/`
 - [x] History lists multiple information chats and assessments; opening an entry restores that session.
 - [x] New Chat keeps earlier conversations; chat transcripts and assessment sessions remain server-owned in PostgreSQL.
 - [x] Persist inference status and result by assessment ID; completed classifications restore from History.
-- [x] Typed domain models, reusable hooks, mock information-chat service and API-backed onboarding/assessment services.
+- [x] Typed domain models, reusable hooks, local reply service and API-backed onboarding/assessment services.
 - [x] Persist screening consent, eligibility, assessment answers and History in PostgreSQL; keep child names out of scope and avoid browser storage.
 
 The first screenshot's label discrepancy is resolved by the revised questionnaire: Q1 is Response to Name; Q2 is Eye Contact. Original responses stay separate from any future NLP interpretation. Structured scores stay internal.
@@ -80,7 +80,7 @@ Acceptance: implemented destinations work within the frontend; account deletion 
 
 The frontend implementation milestone is delivered. Remaining frontend work is external source verification, clinical/Filipino resource review, approved policy/contact content and physical-device keyboard testing. These remain unchecked above.
 
-The backend auth, onboarding and assessment-storage slices are implemented in `backend/`: FastAPI, PostgreSQL-backed sessions, versioned consent, eligibility, bilingual questionnaire snapshots, answer progression and owner-scoped History. Migration `20261024_03` is applied to local `aura_db`. The frontend calls these APIs through Vite. HTTPS origins under `*.trycloudflare.com` are now accepted dynamically by the request-origin guard and credentialed CORS; the backend cookie must be Secure and the current tunnel must be opened with HTTPS. Stage 3.1 and 3.2 artifacts were regenerated locally from 2,900 consented records on 2026-10-27; restart backend and check a new live result before claiming the backend loaded those artifacts. Training scripts now print metric comparison tables and save PNG dashboards to ignored `machine-learning/reports/`. Stage 2.3 model evaluation and clinical validation remain pending.
+The backend auth, onboarding and assessment-storage slices are implemented in `backend/`: FastAPI, PostgreSQL-backed sessions, versioned consent, eligibility, bilingual questionnaire snapshots, answer progression and owner-scoped History. Migration `20261024_03` is applied to local `aura_db`. The frontend calls these APIs through Vite. HTTPS origins under `*.trycloudflare.com` are now accepted dynamically by the request-origin guard and credentialed CORS; the backend cookie must be Secure and the current tunnel must be opened with HTTPS. Stage 3.1 and 3.2 artifacts were regenerated locally from 3,137 consented records on 2026-10-30; restart backend and check a new live result before claiming the backend loaded those artifacts. Training scripts now print metric comparison tables and save PNG dashboards to ignored `machine-learning/reports/`. Stage 2.3 model evaluation and clinical validation remain pending.
 
 ## 3. Backend API and real identity
 
@@ -142,6 +142,27 @@ Dependencies: approved questionnaire scoring and shared training/inference featu
 
 Acceptance: preprocessing, lexicon reference matching, model-based consistency prototype and ordinal encoding work. Model quality and clinical validity remain unestablished until reviewed-example evaluation and client review are complete.
 
+## 5a. Information-chat intent classifier
+
+Dependencies: the 53-entry knowledge base, a local Ollama install with `bge-m3`, and real collected questions for evaluation.
+
+- [x] Replace keyword matching with a model that tolerates paraphrase, typos and Taglish. A local multilingual encoder (`bge-m3`) embeds the message; a Logistic Regression head trained on our own labelled questions chooses one of 53 knowledge-base intents, three small-talk intents (greeting, thanks, goodbye) or `none`. Replies stay the stored, reviewed answers.
+- [x] Add `machine-learning/info_chat/` (training, classifier, intents, data templates), artifact `artifacts/info_chat_intent.joblib`, and `POST /api/v1/chats/intent` (authenticated, with a backend test). The frontend falls back to the keyword matcher if the endpoint or Ollama is unavailable.
+- [x] Add fixed bilingual replies for greeting, thanks and goodbye, and a starter off-topic set so unrelated text falls back instead of matching a greeting. Retrained on 190 starter rows over 57 classes; suggest cutoff lowered to 0.1 so near-miss phrasings show a "Did you mean" list. Starter examples are ours, not collected data.
+- [x] Make source labels in information-chat answers clickable (`frontend/src/data/sourceLinks.ts`); unverified sources stay plain text.
+- [x] Prepare `info_chat/data/question_collection_template.xlsx` (53 intents × 10 blank question columns) for the client.
+- [x] Answer when confidence is high, show a "Did you mean" list when it is medium, and show the fixed fallback message when it is low or the message is out of scope.
+- [ ] Collect real questions from the client with the Excel template (6 to 10 per intent, plus 100 to 150 out-of-scope), with consent and no personal details; label them by intent.
+- [ ] Retrain, tune the thresholds on validation, and report test accuracy, macro F1, out-of-scope rejection and the keyword-matcher baseline on the same held-out questions. Until then no accuracy is claimed.
+- [ ] Merge or sharpen near-duplicate intents (the two "chatbot diagnose" entries; the positive and negative screening-result entries).
+- [ ] Optional AI paraphrase of training seeds only, reviewed by a person and disclosed. Validation and test questions must be real and human-written.
+- [ ] Confirm with the adviser or panel that a pretrained encoder with our own trained head is acceptable; otherwise switch to TF-IDF character n-grams with a larger paraphrase dataset.
+- [ ] Make suggestions tappable (new chat action ids in the backend schema), pick the reply language from the message or setting, and decide on consented logging of low-confidence questions.
+- [ ] Add verified links for "Allison et al." and "Wetherby et al.", and open the CDC/publisher links by hand to confirm them.
+- [ ] Document deployment (`ollama pull bge-m3` on the backend host), measure latency, and add training-script tests and a stored evaluation report.
+
+Acceptance: the endpoint and fallback work now. The model is not considered evaluated until it is retrained on collected questions and its held-out metrics are recorded. It selects among stored answers only, has no conversation memory, and makes no medical claims.
+
 ## 6. Dataset, training and model evaluation
 
 Dependencies: approved labeling protocol, appropriately consented research data and stable feature definitions. Dataset preparation can proceed alongside NLP rule work once these decisions are settled.
@@ -149,12 +170,12 @@ Dependencies: approved labeling protocol, appropriately consented research data 
 - [ ] Document dataset provenance, permitted use, expert-reviewed labels and class definitions.
 - [x] Combine the original 500-record workbook and additional 2,400-record workbook in the loader; validate consent, score totals, labels, category sheets and cutoffs. The user confirmed repeated codes in the new workbook refer to different people; duplicate-code checks are scoped to workbook and sheet.
 - [x] Verify duplicate respondent codes do not represent repeated people in the current data, based on the user's confirmation. Future sources still need stable identifiers or documented deduplication.
-- [x] Train Logistic Regression, Random Forest and XGBoost on 2,900 consented records using the 13-score schema and fixed stratified 70/15/15 split. Print a comparison table and save validation metric/confusion-matrix charts in ignored `reports/`.
-- [x] Compare individual models on validation; equal-weight soft voting reached 98.39% validation accuracy and 97.48% held-out test accuracy (Macro F1 0.9744).
+- [x] Train Logistic Regression, Random Forest and XGBoost on 3,137 consented records using the 13-score schema and fixed stratified 70/15/15 split. Print a comparison table and save validation metric/confusion-matrix charts in ignored `reports/`.
+- [x] Compare individual models on validation; equal-weight soft voting reached 98.09% validation accuracy and 97.03% held-out test accuracy (Macro F1 0.9690); previous 2,900-record run was 98.39% / 97.48% (0.9744), so added data kept performance stable. Random Forest and XGBoost overfit (train 100% / 97.8% vs validation 91.1%); depth limits lowered validation accuracy, so models were left unchanged.
 - [ ] Review generalization, bilingual input behavior and screening limitations; document thresholds and failure conditions where applicable.
 - [ ] Version model artifacts, preprocessing, feature schema, training configuration and evaluation evidence.
 
-Acceptance: the provisional 3.1/3.2 pipeline runs reproducibly and reports held-out metrics. The 2,900-record pool meets the working 500-per-category target, but that target is not statistician-approved. Labels are derived from input scores; metrics show reproduction of the cutoff rule, not ASD-risk validity. Independent labels, clinical review and intended-use approval remain open.
+Acceptance: the provisional 3.1/3.2 pipeline runs reproducibly and reports held-out metrics. The 3,137-record pool meets the working 500-per-category target, but that target is not statistician-approved. Labels are derived from input scores; metrics show reproduction of the cutoff rule, not ASD-risk validity. Independent labels, clinical review and intended-use approval remain open.
 
 ## 7. Live model inference and thesis Phases 4-5
 
@@ -190,6 +211,7 @@ Acceptance: agreed release checks pass; reviewed research and privacy requiremen
 
 ## Decisions still needed
 
+0. Collect and label real questions for the information-chat classifier, and confirm that a pretrained encoder with our own trained head meets the panel's "own model" expectation.
 1. Review Phase 4 explanation wording and output quality with English and Filipino examples.
 2. Review the Phase 5 result summary in a new assessment and History, including the generated explanation and fallback notice for older results.
 3. Stage 2.3 prototype evaluation using human-reviewed bilingual examples, plus client review of unclear handling and retries.

@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 
 from .auth.routes import service as auth_service
 from .auth.service import AuthService
+from .assessment_pipeline import IntentModelUnavailable, classify_intent
 from .auth.store import ChatConversationRecord, ChatMessageRecord
 from .errors import APIError
 from .onboarding import require_storage_consent
@@ -87,6 +88,19 @@ class ChatMetadataInput(BaseModel):
         if not self.model_fields_set:
             raise ValueError("At least one session setting is required.")
         return self
+
+
+class ChatIntentInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    text: str = Field(min_length=1, max_length=1000)
+
+
+class ChatIntentResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+    decision: Literal["answer", "suggest", "fallback"]
+    question: str | None
+    confidence: float
+    suggestions: list[str]
 
 
 class ChatTurnResponse(BaseModel):
@@ -226,6 +240,21 @@ def update_chat_metadata(
             setattr(record, field, getattr(body, field))
         db.flush()
         return _conversation(db, record)
+
+
+@router.post("/intent", response_model=ChatIntentResponse)
+def classify_chat_intent(
+    body: ChatIntentInput,
+    request: Request,
+    auth: AuthService = Depends(auth_service),
+):
+    _user_id(request, auth)
+    if not body.text.strip():
+        raise APIError(422, "empty_chat_message", "Chat messages cannot be empty.")
+    try:
+        return classify_intent(body.text.strip(), request.app.state.settings.ollama_base_url)
+    except IntentModelUnavailable as error:
+        raise APIError(503, "intent_model_unavailable", "The information-chat model is unavailable.") from error
 
 
 @router.post("/{conversation_id}/turns", response_model=ChatTurnResponse)

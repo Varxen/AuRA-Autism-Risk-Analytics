@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAura } from '../contexts/AppContext'
+import { sourceLinks } from '../data/sourceLinks'
 import { ChatWindow } from '../components/chat/ChatWindow'
 import { ChatMessage } from '../components/chat/ChatMessage'
 import { ChatInput } from '../components/chat/ChatInput'
@@ -61,7 +62,15 @@ export function ChatPage() {
                 {message.sources && message.sources.length > 0 &&
                   !(message.id === introduction.messageId && introducing) && (
                   <p className="knowledge-sources">
-                    Source: {message.sources.join('; ')}
+                    Source:{' '}
+                    {message.sources.map((source, sourceIndex) => (
+                      <Fragment key={source}>
+                        {sourceIndex > 0 && '; '}
+                        {sourceLinks[source] ? (
+                          <a href={sourceLinks[source]} target="_blank" rel="noopener noreferrer">{source}</a>
+                        ) : source}
+                      </Fragment>
+                    ))}
                   </p>
                 )}
               </ChatMessage>

@@ -2905,6 +2905,11 @@ p {
   line-height: 1.45;
 }
 
+.knowledge-sources a {
+  color: #1666a8;
+  text-decoration: underline;
+}
+
 .error-message {
   font-size: 14px;
   color: #a32d37;

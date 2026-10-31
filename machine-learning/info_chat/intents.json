@@ -1,0 +1,319 @@
+[
+  {
+    "id": "kb-01",
+    "questionEn": "What is ASD?",
+    "questionTl": "Ano ang ASD?"
+  },
+  {
+    "id": "kb-02",
+    "questionEn": "Why is autism called a spectrum?",
+    "questionTl": "Bakit tinatawag na spectrum ang autism ?"
+  },
+  {
+    "id": "kb-03",
+    "questionEn": "What are the main characteristics of ASD?",
+    "questionTl": "Ano ang mga pangunahing katangian ng ASD?"
+  },
+  {
+    "id": "kb-04",
+    "questionEn": "What are the signs of ASD?",
+    "questionTl": "Ano ang mga posibleng senyales ng ASD?"
+  },
+  {
+    "id": "kb-05",
+    "questionEn": "Does every child with ASD have the same signs?",
+    "questionTl": "Pare-pareho ba ang senyales ng lahat ng batang may ASD?"
+  },
+  {
+    "id": "kb-06",
+    "questionEn": "Can ASD affect a child's senses?",
+    "questionTl": "Nakakaapekto ba ang ASD sa senses ng bata?"
+  },
+  {
+    "id": "kb-07",
+    "questionEn": "Do children with ASD have strengths?",
+    "questionTl": "May mga kalakasan ba ang mga batang may ASD?"
+  },
+  {
+    "id": "kb-08",
+    "questionEn": "Is ASD lifelong?",
+    "questionTl": "Habambuhay ba ang ASD?"
+  },
+  {
+    "id": "kb-09",
+    "questionEn": "What are restricted or repetitive patterns?",
+    "questionTl": "Ano ang ibig sabihin ng paulit-ulit na gawi sa ASD?"
+  },
+  {
+    "id": "kb-10",
+    "questionEn": "What are the social attention characteristics of ASD?",
+    "questionTl": "Ano ang mga katangian ng ASD pagdating sa pakikisama at atensyon?"
+  },
+  {
+    "id": "kb-11",
+    "questionEn": "What are the communication characteristics of ASD?",
+    "questionTl": "Ano ang mga katangian ng ASD pagdating sa pakikipag-usap?"
+  },
+  {
+    "id": "kb-12",
+    "questionEn": "What are the play and learning characteristics of ASD?",
+    "questionTl": "Ano ang mga katangian ng ASD pagdating sa laro at pagkatuto?"
+  },
+  {
+    "id": "kb-13",
+    "questionEn": "What are the flexibility and regulation characteristics of ASD?",
+    "questionTl": "Ano ang mga katangian ng ASD pagdating sa pagbabago ng gawain at emosyon?"
+  },
+  {
+    "id": "kb-14",
+    "questionEn": "What are the sensory, movement, and daily living characteristics?",
+    "questionTl": "Ano ang mga katangian ng ASD pagdating sa senses, galaw, at araw-araw na gawain?"
+  },
+  {
+    "id": "kb-15",
+    "questionEn": "Is there one standard intervention for ASD?",
+    "questionTl": "May iisang tamang therapy o tulong ba para sa lahat ng may ASD?"
+  },
+  {
+    "id": "kb-16",
+    "questionEn": "What supports may be used for ASD?",
+    "questionTl": "Anong mga tulong ang puwedeng gamitin para sa ASD?"
+  },
+  {
+    "id": "kb-17",
+    "questionEn": "Can intervention help at any age?",
+    "questionTl": "Makakatulong ba ang therapy o tulong sa anumang edad?"
+  },
+  {
+    "id": "kb-18",
+    "questionEn": "What should I ask to specialist about an intervention?",
+    "questionTl": "Ano ang dapat kong itanong sa espesyalista tungkol sa therapy o tulong?"
+  },
+  {
+    "id": "kb-19",
+    "questionEn": "Is autism contagious?",
+    "questionTl": "Nakakahawa ba ang autism?"
+  },
+  {
+    "id": "kb-20",
+    "questionEn": "Is autism caused by poor parenting?",
+    "questionTl": "Dahil ba sa maling pagpapalaki ng magulang kaya nagkakaroon ng autism?"
+  },
+  {
+    "id": "kb-21",
+    "questionEn": "Is there a cure for ASD?",
+    "questionTl": "May lunas ba ang ASD?"
+  },
+  {
+    "id": "kb-22",
+    "questionEn": "Can girls be autistic?",
+    "questionTl": "Puwede bang magkaroon ng autism ang mga babae?"
+  },
+  {
+    "id": "kb-23",
+    "questionEn": "Does one behavior prove ASD?",
+    "questionTl": "Napapatunayan na bang may ASD ang"
+  },
+  {
+    "id": "kb-24",
+    "questionEn": "Is there a medication that cures ASD?",
+    "questionTl": "May gamot ba para gumaling ang ASD?"
+  },
+  {
+    "id": "kb-25",
+    "questionEn": "What is autism screening?",
+    "questionTl": "Ano ang autism screening?"
+  },
+  {
+    "id": "kb-26",
+    "questionEn": "When is autism screening recommended?",
+    "questionTl": "Kailan dapat gawin ang autism screening?"
+  },
+  {
+    "id": "kb-27",
+    "questionEn": "What is M-CHAT-R/F?",
+    "questionTl": "Ano ang M-CHAT-R/F?"
+  },
+  {
+    "id": "kb-28",
+    "questionEn": "What is Q-CHAT?",
+    "questionTl": "Ano ang Q-CHAT?"
+  },
+  {
+    "id": "kb-29",
+    "questionEn": "What is the general developmental screening schedule?",
+    "questionTl": "Kailan ginagawa ang general developmental screening?"
+  },
+  {
+    "id": "kb-30",
+    "questionEn": "What is the CSBS DP Infant-Toddler Checklist?",
+    "questionTl": "Ano ang CSBS DP Infant-Toddler Checklist?"
+  },
+  {
+    "id": "kb-31",
+    "questionEn": "What is developmental surveillance?",
+    "questionTl": "Ano ang developmental surveillance?"
+  },
+  {
+    "id": "kb-32",
+    "questionEn": "When can ASD be detected?",
+    "questionTl": "Kailan puwedeng makita o matukoy ang ASD?"
+  },
+  {
+    "id": "kb-33",
+    "questionEn": "Does a negative screening result mean my child cannot have ASD?",
+    "questionTl": "Kapag negatibo ang resulta ng screening, hindi na ba puwedeng magkaroon ng ASD ang anak ko?"
+  },
+  {
+    "id": "kb-34",
+    "questionEn": "Does a positive screening result mean my child has ASD?",
+    "questionTl": "Kapag positibo ang resulta ng screening, may ASD na ba ang anak ko?"
+  },
+  {
+    "id": "kb-35",
+    "questionEn": "Should intervention wait until diagnosis?",
+    "questionTl": "Kailangan bang hintayin muna ang diagnosis bago simulan ang therapy?"
+  },
+  {
+    "id": "kb-36",
+    "questionEn": "What should parents do if they have concerns?",
+    "questionTl": "Ano ang dapat gawin ng magulang kapag nag-aalala sila?"
+  },
+  {
+    "id": "kb-37",
+    "questionEn": "How is ASD diagnosed?",
+    "questionTl": "Paano dina-diagnose ang ASD?"
+  },
+  {
+    "id": "kb-38",
+    "questionEn": "Does speech delay automatically mean ASD?",
+    "questionTl": "Autism na ba agad kapag late magsalita ang bata?"
+  },
+  {
+    "id": "kb-39",
+    "questionEn": "What do clinicians look for under the DSM-5-TR framework?",
+    "questionTl": "Ano ang tinitingnan ng mga doktor ayon sa DSM-5-TR?"
+  },
+  {
+    "id": "kb-40",
+    "questionEn": "Can a chatbot diagnose ASD?",
+    "questionTl": "Puwede bang i-diagnose ng chatbot ang ASD?"
+  },
+  {
+    "id": "kb-41",
+    "questionEn": "Can an online test or chatbot diagnose ASD?",
+    "questionTl": "Puwede bang i-diagnose ng online test o chatbot ang ASD?"
+  },
+  {
+    "id": "kb-42",
+    "questionEn": "Is there a blood test or brain scan for ASD?",
+    "questionTl": "May blood test o brain scan ba para sa ASD?"
+  },
+  {
+    "id": "kb-43",
+    "questionEn": "What is AuRA's role?",
+    "questionTl": "Ano ang papel ng AuRA?"
+  },
+  {
+    "id": "kb-44",
+    "questionEn": "Who can evaluate a child for ASD?",
+    "questionTl": "Sino ang puwedeng mag-evaluate sa bata para sa ASD?"
+  },
+  {
+    "id": "kb-45",
+    "questionEn": "What are the risk factors for ASD?",
+    "questionTl": "Ano ang mga risk factor ng ASD?"
+  },
+  {
+    "id": "kb-46",
+    "questionEn": "What causes ASD?",
+    "questionTl": "Ano ang sanhi ng ASD?"
+  },
+  {
+    "id": "kb-47",
+    "questionEn": "Do vaccines cause autism?",
+    "questionTl": "Sanhi ba ng autism ang bakuna?"
+  },
+  {
+    "id": "kb-48",
+    "questionEn": "Does having a risk factor mean my child has ASD?",
+    "questionTl": "Kapag may risk factor ang anak ko, magkakaroon ba siya ng ASD?"
+  },
+  {
+    "id": "kb-49",
+    "questionEn": "Is a risk factor the same as a cause?",
+    "questionTl": "Pareho ba ang risk factor at sanhi?"
+  },
+  {
+    "id": "kb-50",
+    "questionEn": "When should I consult a professional?",
+    "questionTl": "Kailan ako dapat kumonsulta sa propesyonal?"
+  },
+  {
+    "id": "kb-51",
+    "questionEn": "What signs may require further evaluation?",
+    "questionTl": "Anong mga senyales ang dapat ipasuri sa propesyonal?"
+  },
+  {
+    "id": "kb-52",
+    "questionEn": "What happens after consulting a professional?",
+    "questionTl": "Ano ang mangyayari pagkatapos kumonsulta sa propesyonal?"
+  },
+  {
+    "id": "kb-53",
+    "questionEn": "Where can Filipino families start?",
+    "questionTl": "Saan puwedeng magsimula ang mga pamilyang Pilipino?"
+  },
+  {
+    "id": "sm-01",
+    "questionEn": "Greeting",
+    "questionTl": "Pagbati",
+    "examples": [
+      "hello",
+      "hi",
+      "hey",
+      "hello po",
+      "hi po",
+      "good morning",
+      "good afternoon",
+      "good evening",
+      "kumusta",
+      "kumusta ka",
+      "kumusta po",
+      "magandang umaga",
+      "magandang hapon",
+      "magandang gabi",
+      "uy",
+      "hello there"
+    ]
+  },
+  {
+    "id": "sm-02",
+    "questionEn": "Thanks",
+    "questionTl": "Pasasalamat",
+    "examples": [
+      "thank you",
+      "thanks",
+      "thank you so much",
+      "salamat",
+      "salamat po",
+      "maraming salamat",
+      "salamat sa tulong"
+    ]
+  },
+  {
+    "id": "sm-03",
+    "questionEn": "Goodbye",
+    "questionTl": "Paalam",
+    "examples": [
+      "bye",
+      "goodbye",
+      "see you",
+      "see you later",
+      "paalam",
+      "sige bye",
+      "sige po salamat bye",
+      "hanggang sa muli"
+    ]
+  }
+]

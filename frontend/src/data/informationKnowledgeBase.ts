@@ -238,7 +238,7 @@ export const informationKnowledgeBase: KnowledgeBaseEntry[] = [
     "answerTl": "Oo. Nangyayari ang ASD sa lahat, lalaki man o babae. May mga bata, lalo na ang mga babae o ang mga hindi gaanong halata ang senyales, na mas huli nang napapansin.",
     "sources": [
       "NIMH",
-      "AAP (2020"
+      "AAP (2020)"
     ]
   },
   {

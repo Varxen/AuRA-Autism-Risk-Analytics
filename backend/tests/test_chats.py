@@ -132,3 +132,25 @@ def test_chat_turn_accepts_the_full_unicode_input_limit(client):
     })
     assert response.status_code == 200
     assert response.json()["userMessage"]["content"] == content
+
+
+def test_chat_intent_requires_auth_and_maps_model_results(client, monkeypatch):
+    from aura_api import chats
+
+    assert client.post("/api/v1/chats/intent", json={"text": "is it contagious"}).status_code == 401
+    register(client, "intent@example.test")
+    monkeypatch.setattr(chats, "classify_intent", lambda text, base_url: {
+        "decision": "answer", "question": "Is autism contagious?", "confidence": 0.97, "suggestions": [],
+    })
+    ok = client.post("/api/v1/chats/intent", json={"text": "nakakahawa ba"})
+    assert ok.status_code == 200
+    assert ok.json() == {
+        "decision": "answer", "question": "Is autism contagious?", "confidence": 0.97, "suggestions": [],
+    }
+    assert client.post("/api/v1/chats/intent", json={"text": "   "}).status_code == 422
+
+    def unavailable(text, base_url):
+        raise chats.IntentModelUnavailable()
+
+    monkeypatch.setattr(chats, "classify_intent", unavailable)
+    assert client.post("/api/v1/chats/intent", json={"text": "hello"}).status_code == 503

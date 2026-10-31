@@ -13,6 +13,7 @@ from feature_encoding import (  # noqa: E402
     validate_feature_values,
 )
 from inference import ModelInferenceError, predict_with_soft_voting  # noqa: E402
+from info_chat.classifier import IntentModelUnavailable, classify as classify_intent  # noqa: E402
 
 __all__ = [
     "encode_feature_vector",
@@ -20,4 +21,6 @@ __all__ = [
     "validate_feature_values",
     "ModelInferenceError",
     "predict_with_soft_voting",
+    "IntentModelUnavailable",
+    "classify_intent",
 ]

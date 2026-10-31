@@ -23,13 +23,15 @@ class PreparedDataset:
     label_counts: dict[str, int]
 
 
-def _column_index(headers: tuple[object, ...], label: str, location: str) -> int:
+def _column_index(headers: tuple[object, ...], label: str | tuple[str, ...], location: str) -> int:
+    labels = {label.casefold()} if isinstance(label, str) else {item.casefold() for item in label}
     matches = [
         index for index, value in enumerate(headers)
-        if isinstance(value, str) and value.strip().casefold() == label.casefold()
+        if isinstance(value, str) and value.strip().casefold() in labels
     ]
     if len(matches) != 1:
-        raise ValueError(f"Expected one '{label}' column in {location}.")
+        expected = label if isinstance(label, str) else " / ".join(label)
+        raise ValueError(f"Expected one '{expected}' column in {location}.")
     return matches[0]
 
 
@@ -87,7 +89,9 @@ def load_dataset() -> PreparedDataset:
                 main_headers = tuple(next(rows, ()))
                 sub_headers = tuple(next(rows, ()))
 
-                respondent_index = _column_index(main_headers, "Parent/Respondent Code", location)
+                respondent_index = _column_index(
+                    main_headers, ("Parent/Respondent Code", "File Number Code"), location
+                )
                 consent_index = _column_index(main_headers, "Data Privacy Consent Given", location)
                 total_index = _column_index(main_headers, "TOTAL SCORE", location)
                 label_index = _column_index(main_headers, "Ground Truth Labels", location)

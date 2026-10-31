@@ -10,7 +10,7 @@ import {
   canCompleteAssessment,
 } from '../src/utils/assessment.ts'
 import { mockAssessmentService } from '../src/services/mock/mockAssessmentService.ts'
-import { mockChatService } from '../src/services/mock/mockChatService.ts'
+import { chatReplyService } from '../src/services/api/chatReplyService.ts'
 
 test('Q1–Q9 and Q10–Q13 preserve both documented scoring scales', () => {
   assert.equal(mockQuestions.length, 13)
@@ -111,9 +111,9 @@ test('assessment preserves original answers across all 13 items and completes wi
 })
 
 test('chat returns fixed reference education and action choices', async () => {
-  const conversation = await mockChatService.createConversation()
+  const conversation = await chatReplyService.createConversation()
   assert.equal(conversation.messages[0].actions?.length, 2)
-  const messages = await mockChatService.respond(
+  const messages = await chatReplyService.respond(
     conversation.id,
     'I want to know about ASD',
     'education',
@@ -121,7 +121,7 @@ test('chat returns fixed reference education and action choices', async () => {
   assert.equal(messages[0].type, 'education')
   assert.match(messages[0].content, /Autism Spectrum Disorder/)
   assert.equal(messages[1].actions?.[1].id, 'assessment')
-  const fallback = await mockChatService.respond(
+  const fallback = await chatReplyService.respond(
     conversation.id,
     'What is the weather tomorrow?',
   )

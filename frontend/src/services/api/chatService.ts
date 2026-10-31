@@ -1,4 +1,4 @@
-import { mockChatService } from '../mock/mockChatService'
+import { chatReplyService, type ChatIntent } from './chatReplyService'
 import type { ChatActionId, ChatTurn, Conversation } from '../../types/chat.types'
 import type { SessionMetadataUpdate } from '../../types/history.types'
 
@@ -48,7 +48,10 @@ export const chatService = {
     turnId: string,
     action?: ChatActionId,
   ): Promise<ChatTurn> {
-    const replies = await mockChatService.respond(conversationId, text, action)
+    // The trained intent model runs in the backend; if it is unavailable the
+    // reply service falls back to its local keyword matcher.
+    const intent = action ? null : await this.classifyIntent(text)
+    const replies = await chatReplyService.respond(conversationId, text, action, intent)
     const response = await request(`/${conversationId}/turns`, {
       method: 'POST',
       body: JSON.stringify({
@@ -63,6 +66,14 @@ export const chatService = {
       }),
     })
     return readBody<ChatTurn>(response, 'AuRA could not save this chat turn.')
+  },
+  async classifyIntent(text: string): Promise<ChatIntent | null> {
+    try {
+      const response = await request('/intent', { method: 'POST', body: JSON.stringify({ text }) })
+      return response.ok ? (await response.json() as ChatIntent) : null
+    } catch {
+      return null
+    }
   },
   async deleteConversation(id: string): Promise<void> {
     const response = await request(`/${id}`, { method: 'DELETE' })

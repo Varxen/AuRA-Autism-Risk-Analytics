@@ -1,6 +1,6 @@
 # AuRA Machine Learning Progress Memo
 
-**Updated:** 2026-10-27
+**Updated:** 2026-10-31
 **Purpose:** Quick memory of current implementation, interim decisions, and open development questions. This memo supplements `docs/roadmap.md`; the roadmap remains the baseline for project status and planned work.
 
 ## Current phase status
@@ -11,10 +11,11 @@
 | 2.2 Lexicon matching | Implemented baseline | Uses the client's `behavioral_indicators_lexicon.json`; the current question selects the indicator. A match is lexical evidence only. |
 | 2.3 Consistency and interpretation | Revised local-model prompt and approval flow implemented; evaluation pending | Backend sends the exact approved question, indicator, displayed follow-up, selected answer, permitted choices and parent response to Ollama/Llama 3.2 3B. The prompt includes follow-up intent and item-specific guidance for Q1-Q13. On clear contradiction, the model suggests an option; after parent approval, the backend saves that option and its server-calculated score without a second Ollama check, then advances. The user confirmed this works after restarting the backend. Human-reviewed evaluation remains open. |
 | 2.4 Ordinal feature encoding | Implemented | Produces the shared ordered 13-value vector from accepted structured answers. Missing, duplicate, invalid, or incomplete answers cannot silently become zero. Legacy preview sessions do not receive a vector. |
-| 3.1 Multi-model classification | Retrained on 2,900 records | The original 500 and additional 2,400 consented records are included. All labels remain score-derived. |
-| 3.2 Soft voting | Re-evaluated; 97.48% held-out accuracy | Validation accuracy 98.39%; held-out test accuracy 97.48% on score-derived labels. Artifacts were regenerated locally; restart backend and verify a new live result. Migration `20261025_08` is applied in the tested environment. Restoring a saved result after navigation/refresh is verified. |
+| 3.1 Multi-model classification | Retrained on 3,137 records | The original 500, additional 2,400 and 237 new documented-entry consented records (`AURA-DATASET-3.xlsx`) are included. All labels remain score-derived. |
+| 3.2 Soft voting | Re-evaluated; 97.03% held-out accuracy | Validation accuracy 98.09%; held-out test accuracy 97.03% on score-derived labels (previous 2,900-record run: 98.39% / 97.48%). Artifacts were regenerated locally on 2026-10-30; restart backend and verify a new live result. Migration `20261025_08` is applied in the tested environment. Restoring a saved result after navigation/refresh is verified. |
 | Thesis Phase 4 | Implemented; wording review pending | Computes per-indicator changes to selected-category support by replacing one answer at a time with Sometimes while holding the others fixed. It maps the five largest shifts of at least one percentage point to the exact indicator and selected answer. Local Ollama explains only this structured evidence; a fixed category-based recommendation and localized fallback are saved with the result. |
 | Thesis Phase 5 | Implemented; visual/runtime review pending | The result UI presents the selected category, support bars, influential indicators and answers, explanation, fixed category-based recommendation, model metadata and limitation. Download PDF and Print actions share an A4 result-only layout with a pale slanted AuRA logo watermark; Download PDF opens the browser print dialog and requires Save as PDF. Older saved results without these fields show clear notices. |
+| Information-chat intent classifier | Implemented; trained on knowledge-base questions only; evaluation pending | Replaces keyword matching for information-chat replies. The local `bge-m3` encoder (Ollama) embeds a message and a Logistic Regression head trained on our own labelled questions picks one of 53 knowledge-base intents, three small-talk intents (greeting, thanks, goodbye with fixed replies) or `none` (out of scope). Replies remain the stored, reviewed answers; nothing is generated. Served by `POST /api/v1/chats/intent`; the frontend keeps the keyword matcher as a fallback. Training data is still starter data only: 190 rows over 57 classes (English and Filipino knowledge-base questions, about 37 small-talk examples and about 47 off-topic examples written by us), so thresholds are untuned defaults and no accuracy is reported yet. Direct answers work for phrasings close to the known questions; others show a "Did you mean" list (suggest cutoff 0.1) or the fixed fallback. The backend was restarted to load the retrained artifact. |
 
 ## Decisions recorded
 
@@ -37,24 +38,27 @@
 - Chat bubbles now size to message length within their width limit and have 12px by 14px inner padding. Assistant response containers are offset below the avatar.
 - Backend request-origin checks and credentialed CORS now accept HTTPS origins on generated `*.trycloudflare.com` tunnel hosts dynamically. Use HTTPS; the local backend `.env` has Secure cookies enabled. Restart backend after the origin-code change.
 - Phase 4 explanations, indicator support shifts and category-based recommendations are persisted inside the existing processing-result JSON; no migration is required. If Ollama output is unavailable or invalid, the backend stores localized deterministic explanation text and preserves the model result.
+- Information-chat intent classifier (added 2026-10-31): the panel expects a model we trained rather than a pretrained one, so the design is transfer learning, a pretrained multilingual encoder (`bge-m3`) plus our own trained classification head. State this accurately in the thesis; do not claim the encoder as our own. The risk-prediction models (Logistic Regression, Random Forest, XGBoost) are trained entirely on our data. `llama3.2:3b` is used only for the Stage 2.3 consistency check and the Phase 4 wording, never for the risk category or for chat answers.
+- The classifier only selects a stored answer. It has no memory of earlier messages and cannot answer outside the 53 knowledge-base entries; those fall back to a fixed message or a "Did you mean" list. It is an intent classifier, not a conversational or context-analysis model.
+- Training-data rules for the classifier: seed questions are real questions from people; AI may be used only to paraphrase training seeds, must be reviewed by a person and must be disclosed; validation and test questions must be real, human-written and never paraphrased; paraphrases stay in the same split as their seed.
 - For the interim 3.1 baseline, use consented records from `RAW DATA` and the added category worksheets. Do not use the child's `Diagnosed`, `No Concern`, or `Not Evaluated` status as the model target.
 - Use the workbook's `Ground Truth Labels` as **provisional score-derived categories**: Low 0–8, Moderate 9–11, High 12–26. These labels come from the same 13 scores used as features.
 - The additional 2,400-record workbook is now included with the original 500 records. The user accepts current model output as interim development output; this is not clinical validation or final approval of the target-label method.
-- The combined pool exceeds the working 500-record-per-category target (Low 1,085; Moderate 888; High 927). This target is not a statistically approved minimum. Any future records must be genuine, consented, and not duplicate people.
+- The combined pool exceeds the working 500-record-per-category target (Low 1,093; Moderate 892; High 1,152). This target is not a statistically approved minimum. Any future records must be genuine, consented, and not duplicate people.
 - Keep model artifacts and aggregate reports in ignored local folders. Do not copy parent IDs or free-text follow-ups into training outputs.
 
 ## Current 3.1 training pool and split
 
-Sources: `machine-learning/dataset/AURA-DATASET.xlsx` (`RAW DATA`) and `machine-learning/dataset/AURA-DATASET-2.xlsx` (`Low`, `Moderate`, `High`). The loader combines them in memory, includes rows with consent marked `Yes`, validates all 13 scores and their total, and checks each label against its sheet and the unchanged score cutoffs. The user confirmed that reused codes in the added workbook belong to different people; code checks are scoped to each source workbook and sheet.
+Sources: `machine-learning/dataset/AURA-DATASET.xlsx` (`RAW DATA`), `machine-learning/dataset/AURA-DATASET-2.xlsx` (`Low`, `Moderate`, `High`) and `machine-learning/dataset/AURA-DATASET-3.xlsx` (`RAW DATA`; ID column `File Number Code`, accepted by the loader alongside `Parent/Respondent Code`; 313 rows without consent excluded across all workbooks). The loader combines them in memory, includes rows with consent marked `Yes`, validates all 13 scores and their total, and checks each label against its sheet and the unchanged score cutoffs. The user confirmed that reused codes in the added workbook belong to different people; code checks are scoped to each source workbook and sheet.
 
-The user ran Stage 3.1 and Stage 3.2 on 2026-10-27 using 2,900 consented records. Training scripts now print compact metric comparison tables and save aggregate PNG charts in the ignored reports folder; no row-level data is graphed or saved. The original 500 records used in preliminary cutoff computation remain included. The cutoffs were not recomputed.
+Stage 3.1 and Stage 3.2 were rerun on 2026-10-30 using 3,137 consented records (previously 2,900 on 2026-10-27). Training scripts now print compact metric comparison tables and save aggregate PNG charts in the ignored reports folder; no row-level data is graphed or saved. The original 500 records used in preliminary cutoff computation remain included. The cutoffs were not recomputed.
 
 | Category | Records | Train | Validation | Test |
 |---|---:|---:|---:|---:|
-| Low | 1,085 | 759 | 163 | 163 |
-| Moderate | 888 | 621 | 133 | 134 |
-| High | 927 | 649 | 139 | 139 |
-| **Total** | **2,900** | **2,029** | **435** | **436** |
+| Low | 1,093 | 765 | 164 | 164 |
+| Moderate | 892 | 624 | 134 | 134 |
+| High | 1,152 | 806 | 173 | 173 |
+| **Total** | **3,137** | **2,195** | **471** | **471** |
 
 The split is fixed-seed stratified 70/15/15. The held-out test set was used once for final Stage 3.2 reporting; do not tune models from it.
 
@@ -64,35 +68,37 @@ All models use the same Q1-Q13 score vector. These are validation metrics, not h
 
 | Model | Accuracy | Macro F1 |
 |---|---:|---:|
-| Logistic Regression | 100.00% | 1.0000 |
-| Random Forest | 88.05% | 0.8756 |
-| XGBoost | 89.66% | 0.8921 |
+| Logistic Regression | 99.79% | 0.9977 |
+| Random Forest | 91.08% | 0.9062 |
+| XGBoost | 91.08% | 0.9056 |
 
-Logistic Regression's perfect score is consistent with learning the linear score-cutoff boundaries. The labels are computed from the same questionnaire scores supplied as features, so this result is rule reproduction, not independent ASD-risk prediction.
+Overfitting check (train / validation / test accuracy): Logistic Regression 100% / 99.79% / 99.58%; Random Forest 100% / 91.08% / 90.23%; XGBoost 97.77% / 91.08% / 92.78%; ensemble 100% / 98.09% / 97.03%. Random Forest and XGBoost overfit (trees cannot add scores, so they memorize training patterns). Limiting depth or leaf size lowered their validation accuracy, so models were kept unchanged; the ensemble gap is about 2–3 points because Logistic Regression dominates the vote.
+
+Logistic Regression's near-perfect score is consistent with learning the linear score-cutoff boundaries. The labels are computed from the same questionnaire scores supplied as features, so this result is rule reproduction, not independent ASD-risk prediction.
 
 ## Stage 3.2 equal-weight soft voting
 
 `soft_voting.py` averages the three models' class probabilities equally, then selects the largest mean. It reports validation and held-out test metrics. The report stores aggregate metrics only at `machine-learning/reports/stage_3_2_soft_voting.json`.
 
-Validation (`n = 435`): accuracy **98.39%**, macro F1 **0.9836**. Confusion matrix, actual rows / predicted columns, ordered Low / Moderate / High:
+Validation (`n = 471`): accuracy **98.09%**, macro F1 **0.9800**. Confusion matrix, actual rows / predicted columns, ordered Low / Moderate / High:
 
 ```text
              Low  Moderate  High
-Low          162         1     0
-Moderate       3       130     0
-High           0         3   136
-```
-
-Held-out test (`n = 436`): accuracy **97.48%** (`425/436` correct), macro F1 **0.9744**. Confusion matrix, same order:
-
-```text
-             Low  Moderate  High
-Low          159         4     0
+Low          161         3     0
 Moderate       2       132     0
-High           0         5   134
+High           0         4   169
 ```
 
-The small validation/test gap does not establish clinical generalization. These metrics measure reproduction of score-derived cutoffs, not ASD-risk accuracy, probability, or diagnosis. The backend needs a restart before checking live inference with the new local artifacts.
+Held-out test (`n = 471`): accuracy **97.03%** (`457/471` correct), macro F1 **0.9690**. Confusion matrix, same order:
+
+```text
+             Low  Moderate  High
+Low          160         4     0
+Moderate       3       130     1
+High           0         6   167
+```
+
+Compared with the previous 2,900-record run (test 97.48%, macro F1 0.9744), the extra data kept performance stable rather than improving it; the difference is within noise (about 2 more errors) and the test set differs. The small validation/test gap does not establish clinical generalization. These metrics measure reproduction of score-derived cutoffs, not ASD-risk accuracy, probability, or diagnosis. The backend needs a restart before checking live inference with the new local artifacts.
 ## Questions and work to revisit
 
 ### Stage 2.3 model evaluation
@@ -103,6 +109,27 @@ The small validation/test gap does not establish clinical generalization. These 
 - The UI now distinguishes clear contradictions, which show an answer suggestion with an approval button, from unclear responses, which ask the parent to clarify.
 - After the parent approves a suggested answer, the saved structured answer updates to that option, shows an “Approved” / “Inaprubahan” mark, and advances. User confirmed this worked after restarting the backend.
 - Confirm local Ollama/model setup on development machines. Do not claim clinical validity or production readiness from a successful API call.
+
+### Information-chat intent classifier: work needed to improve it
+
+Current state: 53 knowledge-base intents plus 3 small-talk intents and `none`; 190 training rows (knowledge-base questions in English and Filipino, small-talk and off-topic starter examples); no held-out data; default thresholds. Live checks: "kailan malalaman kung may ASD yung anak ko" returned the right answer directly; "pano ko malalaman kung may ASD ang anak ko" showed a "Did you mean" list with the right entry first; greetings, thanks and goodbye returned fixed replies; off-topic text fell back. Weak spots remain for casual phrasing (for example "ano po ba yung autism" suggested the screening entry, and "kumusta ang autism" was read as a greeting).
+
+- Send the client `info_chat/data/question_collection_template.xlsx` (53 intents in column 1, ten blank question columns); on return, match rows by the English question on the first line of column 1 and convert to `data/collected_questions.csv`. Ask for ten different ways a person might ask each intent, in their own words, without copying the intent text.
+- Replace the starter small-talk and off-topic examples with real ones from the collected data.
+- Collect real questions through the client: at least 6 and ideally 10 per intent (about 320 to 530 in total), written freely in English, Filipino and Taglish, with consent and no names or personal details. Do not show respondents the existing questions or answers.
+- Collect 100 to 150 out-of-scope questions (small talk, unrelated topics) labelled `none` so the model learns to refuse.
+- Split the collected questions per intent into train, validation and test (about 6 / 2 / 2 of every 10). Keep the test questions untouched until the final report.
+- Optionally expand the training seeds to 15 to 20 per intent with AI paraphrases, reviewed by a person and disclosed. Put them in `data/paraphrases.csv` with their `seed_text` so they never cross into held-out data.
+- Retrain with `python -m info_chat.train`, which tunes the regularization strength and the answer threshold on validation, then report on test: top-1 accuracy, macro F1, share of in-scope questions answered correctly, share of out-of-scope questions rejected, and the same numbers for the old keyword matcher as a baseline.
+- Resolve near-duplicate intents that the model cannot separate: "Can a chatbot diagnose ASD?" and "Can an online test or chatbot diagnose ASD?" should be merged; the negative and positive screening-result entries need many distinguishing examples.
+- Add verified addresses for the two sources that still show as plain text ("Allison et al.", "Wetherby et al.") in `frontend/src/data/sourceLinks.ts`, and open the CDC and publisher links once by hand (they block automated checks).
+- Make the "Did you mean" suggestions tappable buttons. This needs new chat action ids in the backend schema (`ChatActionValue`).
+- Choose the reply language from the message or the user's language setting instead of the current keyword test.
+- Decide whether low-confidence and fallback questions may be logged (with consent, without personal data) so the question set can grow after launch.
+- Confirm with the adviser or panel that a pretrained encoder with our own trained head is acceptable. If it is not, the fallback is TF-IDF character n-grams with the same classifier, which needs the larger paraphrase dataset.
+- Measure latency (one embedding call per message) and decide how the deployed backend gets `bge-m3` (`ollama pull bge-m3`).
+- Add tests for the training script and a stored evaluation report with the artifact version; clinical review of the 53 answers themselves remains open.
+- Optional later: remember the previous intent so short follow-ups ("what about girls?") can be resolved. This is not planned for the current version.
 
 ### Account data and access policy
 
@@ -115,14 +142,14 @@ The small validation/test gap does not establish clinical generalization. These 
 
 ### Data and labels
 
-- The combined pool now has 1,085 Low, 888 Moderate, and 927 High records. Re-check counts and consent if further records are added; obtain adviser guidance before setting a final sample-size target.
+- The combined pool now has 1,093 Low, 892 Moderate, and 1,152 High records. Re-check counts and consent if further records are added; obtain adviser guidance before setting a final sample-size target.
 - Ask a statistician or study adviser to justify the final sample size and split method. The 500-per-category target is only a working suggestion.
 - Revisit whether score-derived categories are appropriate training targets. Since the target is calculated from the input vector, model training is a demonstration of formula reproduction, not independent learning of clinical outcomes.
 - If the study needs an independent ML target, obtain an approved outcome-labeling protocol before changing targets or reporting clinical performance.
 
 ### Next pipeline steps
 
-- If the dataset changes, repeat the full split/training/evaluation and preserve this 2,900-record report as a historical result.
+- If the dataset changes, repeat the full split/training/evaluation and preserve this 3,137-record report as a historical result (the 2,900-record result is summarized above).
 - Keep the held-out test report final for this dataset; do not tune from it.
 - Review the Phase 5 result card in a new assessment and History; confirm indicator attribution, generated explanation, category-based recommendations and localized fallback display correctly.
 - Evaluate and refine the local context-aware Stage 2.3 model with reviewed parent-response examples; retain Stage 2.2 lexicon as a reference baseline.
@@ -139,4 +166,6 @@ The small validation/test gap does not establish clinical generalization. These 
 - `machine-learning/feature_encoding.py` and `backend/aura_api/assessments.py` — Stage 2.4 encoding and completed-assessment API output.
 - `machine-learning/prepare_dataset.py`, `models.py`, `train.py`, and `evaluate.py` — Stage 3.1 training pipeline.
 - `machine-learning/inference.py`, `machine-learning/soft_voting.py`, and `backend/aura_api/assessments.py` — live Stage 3.2 inference and persisted model output.
+- `frontend/src/data/sourceLinks.ts` and `frontend/src/pages/ChatPage.tsx` — clickable source labels in information-chat answers.
+- `machine-learning/info_chat/` (`train.py`, `classifier.py`, `intents.json`, `data/`, including the question collection template) and `backend/aura_api/chats.py` — information-chat intent classifier and its `/api/v1/chats/intent` endpoint.
 - `docs/roadmap.md` — authoritative roadmap and baseline project status.
