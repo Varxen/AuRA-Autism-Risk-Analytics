@@ -244,7 +244,11 @@ Never translate, correct, paraphrase, or invent a quote. No markdown, explanatio
                 or suggested_option_id not in permitted_ids
                 or suggested_option_id == selected_option_id
             ):
-                raise ConsistencyModelInvalidResponse("Contradictions require a different permitted answer suggestion.")
+                # The prompt tells the model to answer "unclear" when no alternative
+                # is clearly supported. Apply that rule here when it does not.
+                outcome = ConsistencyOutcome.UNCLEAR
+                evidence = ""
+                suggested_option_id = None
         elif suggested_option_id is not None:
             raise ConsistencyModelInvalidResponse("Only contradictions may include a suggested answer.")
 
