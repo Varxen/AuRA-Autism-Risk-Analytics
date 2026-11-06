@@ -1,0 +1,1476 @@
+text,intent_id,source
+Ano ba yung ASD? Hindi ko pa kasi sya alam,kb-01,client
+Ano po ba yung autism spectrum disorder?,kb-01,client
+What is autism spectrum disorder?,kb-01,client
+Ano ang ibig sabihin ng ASD?,kb-01,client
+Pwede mo bang ipaliwanag kung ano ang autism?,kb-01,client
+Ano ba talaga ang autism?,kb-01,client
+Can you explain what ASD means?,kb-01,client
+Ano yung sinasabi nilang ASD sa mga bata?,kb-01,client
+What does it mean if a child has autism?,kb-01,client
+Ano po ang kahulugan ng autism spectrum disorder?,kb-01,client
+Bakit may tinatawag na autism spectrum?,kb-02,client
+"Ano ang ibig sabihin ng ""spectrum"" sa autism?",kb-02,client
+Why is autism described as a spectrum?,kb-02,client
+Bakit iba-iba yung autism ng bawat bata?,kb-02,client
+What does spectrum mean in ASD?,kb-02,client
+Bakit may mild tapos may severe pa na autism?,kb-02,client
+Ano po ang spectrum sa autism?,kb-02,client
+Bakit parang ang layo ng pagkakaiba ng mga batang may autism sa isa't isa?,kb-02,client
+Eh bakit hindi magkapareho yung autism nila e iisa lang naman diagnosis?,kb-02,client
+Bakit parang may levels yung autism?,kb-02,client
+Paano ko ba ide-describe yung batang may ASD?,kb-03,client
+What are the main features of autism?,kb-03,client
+Ano ang mga karaniwang katangian ng batang may autism?,kb-03,client
+What are the core symptoms of ASD?,kb-03,client
+Ano po ang pangunahing pinagkaiba ng batang may autism?,kb-03,client
+What are the typical characteristics of a child with autism?,kb-03,client
+Ano ang mga madalas na makikita sa batang may ASD?,kb-03,client
+Ano ang dalawang pangunahing areas na apektado ng ASD?,kb-03,client
+What makes a child autistic?,kb-03,client
+Ano-ano ba ang tampok na katangian ng autism?,kb-03,client
+Ano ang mga senyales ng ASD?,kb-04,client
+What are the early signs of autism?,kb-04,client
+Paano ko malalaman kung may autism ang anak ko?,kb-04,client
+Ano ang mga palatandaan ng autism sa toddler?,kb-04,client
+What should I watch out for in my child?,kb-04,client
+Ano ang mga dapat kong obserbahan sa anak ko na posibleng senyales ng ASD?,kb-04,client
+What are the warning signs of autism in babies?,kb-04,client
+Ano po ang mga red flags ng autism?,kb-04,client
+How do I know if my child might be autistic?,kb-04,client
+Ano ang mga unang senyales ng autism sa bata?,kb-04,client
+"Kung magkaiba ang ugali ng dalawang batang may autism, normal ba iyon?",kb-05,client
+Do all children with autism show the same symptoms?,kb-05,client
+Bakit iba ang senyales ng anak ko kumpara sa ibang batang may autism?,kb-05,client
+Is every autistic child the same?,kb-05,client
+Magkapareho ba ang sintomas ng mga batang may ASD?,kb-05,client
+Pwede bang iba-iba ang signs ng autism sa bawat bata?,kb-05,client
+Does autism look the same in every child?,kb-05,client
+"Yung pamangkin ko may autism, iba yung ugali niya sa anak ko, dapat ba pareho sila?",kb-05,client
+Why are the signs of autism different for each child?,kb-05,client
+Lahat ba ng may autism hindi nagsasalita?,kb-05,client
+Apektado ba ang pandama ng batang may ASD?,kb-06,client
+"Can autism affect a child's sense of hearing, touch, or taste?",kb-06,client
+Bakit takot sa ingay ang anak kong may autism?,kb-06,client
+Why is my child sensitive to sounds and lights?,kb-06,client
+Ano ang sensory issues sa autism?,kb-06,client
+Bakit ayaw ng anak ko na hinahawakan o may tag sa damit?,kb-06,client
+Do autistic children have sensory sensitivities?,kb-06,client
+Normal ba na sobrang pihikan sa texture ng pagkain ang batang may ASD?,kb-06,client
+Does ASD affect how a child feels touch or sound?,kb-06,client
+Totoo ba na mas sensitive sa ilaw at tunog ang mga batang may autism?,kb-06,client
+Ano ang mga galing na madalas makita sa batang may ASD?,kb-07,client
+Are there things autistic kids are naturally good at?,kb-07,client
+Ano ang mga talento ng batang may autism?,kb-07,client
+Are autistic kids good at something?,kb-07,client
+May mga magaling ba sa memorya o sining na batang may ASD?,kb-07,client
+What are the strengths of children with ASD?,kb-07,client
+Pwede bang maging magaling ang batang may autism sa isang bagay?,kb-07,client
+Ano ang mga positibong katangian ng batang may ASD?,kb-07,client
+Can a child with autism be gifted?,kb-07,client
+Ano ang mga bagay na kayang gawin nang maayos ng batang may autism?,kb-07,client
+Hindi ba nawawala ang ASD habang tumatanda?,kb-08,client
+Is autism a lifelong condition?,kb-08,client
+Mawawala pa ba ang autism paglaki ng bata?,kb-08,client
+Will my child outgrow autism?,kb-08,client
+Hanggang kailan magkakaroon ng autism ang anak ko?,kb-08,client
+Does autism go away in adulthood?,kb-08,client
+Pwede pa bang mawala ang ASD kapag lumaki na?,kb-08,client
+Do adults still have autism?,kb-08,client
+Permanente ba ang autism?,kb-08,client
+Lalaki bang may autism pa rin ang anak ko?,kb-08,client
+Bakit may mga batang paulit-ulit ang ginagawa kapag may ASD?,kb-09,client
+What are repetitive behaviors in autism?,kb-09,client
+"Bakit paulit-ulit ang galaw ng anak ko, gaya ng pagpaikot ng gulong?",kb-09,client
+What is stimming?,kb-09,client
+Why does my child flap his hands?,kb-09,client
+Ano ang restricted at repetitive patterns?,kb-09,client
+Bakit gusto lagi ng anak ko ang parehong laruan o palabas?,kb-09,client
+Ano ang ibig sabihin ng paulit-ulit na paggalaw o salita sa autism?,kb-09,client
+What are restricted interests in ASD?,kb-09,client
+Bakit paulit-ulit na inuulit ng anak ko ang mga salita?,kb-09,client
+Paano nakikitungo sa ibang tao at nakatuon ang atensyon ng batang may ASD?,kb-10,client
+How does autism affect social interaction?,kb-10,client
+Bakit hindi tumitingin sa mata ang anak ko?,kb-10,client
+Why doesn't my child respond to his name?,kb-10,client
+Bakit parang ayaw makipaglaro ng anak ko sa ibang bata?,kb-10,client
+What are the social characteristics of autism?,kb-10,client
+Bakit hindi nakikipag-eye contact ang batang may autism?,kb-10,client
+Do children with autism have trouble with joint attention?,kb-10,client
+Bakit hindi tinuturo ng anak ko ang mga bagay na gusto niya?,kb-10,client
+Paano naaapektuhan ng ASD ang pakikipagkapwa ng bata?,kb-10,client
+Paano nagkakaiba ang pagsasalita at pakikipag-usap ng batang may ASD?,kb-11,client
+How does autism affect communication?,kb-11,client
+Bakit hindi pa nagsasalita ang anak ko?,kb-11,client
+What are the speech and language characteristics of ASD?,kb-11,client
+Bakit hindi sumasagot sa tanong ang anak kong may autism?,kb-11,client
+Ano ang communication difficulties sa ASD?,kb-11,client
+Do autistic children use gestures?,kb-11,client
+Bakit hindi nakakaintindi ng biro ang batang may autism?,kb-11,client
+Paano nakikipag-usap ang batang may autism?,kb-11,client
+Can children with autism be non-verbal?,kb-11,client
+Ano ang napapansin sa paglalaro at pag-aaral ng batang may ASD?,kb-12,client
+How do children with autism play?,kb-12,client
+Bakit hindi marunong magpanggap sa paglalaro ang anak ko?,kb-12,client
+How does autism affect learning?,kb-12,client
+Bakit mas gusto ng anak kong ayusin ang mga laruan kaysa laruin?,kb-12,client
+Ano ang play characteristics ng batang may ASD?,kb-12,client
+Paano natututo ang mga batang may autism?,kb-12,client
+Do autistic children play pretend?,kb-12,client
+Bakit hirap matuto sa school ang batang may autism?,kb-12,client
+Ano ang kaibahan ng paglalaro ng batang may ASD?,kb-12,client
+Paano hinaharap ng batang may ASD ang pagbabago sa routine at malalakas na emosyon?,kb-13,client
+Why does my child have meltdowns when routines change?,kb-13,client
+Bakit nagagalit ang anak ko kapag nag-iiba ang schedule?,kb-13,client
+How do children with autism handle change?,kb-13,client
+Bakit madalas mag-tantrum ang batang may autism?,kb-13,client
+What is emotional regulation in autism?,kb-13,client
+Ano ang meltdown sa autism?,kb-13,client
+Bakit hirap pakalmahin ang anak kong may ASD?,kb-13,client
+Is it normal for autistic children to insist on routines?,kb-13,client
+Bakit ayaw magpalit ng daan o gawain ang anak ko?,kb-13,client
+"Paano naaapektuhan ng ASD ang pandama, kilos, at pang-araw-araw na gawain ng bata?",kb-14,client
+Bakit clumsy ang anak kong may autism?,kb-14,client
+Why do autistic children have trouble with eating or sleeping?,kb-14,client
+Autism ba ang dahilan kung bakit hirap matulog ang anak ko?,kb-14,client
+What are the movement and daily living challenges in ASD?,kb-14,client
+Bakit ang hirap magbihis o mag-toilet training ng anak kong may ASD?,kb-14,client
+Do children with autism walk on tiptoes?,kb-14,client
+Bakit nakatiptoe maglakad ang anak ko?,kb-14,client
+How does ASD affect daily routines like eating and dressing?,kb-14,client
+Ano ang motor skills at self-care difficulties sa autism?,kb-14,client
+Pare-pareho ba ang kailangang suporta ng lahat ng batang may ASD?,kb-15,client
+Is there one best therapy for autism?,kb-15,client
+Pare-pareho ba ang therapy na kailangan ng lahat ng batang may autism?,kb-15,client
+Which therapy is best for all children with ASD?,kb-15,client
+Ano ang pinakamabisang therapy para sa autism?,kb-15,client
+Is there a one-size-fits-all treatment for ASD?,kb-15,client
+Pwede bang gamitin ang parehong therapy ng pamangkin ko sa anak ko?,kb-15,client
+Bakit magkaiba ang therapy plan ng bawat batang may ASD?,kb-15,client
+Is the same intervention suitable for every autistic child?,kb-15,client
+Mayroon bang standard na gamutan sa autism?,kb-15,client
+Ano-anong suporta ang pwedeng ibigay sa batang may ASD?,kb-16,client
+What types of therapy are available for autism?,kb-16,client
+Ano-ano ang mga therapy para sa batang may autism?,kb-16,client
+What kinds of support can help a child with ASD?,kb-16,client
+Ano ba yung speech therapy tsaka OT? Magkaiba ba sila?,kb-16,client
+Anong mga serbisyo ang pwedeng makuha ng batang may autism?,kb-16,client
+What is early intervention for autism?,kb-16,client
+Anong mga paraan ang makakatulong sa anak kong may autism?,kb-16,client
+What support is there in school for children with ASD?,kb-16,client
+Ano ang mga puwedeng gawin sa bahay para matulungan ang anak ko?,kb-16,client
+Pwede bang makinabang sa therapy ang tao kahit anong edad?,kb-17,client
+Can therapy still help if my child is already older?,kb-17,client
+Huli na ba para magpa-therapy ang 7 taong gulang kong anak?,kb-17,client
+Is it too late to start intervention?,kb-17,client
+Does intervention work at any age?,kb-17,client
+Pwede pa bang magsimula ng therapy kahit teenager na?,kb-17,client
+Is early intervention the only one that works?,kb-17,client
+Makakatulong pa ba ang therapy sa adult na may autism?,kb-17,client
+Kailan dapat magsimula ng therapy?,kb-17,client
+Will my child still benefit from support if we start late?,kb-17,client
+Anong mga tanong ang dapat kong dalhin sa espesyalista tungkol sa therapy?,kb-18,client
+What questions should I ask the therapist?,kb-18,client
+Ano ang mga dapat itanong sa doktor tungkol sa intervention?,kb-18,client
+What should I ask before starting therapy?,kb-18,client
+Paano ko malalaman kung tama ang therapy para sa anak ko?,kb-18,client
+Ano ang dapat kong tanungin sa developmental pediatrician?,kb-18,client
+How do I choose a good therapy program?,kb-18,client
+Ano ang mga tanong na dapat kong ihanda sa susunod na check-up?,kb-18,client
+Ano ang dapat kong malaman bago pumili ng therapy center?,kb-18,client
+What should I ask the specialist about my child's intervention plan?,kb-18,client
+Mahahawa ba ako kapag nakisama sa taong may autism?,kb-19,client
+Can you catch autism?,kb-19,client
+Pwede bang mahawa ang ibang bata sa batang may autism?,kb-19,client
+Can my other child catch autism from his sibling?,kb-19,client
+Nakukuha ba ang autism sa paglalaro kasama ang batang may ASD?,kb-19,client
+Do I need to keep my child away from autistic kids?,kb-19,client
+Nakakahawa ba ang ASD sa pamamagitan ng laway o hawak?,kb-19,client
+Can autism spread from person to person?,kb-19,client
+Ligtas bang makipaglaro ang anak ko sa batang may autism?,kb-19,client
+Madadala ba ang autism sa pakikisalamuha?,kb-19,client
+"Sinasabi ng iba na nagkaka-autism ang bata dahil sa pagpapalaki, totoo ba?",kb-20,client
+Is autism caused by bad parenting?,kb-20,client
+Kasalanan ko ba na may autism ang anak ko?,kb-20,client
+Did I cause my child's autism?,kb-20,client
+Nagkaka-autism ba ang bata dahil sa sobrang gadget?,kb-20,client
+Does too much screen time cause autism?,kb-20,client
+Totoo bang dahil sa kulang na pagmamahal kaya nagkakaroon ng autism?,kb-20,client
+Is it my fault that my child is autistic?,kb-20,client
+Dahil ba sa pagiging istrikto o pabaya ng magulang ang ASD?,kb-20,client
+Can spoiling a child cause autism?,kb-20,client
+Nagagamot ba nang tuluyan ang ASD?,kb-21,client
+Is there a cure for autism?,kb-21,client
+Gagaling pa ba ang anak ko sa autism?,kb-21,client
+Can autism be cured?,kb-21,client
+Mayroon bang paraan para tuluyang mawala ang autism?,kb-21,client
+Will therapy cure my child's autism?,kb-21,client
+Totoo ba na may gamutan na nakakapagpagaling ng autism?,kb-21,client
+Is there any treatment that can remove autism?,kb-21,client
+Pwede bang gumaling nang tuluyan ang batang may ASD?,kb-21,client
+Bakit sinasabing walang cure ang autism?,kb-21,client
+Pwede bang maging autistic ang isang batang babae?,kb-22,client
+Can girls have autism?,kb-22,client
+Totoo bang lalaki lang ang nagkakaroon ng autism?,kb-22,client
+Is autism only in boys?,kb-22,client
+Bakit mas madalas na lalaki ang may autism?,kb-22,client
+Do girls with autism show the same signs as boys?,kb-22,client
+Pwede bang may autism ang anak kong babae kahit mahilig siyang makipag-usap?,kb-22,client
+Why is autism in girls often missed?,kb-22,client
+Mas bihira ba ang autism sa mga babae?,kb-22,client
+Are there autistic girls?,kb-22,client
+Napapatunayan na bang may ASD ang bata kapag may isang behavior lang?,kb-23,client
+Does one behavior mean my child has autism?,kb-23,client
+Autism na ba agad kapag hindi tumitingin sa mata ang anak ko?,kb-23,client
+"If my child flaps his hands, is it autism?",kb-23,client
+Sapat na ba ang isang sintomas para masabing may ASD?,kb-23,client
+Can one sign confirm autism?,kb-23,client
+Autistic na ba ang anak ko kasi mahilig siyang paikutin ang gulong?,kb-23,client
+Does lining up toys mean my child has ASD?,kb-23,client
+Pwede bang normal lang ang isang kakaibang ugali ng bata?,kb-23,client
+Is a single symptom enough to diagnose autism?,kb-23,client
+"Kapag uminom ng gamot, mawawala ba ang ASD?",kb-24,client
+Is there a medicine that cures autism?,kb-24,client
+Anong gamot ang pwede sa autism?,kb-24,client
+Are there pills for autism?,kb-24,client
+Pwede bang inumin ang vitamins o supplements para mawala ang autism?,kb-24,client
+Does medication treat ASD?,kb-24,client
+Totoo ba na may gamot na nakakagaling sa autism?,kb-24,client
+Ano ang gamot sa autism ng anak ko?,kb-24,client
+Can supplements or special diets cure autism?,kb-24,client
+Nagrereseta ba ng gamot ang doktor para sa autism?,kb-24,client
+Ano ang ibig sabihin ng pag-screen para sa autism?,kb-25,client
+What does it mean to screen a child for autism?,kb-25,client
+Para saan ang autism screening?,kb-25,client
+Is screening the same as diagnosis?,kb-25,client
+Paano ginagawa ang screening para sa autism?,kb-25,client
+Ano ang pagkakaiba ng screening at diagnosis?,kb-25,client
+Ano ang ginagawa sa autism screening ng bata?,kb-25,client
+What happens during autism screening?,kb-25,client
+Masakit ba o mahirap ang autism screening?,kb-25,client
+Bakit kailangan ng screening para sa autism?,kb-25,client
+Kailan inirerekomenda ang pagpapa-screen ng bata para sa autism?,kb-26,client
+At what age should my child be screened for autism?,kb-26,client
+Kailan ko dapat ipa-screen ang anak ko?,kb-26,client
+When is the right time for autism screening?,kb-26,client
+Pwede na bang i-screen ang 18 buwang gulang na sanggol?,kb-26,client
+Is autism screening done at 18 and 24 months?,kb-26,client
+Ilang buwan dapat ang bata para ma-screen sa autism?,kb-26,client
+Dapat bang i-screen ang lahat ng bata?,kb-26,client
+Kailan ang pinakamaagang edad para sa screening?,kb-26,client
+Do all toddlers need autism screening?,kb-26,client
+Ano po yung M-CHAT-R/F na checklist?,kb-27,client
+What is the M-CHAT?,kb-27,client
+Para saan ang M-CHAT-R/F?,kb-27,client
+Paano sinasagutan ang M-CHAT-R/F?,kb-27,client
+Ano ang mga tanong sa M-CHAT?,kb-27,client
+Sino ang pwedeng gumamit ng M-CHAT-R/F?,kb-27,client
+Is M-CHAT a diagnostic test?,kb-27,client
+Ilang taon ang bata na pwedeng i-M-CHAT?,kb-27,client
+Where can I get the M-CHAT-R/F?,kb-27,client
+Ano ang ibig sabihin ng resulta ng M-CHAT?,kb-27,client
+Ano ba yung Q-CHAT?,kb-28,client
+Can you explain Q-CHAT?,kb-28,client
+Para saan ang Q-CHAT?,kb-28,client
+Ano ang pagkakaiba ng Q-CHAT at M-CHAT?,kb-28,client
+Sino ang gumagamit ng Q-CHAT?,kb-28,client
+At what age is Q-CHAT used?,kb-28,client
+Paano gamitin ang Q-CHAT?,kb-28,client
+Is Q-CHAT a test for autism?,kb-28,client
+Ano ang Quantitative Checklist for Autism in Toddlers?,kb-28,client
+Maaari ko bang sagutan ang Q-CHAT para sa anak ko?,kb-28,client
+Kailan isinasagawa ang developmental screening sa mga bata?,kb-29,client
+When is developmental screening done?,kb-29,client
+Ilang buwan ginagawa ang developmental screening ng bata?,kb-29,client
+What is the schedule of developmental screening?,kb-29,client
+Anong edad dapat i-screen ang development ng bata?,kb-29,client
+Gaano kadalas dapat ipa-developmental screening ang anak ko?,kb-29,client
+At what ages should my child get developmental screening?,kb-29,client
+Kailan ang developmental check-up ng baby?,kb-29,client
+Is developmental screening done during well-child visits?,kb-29,client
+Ano ang timeline ng developmental screening sa pediatrician?,kb-29,client
+Ano ba yung CSBS DP checklist para sa infant at toddler?,kb-30,client
+Can you explain the CSBS DP Infant-Toddler Checklist?,kb-30,client
+Para saan ang CSBS DP?,kb-30,client
+Sino ang sumasagot ng CSBS DP checklist?,kb-30,client
+What does the CSBS DP checklist measure?,kb-30,client
+Ano ang Communication and Symbolic Behavior Scales?,kb-30,client
+Is CSBS DP used to screen for autism?,kb-30,client
+Anong edad ang pwedeng sumagot ng CSBS DP?,kb-30,client
+Paano ginagamit ang CSBS DP checklist?,kb-30,client
+Ano ang sinusukat ng CSBS DP?,kb-30,client
+Ano ba yung developmental surveillance sa pediatrician?,kb-31,client
+Can you explain developmental surveillance?,kb-31,client
+Ano ang pagkakaiba ng surveillance at screening?,kb-31,client
+Is developmental surveillance done at every visit?,kb-31,client
+Paano ginagawa ang developmental surveillance?,kb-31,client
+Ano ang papel ng magulang sa developmental surveillance?,kb-31,client
+Does the pediatrician monitor my child's development?,kb-31,client
+Bakit tinatanong ng doktor ang mga milestones ng anak ko?,kb-31,client
+Ano ang tuloy-tuloy na pagmo-monitor ng development?,kb-31,client
+What is ongoing monitoring of child development?,kb-31,client
+Anong edad nade-detect ang ASD?,kb-32,client
+At what age can autism be detected?,kb-32,client
+Pwede na bang malaman ang autism sa baby?,kb-32,client
+Ilang taon ang pinakamaagang edad para ma-diagnose ang autism?,kb-32,client
+Can autism be diagnosed at 2 years old?,kb-32,client
+Pwede ba ma-diagnose ang autism ng 1 taong gulang?,kb-32,client
+Kailan karaniwang nalalaman na may autism ang bata?,kb-32,client
+How early can autism be identified?,kb-32,client
+Pwede bang ma-diagnose ang autism sa adulthood?,kb-32,client
+Kailan unang nakikita ang mga senyales ng ASD?,kb-32,client
+"Kung negative ang screening ng anak ko, wala na ba akong dapat ipag-alala?",kb-33,client
+"If my child's screening result is negative, can he still have autism?",kb-33,client
+"Negative ang M-CHAT ng anak ko, sigurado na bang wala siyang autism?",kb-33,client
+Does a low-risk result rule out ASD?,kb-33,client
+Pwede pa rin bang may ASD kahit negative ang screening?,kb-33,client
+Should I still worry if screening is negative?,kb-33,client
+Kailangan pa bang ulitin ang screening kapag negative?,kb-33,client
+Can a screening miss autism?,kb-33,client
+Ano ang gagawin ko kung negative ang resulta pero nag-aalala pa rin ako?,kb-33,client
+Ibig sabihin ba ng low risk ay wala nang autism?,kb-33,client
+"Positibo ang screening ng anak ko, sigurado na bang may ASD siya?",kb-34,client
+"If screening is positive, does my child have autism?",kb-34,client
+"Positive ang M-CHAT ng anak ko, may autism na ba siya?",kb-34,client
+What does a high-risk screening result mean?,kb-34,client
+Ano ang ibig sabihin ng positive sa autism screening?,kb-34,client
+Is a positive result a diagnosis?,kb-34,client
+Ano ang susunod na gagawin kapag positive ang screening?,kb-34,client
+Can a positive screening be a false alarm?,kb-34,client
+Pwede bang mali ang positive na resulta ng screening?,kb-34,client
+Ano ang ibig sabihin kapag positive ang resulta?,kb-34,client
+"Bago mag-therapy, kailangan ba munang may opisyal na diagnosis?",kb-35,client
+Should we wait for a diagnosis before starting therapy?,kb-35,client
+Pwede na bang magsimula ng therapy kahit wala pang diagnosis?,kb-35,client
+Can intervention start before official diagnosis?,kb-35,client
+Maghihintay pa ba ako ng resulta bago ipa-therapy ang anak ko?,kb-35,client
+Is it okay to start early support while waiting for evaluation?,kb-35,client
+Mas mabuti bang magpa-therapy na agad habang naghihintay ng appointment?,kb-35,client
+Do I need a diagnosis to get speech therapy?,kb-35,client
+"Matagal ang waitlist, pwede bang magsimula muna ng therapy?",kb-35,client
+Bakit sinasabing huwag nang hintayin ang diagnosis para magsimula ng tulong?,kb-35,client
+"Nag-aalala ako sa development ng anak ko, ano ang pwede kong gawin?",kb-36,client
+What should I do if I'm worried about my child's development?,kb-36,client
+"Nag-aalala ako sa anak ko, saan ako unang pupunta?",kb-36,client
+Who do I talk to if I think my child has autism?,kb-36,client
+Ano ang unang hakbang kapag may duda ako sa development ng anak ko?,kb-36,client
+What are the first steps if I suspect autism?,kb-36,client
+Dapat ko bang hintayin kung lalaki siyang okay?,kb-36,client
+Paano ako magsisimula kung may nakikita akong kakaiba sa anak ko?,kb-36,client
+Should I wait and see or seek help right away?,kb-36,client
+Ano ang dapat kong gawin kung sinabi ng teacher na may kakaiba sa anak ko?,kb-36,client
+Ano ang mga hakbang para ma-diagnose ang ASD?,kb-37,client
+How is autism diagnosed?,kb-37,client
+Ano ang proseso ng pag-diagnose ng autism?,kb-37,client
+What tests are used to diagnose ASD?,kb-37,client
+Ano ang mga ginagawa sa autism evaluation?,kb-37,client
+Paano malalaman ng doktor kung may autism ang bata?,kb-37,client
+What happens during an autism assessment?,kb-37,client
+Gaano katagal ang proseso ng diagnosis?,kb-37,client
+Anong mga assessment ang ginagamit para sa autism?,kb-37,client
+Sino ang gumagawa ng diagnosis ng ASD?,kb-37,client
+"Delayed sa pagsasalita ang anak ko, ibig sabihin ba may autism siya?",kb-38,client
+Does speech delay mean my child has autism?,kb-38,client
+"Late magsalita ang anak ko, may ASD ba siya?",kb-38,client
+Is late talking always a sign of autism?,kb-38,client
+Pwede bang speech delay lang at hindi autism?,kb-38,client
+"My 2-year-old isn't talking yet, is it autism?",kb-38,client
+Bakit late magsalita ang anak ko pero nakakaintindi naman siya?,kb-38,client
+Ano ang pagkakaiba ng speech delay sa autism?,kb-38,client
+Can a child be a late talker without having ASD?,kb-38,client
+Lahat ba ng batang hindi pa nagsasalita ay may autism?,kb-38,client
+Anong mga bagay ang sinusuri ng doktor sa ilalim ng DSM-5-TR?,kb-39,client
+What does the DSM-5-TR say about autism?,kb-39,client
+Ano ang diagnostic criteria ng ASD?,kb-39,client
+What criteria do doctors use to diagnose autism?,kb-39,client
+Ano ang DSM-5-TR?,kb-39,client
+Ano ang mga pamantayan sa pag-diagnose ng autism?,kb-39,client
+What are the DSM-5-TR criteria for ASD?,kb-39,client
+Ano ang tinitingnan ng doktor para masabing may autism?,kb-39,client
+Ano ang dalawang domain ng DSM-5-TR para sa ASD?,kb-39,client
+Anong guidelines ang sinusunod ng mga espesyalista sa diagnosis?,kb-39,client
+Kaya bang magsabi ng chatbot kung may ASD ang bata?,kb-40,client
+Is a chatbot able to tell if a child is autistic?,kb-40,client
+Pwede mo bang sabihin kung may autism ang anak ko?,kb-40,client
+Can you tell me if my child has autism?,kb-40,client
+Maaasahan ba ang AI sa pag-diagnose ng autism?,kb-40,client
+Can AI diagnose ASD?,kb-40,client
+Pwede ba kitang tanungin kung autistic ang anak ko base sa kwento ko?,kb-40,client
+Kaya mo bang mag-diagnose ng bata?,kb-40,client
+Is it safe to rely on a chatbot for an autism diagnosis?,kb-40,client
+Pwede bang chatbot na lang ang magsabi kung may ASD ang anak ko?,kb-40,client
+Pwede bang magpa-diagnose sa online test o chatbot?,kb-41,client
+Can an online autism test give a diagnosis?,kb-41,client
+Reliable ba ang mga online quiz para sa autism?,kb-41,client
+Can I use an online test to find out if my child is autistic?,kb-41,client
+May libreng online test ba para malaman kung may autism ang anak ko?,kb-41,client
+Is an online autism quiz accurate?,kb-41,client
+Pwede bang gamitin ang resulta ng online test para sa school o doktor?,kb-41,client
+Ano ang limitasyon ng online autism tests?,kb-41,client
+Sapat na ba ang online test para masabing may autism ang bata?,kb-41,client
+Are online screening tools a replacement for professional evaluation?,kb-41,client
+Makikita ba sa blood test o brain scan kung may ASD?,kb-42,client
+Is there a blood test for autism?,kb-42,client
+Pwede bang makita ang autism sa MRI?,kb-42,client
+Can a brain scan detect autism?,kb-42,client
+May laboratory test ba para malaman kung autistic ang bata?,kb-42,client
+Can genetic testing diagnose autism?,kb-42,client
+Bakit walang medical test para sa autism?,kb-42,client
+Pwede ba ang EEG o CT scan para sa autism?,kb-42,client
+Is there a medical test that confirms ASD?,kb-42,client
+Paano ma-diagnose ang autism kung walang blood test?,kb-42,client
+Ano ang role ng AuRA sa pagtulong sa mga magulang?,kb-43,client
+What is AuRA?,kb-43,client
+Ano ang magagawa ng AuRA para sa akin?,kb-43,client
+What can AuRA do?,kb-43,client
+Para saan ang AuRA chatbot?,kb-43,client
+Pwede bang i-diagnose ng AuRA ang anak ko?,kb-43,client
+What is the purpose of AuRA?,kb-43,client
+Ano ang pwede at hindi pwedeng gawin ng AuRA?,kb-43,client
+Sino ang gumawa ng AuRA at para kanino ito?,kb-43,client
+How can AuRA help parents?,kb-43,client
+Sino ang pwedeng magsuri sa bata kung may ASD?,kb-44,client
+Who can diagnose autism?,kb-44,client
+Anong doktor ang pupuntahan para sa autism?,kb-44,client
+What kind of specialist evaluates children for ASD?,kb-44,client
+Pwede ba ang pediatrician mag-diagnose ng autism?,kb-44,client
+Sino ang developmental pediatrician?,kb-44,client
+Sino ang child psychologist at psychiatrist?,kb-44,client
+Who is qualified to assess my child for autism?,kb-44,client
+Saan ako makakahanap ng espesyalista para sa autism?,kb-44,client
+Ano ang pagkakaiba ng developmental pediatrician at pediatric neurologist?,kb-44,client
+Ano-ano ang mga risk factors ng autism sa bata?,kb-45,client
+What things make a child more likely to be autistic?,kb-45,client
+Ano ang nagpapataas ng tsansa na magkaroon ng autism?,kb-45,client
+What increases a child's chance of having ASD?,kb-45,client
+Mas mataas ba ang tsansa kung may kapatid na may autism?,kb-45,client
+Does family history raise the risk of autism?,kb-45,client
+Ano ang epekto ng premature birth sa autism?,kb-45,client
+Ano ang mga bagay na may kaugnayan sa autism?,kb-45,client
+Does age of parents affect autism risk?,kb-45,client
+May kinalaman ba ang genetics sa autism?,kb-45,client
+Ano po ang nagdudulot ng ASD sa bata?,kb-46,client
+What causes autism?,kb-46,client
+Bakit nagkaroon ng autism ang anak ko?,kb-46,client
+What is the cause of ASD?,kb-46,client
+Saan nanggagaling ang autism?,kb-46,client
+Is autism genetic?,kb-46,client
+Namamana ba ang autism?,kb-46,client
+Ano ang dahilan ng autism sa bata?,kb-46,client
+Do we know what causes autism?,kb-46,client
+May kinalaman ba ang nangyari noong ako ay buntis sa autism ng anak ko?,kb-46,client
+Pwede bang magdulot ng autism ang pagpapabakuna?,kb-47,client
+Can vaccination lead to autism?,kb-47,client
+Totoo bang MMR vaccine ang dahilan ng autism?,kb-47,client
+Is it safe to vaccinate my child if he might have autism?,kb-47,client
+Nagkaka-autism ba ang bata pagkatapos mabakunahan?,kb-47,client
+Is there a link between vaccines and autism?,kb-47,client
+Dapat ko bang ipagpaliban ang bakuna dahil sa autism?,kb-47,client
+"Nagkaroon ng autism ang anak ko pagkatapos ng bakuna, dahil ba doon?",kb-47,client
+Do vaccine ingredients lead to autism?,kb-47,client
+Totoo ba na ligtas ang bakuna pagdating sa autism?,kb-47,client
+possible ba na ASD ang pagkakaroon ng risk factor?,kb-48,client
+"If my child has a risk factor, will he get autism?",kb-48,client
+"Premature ang anak ko, magkakaroon ba siya ng autism?",kb-48,client
+Does having a risk factor guarantee autism?,kb-48,client
+"May kapatid siyang may autism, siguradong magkakaroon din ba siya?",kb-48,client
+Ibig sabihin ba na may autism na kapag may risk factor?,kb-48,client
+Can a child with risk factors be typically developing?,kb-48,client
+Pwede bang may risk factor pero walang autism?,kb-48,client
+Does family history mean my child will definitely have ASD?,kb-48,client
+Mataas ba ang chance na maging autistic ang anak ko kung may risk factor?,kb-48,client
+Magkapareho ba ang risk factor at sanhi ng ASD?,kb-49,client
+Are a risk factor and a cause the same thing?,kb-49,client
+Ano ang pagkakaiba ng risk factor at cause?,kb-49,client
+What's the difference between a risk factor and a cause of autism?,kb-49,client
+"Kapag risk factor ba, ito ba ang dahilan ng autism?",kb-49,client
+Bakit hindi sanhi ang risk factor?,kb-49,client
+Are risk factors the reason a child gets autism?,kb-49,client
+Ano ang ibig sabihin ng risk factor?,kb-49,client
+Paano nagkakaiba ang sanhi at risk factor sa ASD?,kb-49,client
+Can a risk factor cause autism?,kb-49,client
+kailan dapat ako magpakonsulta sa espesyalista?,kb-50,client
+When should I see a professional about my child?,kb-50,client
+Anong edad dapat magpakonsulta kung may duda sa development?,kb-50,client
+At what point should I seek help for autism concerns?,kb-50,client
+Kailan dapat magpatingin sa doktor kung hindi pa nagsasalita ang anak ko?,kb-50,client
+Dapat na ba akong kumonsulta kung ayaw tumingin ng anak ko sa mata?,kb-50,client
+When is it time to see a developmental pediatrician?,kb-50,client
+Gaano katagal dapat maghintay bago magpatingin?,kb-50,client
+Dapat ko bang ipakonsulta ang anak ko agad kahit hindi sigurado?,kb-50,client
+Kailangan na ba ng consultation kung may duda ako?,kb-50,client
+Aling mga senyales ng bata ang dapat talagang ipa-check sa propesyonal?,kb-51,client
+What signs should prompt an evaluation?,kb-51,client
+Anong mga red flag ang dapat ipa-check agad?,kb-51,client
+Which symptoms need further assessment?,kb-51,client
+Ano ang mga palatandaan na dapat nang magpa-evaluate?,kb-51,client
+What behaviors should I report to my child's doctor?,kb-51,client
+"Kapag nawala ang mga salitang dati nang nasasabi ng anak ko, dapat bang ipasuri?",kb-51,client
+Does loss of skills need evaluation?,kb-51,client
+Ano ang dapat kong ipaalam sa pediatrician tungkol sa ugali ng anak ko?,kb-51,client
+When do autism signs need professional attention?,kb-51,client
+"Pagkatapos naming pumunta sa espesyalista, ano ang susunod na gagawn ko?",kb-52,client
+What happens after I consult a specialist?,kb-52,client
+Ano ang susunod na hakbang pagkatapos ng konsultasyon?,kb-52,client
+What should I expect at the first appointment?,kb-52,client
+Ano ang mangyayari sa unang appointment namin sa doktor?,kb-52,client
+"Pagkatapos ng diagnosis, ano ang gagawin?",kb-52,client
+What happens after my child is evaluated for autism?,kb-52,client
+Magkakaroon ba ng report o rekomendasyon pagkatapos?,kb-52,client
+Ano ang next steps matapos ma-diagnose ang bata?,kb-52,client
+What should I do after receiving the evaluation results?,kb-52,client
+Saan dapat magsimula ang pamilyang Pilipino na may anak na posibleng may ASD?,kb-53,client
+Where should a family in the Philippines begin?,kb-53,client
+Saan ako pwedeng pumunta sa Pilipinas para sa autism evaluation?,kb-53,client
+Where can I get autism services in the Philippines?,kb-53,client
+Anong mga ospital o center ang may developmental pediatrics sa Pilipinas?,kb-53,client
+May libre bang serbisyo para sa batang may autism sa Pilipinas?,kb-53,client
+Saan ako makakahanap ng murang therapy para sa anak ko?,kb-53,client
+Where can I find support groups for parents of autistic children in the Philippines?,kb-53,client
+Paano ako magsisimula kung limitado ang budget namin?,kb-53,client
+Ano ang mga resources para sa mga magulang ng batang may ASD sa Pilipinas?,kb-53,client
+asd meaning pls,kb-01,client-r2
+ano ba autism? bago lang samin,kb-01,client-r2
+whats autsim exactly,kb-01,client-r2
+ASD defintion po,kb-01,client-r2
+autism ano un sakit ba,kb-01,client-r2
+ano po ung autism spectrum,kb-01,client-r2
+explain autism simple words pls,kb-01,client-r2
+anong kondisyon ang ASD,kb-01,client-r2
+"ano kaya ung autism, narinig ko lng sa pedia",kb-01,client-r2
+what is autism po? parent here,kb-01,client-r2
+asd sakit b o ano,kb-01,client-r2
+anu un asd? d ko gets,kb-01,client-r2
+meaning ng autism sa bata,kb-01,client-r2
+autism= ano ba tlga,kb-01,client-r2
+can someone explain what asd is,kb-01,client-r2
+bakit spectrum tawag sa autism,kb-02,client-r2
+why spectrum? di ba iisa lang yan,kb-02,client-r2
+ano meaning ng spectrum autism,kb-02,client-r2
+spectrum ibig sabihin?,kb-02,client-r2
+spectrum meaning autism pls,kb-02,client-r2
+bkt may spectrum asd,kb-02,client-r2
+what do they mean by autism spectrum,kb-02,client-r2
+mild moderate severe asd bkt ganun spectrum,kb-02,client-r2
+ano ung spectrum na sinasabi ng doktor,kb-02,client-r2
+"why ""spectrum"" ang word sa ASD",kb-02,client-r2
+spektrum ano un autism,kb-02,client-r2
+bat ang tawag spectrum,kb-02,client-r2
+autism spectrum explain pls po,kb-02,client-r2
+bakit parang range ang autism,kb-02,client-r2
+d ko gets spectrum sa autism,kb-02,client-r2
+anu mga main features ng asd,kb-03,client-r2
+characteristics ng autism list pls,kb-03,client-r2
+main traits autism,kb-03,client-r2
+ano ba katangian ng batang autistic,kb-03,client-r2
+what are the usual traits of autism,kb-03,client-r2
+key features asd,kb-03,client-r2
+ano mga pangunahing kakaiba sa batang may asd,kb-03,client-r2
+core features autism ano,kb-03,client-r2
+asd traits po,kb-03,client-r2
+describe autism characteristics,kb-03,client-r2
+ano-ano ba mga ugali ng may ASD in general,kb-03,client-r2
+pangkalahatang katangian ng autism,kb-03,client-r2
+characterstics asd bata,kb-03,client-r2
+typical autistic traits ano,kb-03,client-r2
+ano basic na pagkakakilanlan ng autism,kb-03,client-r2
+sign ng autism sa toddler,kb-04,client-r2
+early signs asd ano,kb-04,client-r2
+pano malalaman kung autistic ang baby,kb-04,client-r2
+senyales autism baby 1 yr,kb-04,client-r2
+warning signs autism,kb-04,client-r2
+mga palatandaan ng autism ano ano,kb-04,client-r2
+what to look for autism signs,kb-04,client-r2
+ano dapat obserbahan sa baby autism,kb-04,client-r2
+sintomas autism ano,kb-04,client-r2
+signs of autsim in babys,kb-04,client-r2
+ano po mga sign ng asd sa bata,kb-04,client-r2
+symptoms autism early,kb-04,client-r2
+pano makikita kung autistic bata,kb-04,client-r2
+senyales asd 2 yrs old,kb-04,client-r2
+ano mga ginagawa ng bata na pwedeng asd,kb-04,client-r2
+pareho b lahat ng autistic,kb-05,client-r2
+same ba symptoms ng mga bata asd,kb-05,client-r2
+iba iba b sintomas autism,kb-05,client-r2
+d pareho signs ng pinsan ko at anak ko autism,kb-05,client-r2
+do autistic kids all act the same,kb-05,client-r2
+every autistic child same signs?,kb-05,client-r2
+magkapareho ba ugali ng 2 batang autistic,kb-05,client-r2
+"magkapatid may autism pero iba signs, ok lang ba",kb-05,client-r2
+autism looks different per child?,kb-05,client-r2
+lahat b ng asd may same behavior,kb-05,client-r2
+"may batang asd na nagsasalita meron hindi, pareho b signs",kb-05,client-r2
+"iba ung signs sa anak ko kesa sa kapitbahay, normal b",kb-05,client-r2
+"same ba kmi ng pinagdadaanan ng ibang parent, same signs",kb-05,client-r2
+each child w/ autism unique ba,kb-05,client-r2
+same symptoms ba lahat asd,kb-05,client-r2
+sensitive sa ingay anak ko autism,kb-06,client-r2
+sensory problems autism,kb-06,client-r2
+bakit takot sa vacuum anak ko asd,kb-06,client-r2
+ayaw ng texture ng pagkain sensory ba,kb-06,client-r2
+hypersensitive ba mga autistic,kb-06,client-r2
+senses asd apektado ba,kb-06,client-r2
+ayaw ng ilaw anak ko asd,kb-06,client-r2
+does autism make loud sounds painful,kb-06,client-r2
+sensory sensitivity autism,kb-06,client-r2
+bkt tinatakpan tenga pg maingay,kb-06,client-r2
+pandama ng autistic kakaiba ba,kb-06,client-r2
+ayaw ng mga labels sa damit asd,kb-06,client-r2
+sensitive sa amoy asd,kb-06,client-r2
+sensory issue ba pag ayaw maulanan,kb-06,client-r2
+ano senses na apektado ng autism,kb-06,client-r2
+talents ng autistic kids,kb-07,client-r2
+may special skills ba autistic,kb-07,client-r2
+magaling ba sa math ang may asd,kb-07,client-r2
+strengths autism,kb-07,client-r2
+anong galing ng batang autistic,kb-07,client-r2
+gifted ba autistic,kb-07,client-r2
+autistic child good at drawing,kb-07,client-r2
+may skill ba anak ko kasi autistic,kb-07,client-r2
+ano pede ipraise sa batang asd,kb-07,client-r2
+positive side autism,kb-07,client-r2
+sobrang tindi memorya ng anak ko asd ba,kb-07,client-r2
+good qualities ng mga autistic,kb-07,client-r2
+abilities ng bata may asd,kb-07,client-r2
+autistic kids talented?,kb-07,client-r2
+kalakasan ng asd ano,kb-07,client-r2
+forever ba autism,kb-08,client-r2
+mawawala pa ba pag lumaki,kb-08,client-r2
+outgrow autism possible?,kb-08,client-r2
+lifelong ba ang asd,kb-08,client-r2
+hanggang matanda ba autism,kb-08,client-r2
+pag adult na may autism p rin ba,kb-08,client-r2
+will autism go away with age,kb-08,client-r2
+paglaki ba nya autistic p rin,kb-08,client-r2
+permanent ba asd,kb-08,client-r2
+lagi na bang may asd habang buhay,kb-08,client-r2
+may autism pa din ba ang adult,kb-08,client-r2
+temporary lng ba ang autism,kb-08,client-r2
+bata lng b nagkakaasd o hanggang matanda,kb-08,client-r2
+till when autism po,kb-08,client-r2
+nawawala b autism with age,kb-08,client-r2
+paulit ulit na galaw asd,kb-09,client-r2
+bkt laging nagpapaikot ng gulong,kb-09,client-r2
+hand flapping meaning,kb-09,client-r2
+stims sa autism ano,kb-09,client-r2
+repetitive behavior autism,kb-09,client-r2
+bkt inuulit ulit ung salita echolalia ba,kb-09,client-r2
+rocking back and forth autism,kb-09,client-r2
+same cartoons everyday asd,kb-09,client-r2
+laging nilalinya toys,kb-09,client-r2
+ano ang obsession sa isang bagay asd,kb-09,client-r2
+bkt paulit-ulit ung ginagawa ng bata autism,kb-09,client-r2
+repetitive movements ano ibig sabihin,kb-09,client-r2
+fixated sa isang interes autism,kb-09,client-r2
+spinning objects asd,kb-09,client-r2
+"ayaw magpalit ng paboritong laruan, repetitive ba",kb-09,client-r2
+bkt di tumitingin sa mata,kb-10,client-r2
+ayaw mkipag eye contact asd,kb-10,client-r2
+di lumilingon pag tinawag pangalan,kb-10,client-r2
+social skills ng autistic,kb-10,client-r2
+hirap makipagkaibigan anak ko asd,kb-10,client-r2
+ayaw sumama sa ibang bata,kb-10,client-r2
+joint attention ano,kb-10,client-r2
+bkt di nagpapakita ng laruan sa magulang,kb-10,client-r2
+mas gusto mag-isa asd,kb-10,client-r2
+social interaction difficulty autism,kb-10,client-r2
+di nakikinig pag kinakausap asd,kb-10,client-r2
+hindi nakikisabay sa ibang bata autism,kb-10,client-r2
+doesnt look at me when i talk,kb-10,client-r2
+bkt di marunong makisama anak ko,kb-10,client-r2
+attention sa tao autism ano nangyayari,kb-10,client-r2
+speech problems autism,kb-11,client-r2
+hirap magsalita asd,kb-11,client-r2
+non verbal ba autistic,kb-11,client-r2
+bkt di nakikipag usap anak ko may asd,kb-11,client-r2
+uses gestures ba autistic,kb-11,client-r2
+hindi nakakaintindi ng sinasabi asd,kb-11,client-r2
+inuulit ung tanong imbis sagutin,kb-11,client-r2
+communication autism ano problema,kb-11,client-r2
+bkt walang sinasabi kundi memorized lines,kb-11,client-r2
+language difficulties asd,kb-11,client-r2
+pano nakikipag-communicate ang walang speech asd,kb-11,client-r2
+bakit literal mag-isip asd,kb-11,client-r2
+hirap ipahayag gusto asd,kb-11,client-r2
+mahina sa conversation autistic,kb-11,client-r2
+pano sya mag express kung di nagsasalita,kb-11,client-r2
+paano maglaro ang batang asd,kb-12,client-r2
+pretend play autism,kb-12,client-r2
+learning style ng autistic,kb-12,client-r2
+mabagal matuto asd normal ba,kb-12,client-r2
+bkt iba maglaro anak ko autism,kb-12,client-r2
+hirap sumunod sa instructions sa school asd,kb-12,client-r2
+visual learner ba autistic,kb-12,client-r2
+di marunong makipaglaro ng turns,kb-12,client-r2
+plays alone autism,kb-12,client-r2
+ayaw ng group activities asd,kb-12,client-r2
+bkt di sumasali sa laro ng mga bata autism,kb-12,client-r2
+hirap mag-focus aralin autism,kb-12,client-r2
+learning difficulty autism ano,kb-12,client-r2
+how do autistic kids learn best,kb-12,client-r2
+laro ng bata asd ano napapansin,kb-12,client-r2
+meltdown asd,kb-13,client-r2
+bkt nag tantrums pag nagbago routine,kb-13,client-r2
+ayaw ng changes autism,kb-13,client-r2
+emotional outbursts autism,kb-13,client-r2
+nagagalit pag iba daan,kb-13,client-r2
+hirap kumalma bata asd,kb-13,client-r2
+rigid routines autism,kb-13,client-r2
+bkt iyak ng iyak pag nag iba schedule,kb-13,client-r2
+hirap mag-adjust sa bago asd,kb-13,client-r2
+sobrang galit biglang autism normal ba,kb-13,client-r2
+emotions regulation asd,kb-13,client-r2
+bkt takot sa bagong lugar anak ko,kb-13,client-r2
+transition difficulty autism,kb-13,client-r2
+nagwawala pag di sinunod gusto asd,kb-13,client-r2
+ayaw sumunod sa schedule na iba,kb-13,client-r2
+hirap kumain anak ko asd,kb-14,client-r2
+motor skills autism,kb-14,client-r2
+clumsy ba ang batang autistic,kb-14,client-r2
+pag toilet training autism,kb-14,client-r2
+bkt di marunong magbihis mag-isa asd,kb-14,client-r2
+sleep problems autism,kb-14,client-r2
+walking on toes asd,kb-14,client-r2
+daily activities autism hirap,kb-14,client-r2
+picky eater autism,kb-14,client-r2
+self care skills asd,kb-14,client-r2
+bkt di mapakali sa pag upo,kb-14,client-r2
+gross motor delay autism,kb-14,client-r2
+hirap maghawak ng lapis asd,kb-14,client-r2
+fine motor autism,kb-14,client-r2
+daily routine autism difficulty,kb-14,client-r2
+iisa lang b therapy sa asd,kb-15,client-r2
+may best therapy ba para sa autism lahat,kb-15,client-r2
+pare pareho ba therapy ng mga bata autism,kb-15,client-r2
+one size fits all ba treatment asd,kb-15,client-r2
+bakit magkaiba therapy ng mga autistic,kb-15,client-r2
+standard treatment autism meron b,kb-15,client-r2
+same plan ba sa lahat ng may asd,kb-15,client-r2
+sabi nila ABA lang ang tama totoo ba,kb-15,client-r2
+universal therapy autism,kb-15,client-r2
+therapy ng pinsan ko pede ba samin,kb-15,client-r2
+iisang paraan ba para sa autism,kb-15,client-r2
+is there a single best treatment for autism,kb-15,client-r2
+bat iba iba intervention depende sa bata,kb-15,client-r2
+sino nagdedecide ng therapy na akma,kb-15,client-r2
+ano nag-iisang pinakamagandang tulong ba sa asd,kb-15,client-r2
+ano ano therapy asd,kb-16,client-r2
+speech therapy autism,kb-16,client-r2
+OT para saan autism,kb-16,client-r2
+SPED school meron ba,kb-16,client-r2
+ano tulong pede bigay sa batang asd,kb-16,client-r2
+anong support meron autistic,kb-16,client-r2
+behavioral therapy autism ano,kb-16,client-r2
+services autism ano meron,kb-16,client-r2
+pano matulungan anak ko asd,kb-16,client-r2
+early intervention programs ano meron,kb-16,client-r2
+occupational therapy ano un,kb-16,client-r2
+what therapies help autistic kids,kb-16,client-r2
+ano pede gawin sa bahay asd,kb-16,client-r2
+visual schedule picture cards ok ba,kb-16,client-r2
+mga tulong sa autism list pls,kb-16,client-r2
+huli n b magtherapy,kb-17,client-r2
+pede pa ba mag start therapy teen,kb-17,client-r2
+too late na ba 10 yrs old,kb-17,client-r2
+therapy sa adult autism meron,kb-17,client-r2
+is it ever too late for intervention,kb-17,client-r2
+effective pa rin ba kahit late nagsimula,kb-17,client-r2
+5 yrs old na anak ko saka lng magtherapy ok lang,kb-17,client-r2
+any age therapy asd,kb-17,client-r2
+pede ba pag-matanda na,kb-17,client-r2
+may epekto pa ba kung 8 na sya,kb-17,client-r2
+therapy kht anong edad,kb-17,client-r2
+late start therapy worth it,kb-17,client-r2
+ilang taon pede magsimula ng help,kb-17,client-r2
+d p huli ba sa 6 yo anak ko,kb-17,client-r2
+early lang b nakakatulong ang therapy,kb-17,client-r2
+ano tanungin ko sa therapist,kb-18,client-r2
+questions for doctor about therapy,kb-18,client-r2
+ano dapat itanong bago magtherapy,kb-18,client-r2
+checklist tanong sa espesyalista,kb-18,client-r2
+what to ask before starting intervention,kb-18,client-r2
+pano malaman kung maayos therapist,kb-18,client-r2
+ano itatanong sa OT,kb-18,client-r2
+tanong sa speech therapist,kb-18,client-r2
+ilang sessions? ano ibang tanong,kb-18,client-r2
+prepare questions for therapy consult,kb-18,client-r2
+how long therapy ano tanungin sa doc,kb-18,client-r2
+ano ask pag pumili center,kb-18,client-r2
+dapat ko bang itanong yung success rate,kb-18,client-r2
+tanong sa espesyalista about plan ng anak ko,kb-18,client-r2
+listahan ng tanong sa therapy center,kb-18,client-r2
+nakakahawa ba asd,kb-19,client-r2
+mahahawa ba kapatid nya,kb-19,client-r2
+catching ba ang autism,kb-19,client-r2
+can autism spread,kb-19,client-r2
+pede b mahawa pag nakipaglaro,kb-19,client-r2
+virus ba ang autism,kb-19,client-r2
+mahawahan ba ako ng autism,kb-19,client-r2
+contagious ba autistic bata,kb-19,client-r2
+bawal ba lumapit sa autistic,kb-19,client-r2
+nakukuha ba sa hangin autism,kb-19,client-r2
+ilayo ko ba anak ko sa batang asd,kb-19,client-r2
+airborne b autism,kb-19,client-r2
+transmitted ba autism sa tao,kb-19,client-r2
+makakahawa ba paglaro sa autistic,kb-19,client-r2
+autism parang sipon ba,kb-19,client-r2
+kasalanan ko ba autism nya,kb-20,client-r2
+bad parenting cause ng autism,kb-20,client-r2
+dahil sa pagpapalaki ba,kb-20,client-r2
+pinabayaan ko ba kaya autistic,kb-20,client-r2
+too strict parents autism,kb-20,client-r2
+does spoiling cause autism,kb-20,client-r2
+kulang b attention ko kaya nagka asd,kb-20,client-r2
+sinisi ako ng biyenan autism ng bata,kb-20,client-r2
+mom guilt autism did i cause it,kb-20,client-r2
+cellphone nanonood sya maghapon autism ba,kb-20,client-r2
+pagiging working mom autism ba,kb-20,client-r2
+hindi ko sya naalagaan ng maayos autism,kb-20,client-r2
+parenting style cause autism?,kb-20,client-r2
+bakit sinisisi mga magulang sa autism,kb-20,client-r2
+dahil sa pagagalit ko sa kanya autism,kb-20,client-r2
+may cure ba autism,kb-21,client-r2
+magagamot ba ang asd,kb-21,client-r2
+nawawala ba autism pag natherapy,kb-21,client-r2
+tuluyang gagaling anak ko,kb-21,client-r2
+cure for autism exists?,kb-21,client-r2
+"sabi sa fb may gamutan, totoo",kb-21,client-r2
+can autism be fully cured,kb-21,client-r2
+may nadiscover na bang lunas sa autism,kb-21,client-r2
+normal na ba anak ko pagkatapos ng therapy,kb-21,client-r2
+healing autism possible,kb-21,client-r2
+pano gumaling ang autism,kb-21,client-r2
+miracle cure autism totoo ba,kb-21,client-r2
+permanent cure asd meron ba,kb-21,client-r2
+mawawala ba ang autism kung mag therapy araw-araw,kb-21,client-r2
+asd mawawala ba talaga,kb-21,client-r2
+pede ba babae autistic,kb-22,client-r2
+girls with autism meron ba,kb-22,client-r2
+lalaki lang ba nagkaka asd,kb-22,client-r2
+anak ko babae may autism kaya,kb-22,client-r2
+autism in girls different?,kb-22,client-r2
+bkt kaunti babae asd,kb-22,client-r2
+can a girl be diagnosed w autism,kb-22,client-r2
+babaeng bata autism signs,kb-22,client-r2
+mas madalas ba sa boys autism,kb-22,client-r2
+girl autism often missed daw,kb-22,client-r2
+may autistic na babae ba talaga,kb-22,client-r2
+pano naiiba ang autism sa babae,kb-22,client-r2
+boys vs girls autism,kb-22,client-r2
+girls masking autism ano un,kb-22,client-r2
+pede magka asd ang baby girl,kb-22,client-r2
+isang sintomas lang autism na ba,kb-23,client-r2
+nag flap lang hands autism agad,kb-23,client-r2
+one sign enough ba to say asd,kb-23,client-r2
+di tumitingin sa mata minsan autism na,kb-23,client-r2
+mahilig sa gulong lng autism na ba,kb-23,client-r2
+does one symptom mean autism,kb-23,client-r2
+pano malaman kung asd o normal lang ugali,kb-23,client-r2
+naglalakad nakatiptoe lang autism ba,kb-23,client-r2
+isang kakaibang gawi lng asd na,kb-23,client-r2
+diagnosis ba ung isang behavior,kb-23,client-r2
+just one autistic trait may asd na ba,kb-23,client-r2
+ayaw magpayakap lang autism ba,kb-23,client-r2
+ung ugali nya normal lang ba kasi isa lng,kb-23,client-r2
+isa lang napansin ko autism ba,kb-23,client-r2
+can single behavior prove autism,kb-23,client-r2
+gamot autism ano,kb-24,client-r2
+meron bang pills para gumaling autism,kb-24,client-r2
+vitamins cure autism,kb-24,client-r2
+niresetahan ba ng gamot ang autistic,kb-24,client-r2
+medicine for autism what,kb-24,client-r2
+may iniinom ba para mawala asd,kb-24,client-r2
+meds sa autism safe ba,kb-24,client-r2
+capsule pampagaling autism,kb-24,client-r2
+gamot na nakakagaling autism meron,kb-24,client-r2
+injection autism cure,kb-24,client-r2
+herbal gamot autism,kb-24,client-r2
+anong gamot sa batang autistic,kb-24,client-r2
+pede ba gamot imbis na therapy,kb-24,client-r2
+gamot para sa behavior ng autism,kb-24,client-r2
+does medication cure asd,kb-24,client-r2
+autism screening ano un,kb-25,client-r2
+screening ba same sa diagnosis,kb-25,client-r2
+ano ginagawa sa screening,kb-25,client-r2
+para saan ang screening autism,kb-25,client-r2
+what is screening test for autism,kb-25,client-r2
+screening vs test autism,kb-25,client-r2
+pano ang screening ng baby,kb-25,client-r2
+questionnaire ba un screening,kb-25,client-r2
+screening autism pano gawin,kb-25,client-r2
+bkt may screening autism,kb-25,client-r2
+screening tool ano,kb-25,client-r2
+autism screen explain,kb-25,client-r2
+"ano un screening, mag diagnose na ba",kb-25,client-r2
+screening ng autism ano meaning,kb-25,client-r2
+anong mangyayari sa screening,kb-25,client-r2
+kelan screening autism,kb-26,client-r2
+anong age ipa screen,kb-26,client-r2
+18 months screening autism,kb-26,client-r2
+dapat ba screening lahat ng bata,kb-26,client-r2
+24 mos screening,kb-26,client-r2
+recommended age for autism screening,kb-26,client-r2
+kailan pede mag-screen baby,kb-26,client-r2
+when to screen toddler for autism,kb-26,client-r2
+age ng autism screening,kb-26,client-r2
+ilang buwan screening,kb-26,client-r2
+pano malaman kung time na magscreen,kb-26,client-r2
+recommended time for autism screen,kb-26,client-r2
+dapat ba ipascreen kahit okay naman bata,kb-26,client-r2
+ano edad pede na ma screen asd,kb-26,client-r2
+2 yrs old na anak ko screen na ba,kb-26,client-r2
+mchat ano un,kb-27,client-r2
+m-chat rf para saan,kb-27,client-r2
+mchat r/f meaning po,kb-27,client-r2
+pano sagutan mchat,kb-27,client-r2
+mchat checklist autism,kb-27,client-r2
+mchat-rf yes no questions ano,kb-27,client-r2
+sino nagbibigay ng mchat,kb-27,client-r2
+mchat result ano meaning,kb-27,client-r2
+follow up interview mchat ano,kb-27,client-r2
+mchat 16-30 months ba,kb-27,client-r2
+mchat ano mga tanong,kb-27,client-r2
+mchat online meron,kb-27,client-r2
+mchat rf test autism ba,kb-27,client-r2
+sino pwede gumawa ng mchat,kb-27,client-r2
+ano ung R/F sa mchat,kb-27,client-r2
+q chat ano un,kb-28,client-r2
+qchat para saan,kb-28,client-r2
+q-chat meaning for toddlers,kb-28,client-r2
+qchat age,kb-28,client-r2
+qchat questionnaire autism,kb-28,client-r2
+pano gamitin qchat,kb-28,client-r2
+qchat score ano,kb-28,client-r2
+sino gumagamit ng qchat,kb-28,client-r2
+q-chat toddlers explain,kb-28,client-r2
+qchat meron b sa pinas,kb-28,client-r2
+qchat checklist ano,kb-28,client-r2
+quantitative checklist ano un,kb-28,client-r2
+q chat 18 months ba,kb-28,client-r2
+ano meaning ng score sa q-chat,kb-28,client-r2
+qchat test para sa autism?,kb-28,client-r2
+kelan developmental screening,kb-29,client-r2
+ilang months dev screen ng baby,kb-29,client-r2
+schedule dev screening pedia,kb-29,client-r2
+developmental screen 9 18 30 months ba,kb-29,client-r2
+anong edad dev screening,kb-29,client-r2
+pano kung hindi na screen,kb-29,client-r2
+devt screening checkup baby,kb-29,client-r2
+how often is developmental screening,kb-29,client-r2
+ilang beses dev screen,kb-29,client-r2
+development check kelan,kb-29,client-r2
+dev screening ano edad,kb-29,client-r2
+milestone check schedule,kb-29,client-r2
+well baby visit screening,kb-29,client-r2
+timeline dev screening,kb-29,client-r2
+ano gagawin pag naligtaan dev screening,kb-29,client-r2
+csbs dp ano un,kb-30,client-r2
+csbs checklist para saan,kb-30,client-r2
+what is csbs dp,kb-30,client-r2
+infant toddler checklist ano,kb-30,client-r2
+sino sumasagot ng csbs,kb-30,client-r2
+csbs dp age range,kb-30,client-r2
+communication and symbolic behavior ano un,kb-30,client-r2
+csbs checklist pano,kb-30,client-r2
+csbs dp score ano,kb-30,client-r2
+csbs-dp magulang sumasagot ba,kb-30,client-r2
+csbs infant checklist meaning,kb-30,client-r2
+anong sinusukat ng csbs,kb-30,client-r2
+csbs dp ba screening autism,kb-30,client-r2
+csbs checklist pwede sa bahay,kb-30,client-r2
+csbs dp pa explain,kb-30,client-r2
+dev surveillance ano,kb-31,client-r2
+ano un surveillance sa pedia,kb-31,client-r2
+monitoring ng development ano,kb-31,client-r2
+bkt laging tinatanong milestones,kb-31,client-r2
+surveillance vs screening,kb-31,client-r2
+developmental surveillance every visit?,kb-31,client-r2
+what is surveillance in child development,kb-31,client-r2
+pano ginagawa ang surveillance,kb-31,client-r2
+ano role ng parents sa surveillance,kb-31,client-r2
+ongoing monitoring ng bata,kb-31,client-r2
+tinitignan ba ng pedia development ko anak,kb-31,client-r2
+developmental monitoring ano,kb-31,client-r2
+pedia nagtatanong about paglalakad pagsasalita ano un,kb-31,client-r2
+surveillance meaning,kb-31,client-r2
+observation ng doktor sa bata ano,kb-31,client-r2
+kelan malalaman autism,kb-32,client-r2
+pede ba sa baby malaman,kb-32,client-r2
+earliest age autism diagnosis,kb-32,client-r2
+1 yr old autism detect,kb-32,client-r2
+2 yrs autism diagnosed na pede,kb-32,client-r2
+ilang taon pede ma diagnose,kb-32,client-r2
+at what age autism is noticed,kb-32,client-r2
+kelan nakikita ang autism,kb-32,client-r2
+pwede na ba sa 18 months,kb-32,client-r2
+early detection autism age,kb-32,client-r2
+minsan ba late nadidiagnose autism,kb-32,client-r2
+kelan unang sign lumalabas,kb-32,client-r2
+earliest age diagnosis asd,kb-32,client-r2
+pede maging reliable sa 2 yrs,kb-32,client-r2
+kelan pede masabi may asd,kb-32,client-r2
+negative result asd pa ba,kb-33,client-r2
+low risk meaning pwede padin autism,kb-33,client-r2
+neg mchat pero duda ko,kb-33,client-r2
+can i trust negative screening,kb-33,client-r2
+pede magmiss ang screening,kb-33,client-r2
+negative sa screening so wala na ba,kb-33,client-r2
+low risk wala ng asd?,kb-33,client-r2
+screening normal pero may duda,kb-33,client-r2
+pwede pa ba ma diagnose kht low risk,kb-33,client-r2
+bakit negative pero may autism pa rin,kb-33,client-r2
+ulitin ba screening kung negative,kb-33,client-r2
+negative lang resulta ok na ba,kb-33,client-r2
+false negative screening autism,kb-33,client-r2
+hindi na ba autistic kung negative,kb-33,client-r2
+normal ang screening pero late nagsasalita,kb-33,client-r2
+positive result asd na ba,kb-34,client-r2
+high risk mchat autism na ba,kb-34,client-r2
+"positive screen na, next step po?",kb-34,client-r2
+false positive meron ba,kb-34,client-r2
+positive means autism?,kb-34,client-r2
+high risk ano ibig sabihin,kb-34,client-r2
+nag positive anak ko sa screening,kb-34,client-r2
+pano pag mali ang positive,kb-34,client-r2
+positive result diagnosis na ba,kb-34,client-r2
+sure na ba autism kung positive,kb-34,client-r2
+what to do after positive screen,kb-34,client-r2
+positive pero walang diagnosis pa,kb-34,client-r2
+kinakabahan positive mchat,kb-34,client-r2
+pwede bang maling positive,kb-34,client-r2
+failed screening autism ba,kb-34,client-r2
+hintayin pa ba diagnosis,kb-35,client-r2
+therapy agad kht walang diagnosis,kb-35,client-r2
+wait for diagnosis before therapy,kb-35,client-r2
+start therapy while waiting for evaluation,kb-35,client-r2
+pede mag speech therapy kht wala pa dx,kb-35,client-r2
+matagal waitlist pedia pede therapy muna,kb-35,client-r2
+kailangan ba muna may papel bago therapy,kb-35,client-r2
+early intervention without diagnosis,kb-35,client-r2
+d p dx pero nag therapy na ok ba,kb-35,client-r2
+diagnosis muna o therapy muna,kb-35,client-r2
+pede ba pauna therapy,kb-35,client-r2
+hintay ng result bago therapy,kb-35,client-r2
+delay ba kung maghihintay diagnosis,kb-35,client-r2
+can we start support before diagnosis,kb-35,client-r2
+nagtherapy na kami pero wala pa diagnosis,kb-35,client-r2
+ano gagawin kung duda ako sa anak ko,kb-36,client-r2
+nag aalala ako sa development ng bata,kb-36,client-r2
+saan unang pumunta pag may duda,kb-36,client-r2
+first step pag worried parent,kb-36,client-r2
+what to do if i suspect autism,kb-36,client-r2
+may napapansin ako kakaiba ano gagawin,kb-36,client-r2
+mommy worried ano gawin,kb-36,client-r2
+pano simulan kung may concern,kb-36,client-r2
+sabi ng teacher may kakaiba ano gagawin ko,kb-36,client-r2
+worry parent autism next step,kb-36,client-r2
+pano ko kakausapin pedia about concern ko,kb-36,client-r2
+d ko alam gagawin may duda ako,kb-36,client-r2
+steps for worried parents,kb-36,client-r2
+kinakabahan ako sa anak ko ano gawin,kb-36,client-r2
+sino kakausapin muna pag may concern,kb-36,client-r2
+pano idiagnose autism,kb-37,client-r2
+process ng diagnosis asd,kb-37,client-r2
+anong test ginagamit diagnosis autism,kb-37,client-r2
+ano mangyayari sa assessment,kb-37,client-r2
+how do doctors diagnose autism,kb-37,client-r2
+ilang sessions ang eval,kb-37,client-r2
+diagnosis steps autism,kb-37,client-r2
+ADOS ano un,kb-37,client-r2
+observation ba o test diagnosis,kb-37,client-r2
+pano ma-confirm na autism,kb-37,client-r2
+mga assessment tool autism,kb-37,client-r2
+may questionnaire ba sa diagnosis,kb-37,client-r2
+interview sa parents pano diagnosis,kb-37,client-r2
+autism evaluation what to expect,kb-37,client-r2
+diagnosis process po,kb-37,client-r2
+late talker autism ba,kb-38,client-r2
+speech delay asd na ba,kb-38,client-r2
+di pa nagsasalita 2 yrs autism?,kb-38,client-r2
+late nagsalita bata,kb-38,client-r2
+delayed speech normal ba,kb-38,client-r2
+3 yrs old di pa nagsasalita,kb-38,client-r2
+speech delay vs autism diff,kb-38,client-r2
+baby di pa nagbibigkas autism,kb-38,client-r2
+late magsalita pero nakakaintindi,kb-38,client-r2
+bkt late magsalita autism ba,kb-38,client-r2
+kapatid late nagsalita din autism ba,kb-38,client-r2
+speech delayed ibig sabihin autistic,kb-38,client-r2
+no words yet 18 months autism?,kb-38,client-r2
+walang words pa autism na,kb-38,client-r2
+pede speech delay lang,kb-38,client-r2
+dsm 5 tr ano,kb-39,client-r2
+criteria ng autism diagnosis,kb-39,client-r2
+diagnostic criteria asd,kb-39,client-r2
+ano sinusuri ng clinician,kb-39,client-r2
+dsm-5 autism ano nakasulat,kb-39,client-r2
+pano nag base doktor sa dsm,kb-39,client-r2
+dsm 5 tr domains autism,kb-39,client-r2
+what do clinicians check,kb-39,client-r2
+guidelines sa diagnosis autism,kb-39,client-r2
+dsm criteria sa pinas ginagamit ba,kb-39,client-r2
+ano ibig sabihin DSM-5-TR,kb-39,client-r2
+requirements para masabing asd,kb-39,client-r2
+anong standard ginagamit ng doktor,kb-39,client-r2
+clinician criteria autism,kb-39,client-r2
+dsm5 tr asd para sa magulang explain,kb-39,client-r2
+pede ka mag diagnose,kb-40,client-r2
+AI diagnose autism?,kb-40,client-r2
+chatbot kayang magsabi autistic ba,kb-40,client-r2
+can u tell if my child is autistic,kb-40,client-r2
+ikaw na ba mag diagnose,kb-40,client-r2
+ai or doctor mag diagnose autism,kb-40,client-r2
+pwede ko ba ikwento sayo sintomas para malaman asd,kb-40,client-r2
+bot diagnose asd?,kb-40,client-r2
+tama ba ang diagnosis ng chatbot,kb-40,client-r2
+diagnose mo anak ko,kb-40,client-r2
+can chatgpt diagnose autism,kb-40,client-r2
+reliable ba AI sa autism,kb-40,client-r2
+chatbot lang ba sapat para malaman autism,kb-40,client-r2
+sabihin mo kung autistic anak ko,kb-40,client-r2
+do you diagnose children,kb-40,client-r2
+online test autism accurate b,kb-41,client-r2
+quiz online diagnose autism,kb-41,client-r2
+may free test online autism,kb-41,client-r2
+pede ba online test lang diagnosis,kb-41,client-r2
+online autism test results valid ba,kb-41,client-r2
+pwede ipakita sa doktor result ng online test,kb-41,client-r2
+website test autism reliable,kb-41,client-r2
+limitations online tests asd,kb-41,client-r2
+online screening vs doktor,kb-41,client-r2
+app na nag didiagnose ng autism,kb-41,client-r2
+online quiz autism ok na ba,kb-41,client-r2
+pede ba online assessment lang,kb-41,client-r2
+trust online autism quiz?,kb-41,client-r2
+ano problema sa online autism test,kb-41,client-r2
+online test pede ba pamalit sa doktor,kb-41,client-r2
+blood test autism meron,kb-42,client-r2
+MRI autism makikita ba,kb-42,client-r2
+brain scan asd,kb-42,client-r2
+lab test para sa autism,kb-42,client-r2
+genetic test autism diagnose,kb-42,client-r2
+EEG autism,kb-42,client-r2
+may test sa dugo ba autism,kb-42,client-r2
+medical test confirm autism,kb-42,client-r2
+CT scan asd,kb-42,client-r2
+ultrasound nakikita ba autism,kb-42,client-r2
+pwede ba urine test autism,kb-42,client-r2
+bakit walang lab test autism,kb-42,client-r2
+diagnosis through scan possible?,kb-42,client-r2
+dna test autism,kb-42,client-r2
+anong medical exam autism,kb-42,client-r2
+ano ba si AuRA,kb-43,client-r2
+sino si AuRA,kb-43,client-r2
+ano kayang gawin ni aura para saken,kb-43,client-r2
+para saan ang aura,kb-43,client-r2
+aura chatbot ano gamit,kb-43,client-r2
+aura makakatulong ba sa parents,kb-43,client-r2
+ano limit ng AuRA,kb-43,client-r2
+aura doktor ba,kb-43,client-r2
+what is aura for,kb-43,client-r2
+pano gamitin aura,kb-43,client-r2
+aura papel anu,kb-43,client-r2
+aura role sa autism,kb-43,client-r2
+ano sasagot ni aura,kb-43,client-r2
+aura pwede ba pamalit sa doktor,kb-43,client-r2
+sino gumawa ng aura,kb-43,client-r2
+sino pede mag evaluate autism,kb-44,client-r2
+anong doktor pupuntahan,kb-44,client-r2
+developmental pedia ba,kb-44,client-r2
+psychologist or psychiatrist autism,kb-44,client-r2
+pede ba pedia lang,kb-44,client-r2
+who diagnoses autism,kb-44,client-r2
+neurologist ba autism,kb-44,client-r2
+sino ang specialist sa autism,kb-44,client-r2
+saan ako pupunta pra masuri anak ko,kb-44,client-r2
+qualified professional evaluate asd,kb-44,client-r2
+sino nag-aassess ng bata,kb-44,client-r2
+doktor para sa autism sino,kb-44,client-r2
+what kind of doctor evaluates autism,kb-44,client-r2
+child psychiatrist pede ba,kb-44,client-r2
+sino nagbibigay ng official diagnosis,kb-44,client-r2
+risk factors autism ano,kb-45,client-r2
+ano nag papataas ng chance asd,kb-45,client-r2
+family history autism risk ba,kb-45,client-r2
+premature baby risk autism,kb-45,client-r2
+edad ng magulang risk autism,kb-45,client-r2
+mas mataas chance pag kapatid,kb-45,client-r2
+what increases risk of autism,kb-45,client-r2
+risk factor list asd,kb-45,client-r2
+low birth weight risk ba autism,kb-45,client-r2
+mga bagay na pwede magpataas ng risk,kb-45,client-r2
+complications sa pagbubuntis risk ba,kb-45,client-r2
+risk for autism meron ba ako,kb-45,client-r2
+anu anong factors related sa asd,kb-45,client-r2
+may kamag-anak autism mas risk,kb-45,client-r2
+anong kondisyon ang risk factor ng autism,kb-45,client-r2
+ano cause ng autism,kb-46,client-r2
+bat nagkaautism ung baby ko,kb-46,client-r2
+saan galing autism,kb-46,client-r2
+cause ba ay genetics,kb-46,client-r2
+namana ba nya kay mister,kb-46,client-r2
+ano ba nagcacause ng asd,kb-46,client-r2
+dahilan ng autism ano,kb-46,client-r2
+environmental cause autism,kb-46,client-r2
+pano nagkakaroon ng autism,kb-46,client-r2
+buntis ako nun uminom ng gamot cause ba,kb-46,client-r2
+what leads to autism,kb-46,client-r2
+origin ng asd,kb-46,client-r2
+alam na ba kung ano cause,kb-46,client-r2
+genes or environment autism,kb-46,client-r2
+bakit may batang autistic,kb-46,client-r2
+vaccine autism totoo,kb-47,client-r2
+mmr autism,kb-47,client-r2
+bakuna cause ng autism ba,kb-47,client-r2
+ligtas ba bakuna sa batang asd,kb-47,client-r2
+nagka autism pagkatapos bakuna,kb-47,client-r2
+do vaccines lead to autism,kb-47,client-r2
+vaccine autism link meron,kb-47,client-r2
+ititigil ko ba bakuna dahil autism,kb-47,client-r2
+totoo ba na bakuna sanhi,kb-47,client-r2
+bakuna ingredients autism,kb-47,client-r2
+may autism anak ko bakunahan pa ba,kb-47,client-r2
+sabi sa fb bakuna ang cause autism,kb-47,client-r2
+mercury sa bakuna autism,kb-47,client-r2
+ipagpapaliban ko ba vaccine,kb-47,client-r2
+autism after vaccine coincidence ba,kb-47,client-r2
+may risk factor autism na ba,kb-48,client-r2
+premature anak ko autism na ba,kb-48,client-r2
+kapatid autistic siya rin ba,kb-48,client-r2
+risk factor sure ba mag asd,kb-48,client-r2
+may family history siguradong autism,kb-48,client-r2
+risk factor = autism?,kb-48,client-r2
+high risk pero hindi autistic pwede,kb-48,client-r2
+may risk factor pero normal development,kb-48,client-r2
+will my child get autism if risk factor,kb-48,client-r2
+chance ba o sigurado,kb-48,client-r2
+risk factor ibig sabihin autistic,kb-48,client-r2
+kung may kamag anak asd mag ka asd din ba,kb-48,client-r2
+low birth weight anak ko magka autism ba,kb-48,client-r2
+may risk pero ok development,kb-48,client-r2
+hindi ba sure kapag risk factor,kb-48,client-r2
+risk factor vs cause diff,kb-49,client-r2
+risk factor ba o dahilan,kb-49,client-r2
+pareho b ang risk at cause,kb-49,client-r2
+anu ibig sabihin ng risk factor,kb-49,client-r2
+cause at risk factor magkaiba ba,kb-49,client-r2
+risk factor is it a cause,kb-49,client-r2
+diff ng cause sa risk autism,kb-49,client-r2
+risk factors same as causes?,kb-49,client-r2
+pag risk factor ba cause na rin,kb-49,client-r2
+explain risk vs cause,kb-49,client-r2
+bakit hindi cause ang risk factor,kb-49,client-r2
+risk factor definition autism,kb-49,client-r2
+ano pagkakaiba risk tsaka dahilan,kb-49,client-r2
+sanhi ba ang risk factor,kb-49,client-r2
+cause and risk iisa ba,kb-49,client-r2
+kelan magpatingin,kb-50,client-r2
+kelan dapat ipakonsulta bata,kb-50,client-r2
+anong age magpacheck up developmental,kb-50,client-r2
+when to see doctor autism,kb-50,client-r2
+dapat na ba kumonsulta,kb-50,client-r2
+kelan sapat para magpatingin,kb-50,client-r2
+pag di pa nagsasalita 18 months pacheck na ba,kb-50,client-r2
+how long to wait before seeing specialist,kb-50,client-r2
+ipakonsulta ko na ba agad,kb-50,client-r2
+time na ba magpa eval,kb-50,client-r2
+consult ba kung may duda lng,kb-50,client-r2
+kelan pede magpakonsulta sa developmental pedia,kb-50,client-r2
+kailangan ko na bang magpa appointment,kb-50,client-r2
+anong buwan ng baby dapat magpacheck,kb-50,client-r2
+pwede ba konsulta kahit 1 yr pa lang,kb-50,client-r2
+anong sign dapat ipacheck,kb-51,client-r2
+red flags for evaluation,kb-51,client-r2
+nawala ang words dati nasasabi,kb-51,client-r2
+hindi na sumasagot sa pangalan dati sumasagot,kb-51,client-r2
+what signs need professional evaluation,kb-51,client-r2
+kailangan na ipa eval pag ganito,kb-51,client-r2
+warning signs na dapat sabihin sa doktor,kb-51,client-r2
+skill regression ano gagawin,kb-51,client-r2
+mga senyales na urgent ipacheck,kb-51,client-r2
+d nag babye wave bata 12 months ipacheck na ba,kb-51,client-r2
+d nagtuturo at 18 mos pacheck,kb-51,client-r2
+anong behavior report sa pedia,kb-51,client-r2
+signs that need assessment,kb-51,client-r2
+palatandaan na dapat nang ipatingin,kb-51,client-r2
+hindi nakikipag eye contact kailangan ba ipa eval,kb-51,client-r2
+ano susunod pagkatapos ng consult,kb-52,client-r2
+after diagnosis ano gagawin,kb-52,client-r2
+first appointment ano mangyayari,kb-52,client-r2
+ano aasahan sa unang konsulta,kb-52,client-r2
+after evaluation next steps,kb-52,client-r2
+pano after magpa check up,kb-52,client-r2
+bibigyan ba ako ng report,kb-52,client-r2
+ano rekomendasyon pagkatapos,kb-52,client-r2
+what to expect after visiting specialist,kb-52,client-r2
+post diagnosis steps,kb-52,client-r2
+ano gagawin pag may result na,kb-52,client-r2
+follow up after consultation,kb-52,client-r2
+refer ba sa ibang doktor after,kb-52,client-r2
+anong mangyayari sa susunod na appointment,kb-52,client-r2
+after consult therapy na ba agad,kb-52,client-r2
+"pinoy family autism, saan sisimulan",kb-53,client-r2
+saan pede magpa eval sa pilipinas,kb-53,client-r2
+anong hospital sa pinas may developmental pedia,kb-53,client-r2
+saan may libreng serbisyo autism ph,kb-53,client-r2
+paano magsimula pag limitado budget,kb-53,client-r2
+saan may support group parents autism,kb-53,client-r2
+mura na therapy saan,kb-53,client-r2
+sa probinsya paano magpaevaluate,kb-53,client-r2
+where to start in philippines autism,kb-53,client-r2
+resources sa magulang autism pinas,kb-53,client-r2
+saan ako lalapit kung walang pera,kb-53,client-r2
+unang hakbang ng pamilyang pilipino autism,kb-53,client-r2
+where can i get help in the philippines autism,kb-53,client-r2
+saan pwede mag start ang family namin,kb-53,client-r2
+anong center sa pinas para sa autism,kb-53,client-r2
+magkno pamasahe papuntang baguio,none,client-oos
+Ano ang lagay ng panahon sa Cebu ngayon?,none,client-oos
+paano magluto ng sinigang,none,client-oos
+sino presidente ng pilipinas ngayon,none,client-oos
+What is the capital of Japan?,none,client-oos
+gaano katagal dumating ang order sa shopee,none,client-oos
+pano mag renew ng drivers license,none,client-oos
+anong oras nagbubukas ang mall,none,client-oos
+paano magpalit ng gulong ng motor,none,client-oos
+magkano na bigas ngayon,none,client-oos
+sino nanalo sa NBA finals,none,client-oos
+tell me a joke,none,client-oos
+how do i reset my wifi router,none,client-oos
+best phone under 15k?,none,client-oos
+how to lose weight fast,none,client-oos
+translate good morning in japanese,none,client-oos
+how to write a resume,none,client-oos
+palitan ng dollar sa piso ngayon,none,client-oos
+kumusta ka na,none,client-oos
+anong pangalan mo,none,client-oos
+sino gumawa ng noli me tangere,none,client-oos
+pno mg apply ng pag-ibig loan,none,client-oos
+pasalubong sa cebu ano maganda,none,client-oos
+resipe ng leche flan pls,none,client-oos
+how to use a french press,none,client-oos
+uulan ba bukas,none,client-oos
+gaano kataas ang mt apo,none,client-oos
+recommend a netflix series,none,client-oos
+what is the meaning of life,none,client-oos
+paano maglaro ng chess,none,client-oos
+ano ang inflation,none,client-oos
+pano mag register ng sim card,none,client-oos
+anong promo unli data,none,client-oos
+ilang km ang manila to batangas,none,client-oos
+what time is it in london,none,client-oos
+pano ayusin tumutulong gripo,none,client-oos
+paano mag install ng windows 11,none,client-oos
+saan bumili ng murang laptop,none,client-oos
+anong kanta trending ngayon,none,client-oos
+horoscope ko today leo,none,client-oos
+paano tanggalin mantsa sa damit,none,client-oos
+bakit asul ang langit,none,client-oos
+ilang planeta sa solar system,none,client-oos
+how to bake chocolate cake,none,client-oos
+anong gamot sa sipon,none,client-oos
+masakit ulo ko ano gagawin,none,client-oos
+magkno dental cleaning,none,client-oos
+paano mag budget ng sweldo,none,client-oos
+how to invest in stocks,none,client-oos
+pwede ba aso sa condo,none,client-oos
+paano magtrain ng tuta,none,client-oos
+magandang name sa baby girl,none,client-oos
+paano mag apply ng passport,none,client-oos
+tallest person in the world,none,client-oos
+what is AI,none,client-oos
+bakit mahal kuryente,none,client-oos
+pano mag ipon ng pera,none,client-oos
+anong oras sunset ngayon,none,client-oos
+saan magpa-notarize ng papel,none,client-oos
+pinakamalaking isla sa mundo,none,client-oos
+gaano kalayo ang buwan,none,client-oos
+best way to learn english,none,client-oos
+pano mag edit ng video sa phone,none,client-oos
+magkno gupit sa barbershop,none,client-oos
+anong palabas sa sinehan ngayon,none,client-oos
+paano magrosary,none,client-oos
+resipe ng chicken adobo,none,client-oos
+paano kumuha NBI clearance,none,client-oos
+sintomas ng dengue,none,client-oos
+what is the capital of Australia,none,client-oos
+magkano pamasahe jeep ngayon,none,client-oos
+how to cook rice without rice cooker,none,client-oos
+sino sikat na singer sa pinas,none,client-oos
+pano mag bukas ng bank account,none,client-oos
+gaano kataas ang eiffel tower,none,client-oos
+gamot sa adhd anu po,none,client-oos
+may sped school ba sa quezon city,none,client-oos
+anong pagkain bawal sa autism,none,client-oos
+Magkano ang therapy sa isang session?,none,client-oos
+magkano magpadiagnose autism manila,none,client-oos
+Ano ang ADHD?,none,client-oos
+pareho ba autism at adhd,none,client-oos
+ano un down syndrome,none,client-oos
+What is dyslexia?,none,client-oos
+ano ang gfcf diet,none,client-oos
+magkno ABA therapy per hour,none,client-oos
+magkano bayad sa developmental pedia,none,client-oos
+anong trabaho pwede sa adult na autistic,none,client-oos
+pano magpa PWD id autism,none,client-oos
+covered ba ng philhealth ang therapy,none,client-oos
+pwede bang mag-asawa ang autistic,none,client-oos
+anong laruan maganda sa batang autistic,none,client-oos
+pano turuan mag potty ang batang autistic,none,client-oos
+paano disiplinahin batang autistic,none,client-oos
+ano ang sensory room,none,client-oos
+may app ba para sa autistic kids,none,client-oos
+sino mga sikat na taong may autism,none,client-oos
+ilang percent ng tao ang autistic,none,client-oos
+What is Asperger's syndrome?,none,client-oos
+ano ang pdd-nos,none,client-oos
+autism vs intellectual disability diff,none,client-oos
+paano mag homeschool ng batang autistic,none,client-oos
+recommend books for parents of autistic kids,none,client-oos
+anong exercise maganda sa autistic kid,none,client-oos
+pede ba mag swimming lessons ang autistic,none,client-oos
+ano ibig sabihin neurodivergent,none,client-oos
+paano ipaliwanag sa kapatid na autistic si kuya,none,client-oos
+ano ang IEP sa school,none,client-oos
+paano makahanap ng shadow teacher,none,client-oos
+may online therapy ba para sa bata,none,client-oos
+anong noise cancelling headphones ok sa kids,none,client-oos
+is melatonin safe for autistic kids,none,client-oos
+pede ba mag-drive ang autistic,none,client-oos
+pwede bang mag college ang may autism,none,client-oos
+pano magpa IQ test ang bata,none,client-oos
+kelan autism awareness month,none,client-oos
+ano kulay ng autism awareness,none,client-oos
+pwede ba mag adopt ng bata na may autism,none,client-oos
+paano turuan magbasa ang batang autistic,none,client-oos
+bakit puzzle piece logo ng autism,none,client-oos
+ano ang rett syndrome,none,client-oos
+ano ang cerebral palsy,none,client-oos
+what is OCD,none,client-oos
+ano ang anxiety sa bata,none,client-oos
+what is selective mutism,none,client-oos
+magkano tuition sa sped school,none,client-oos
+may scholarship ba sa special needs na bata,none,client-oos
+anong batas protektado ang PWD sa pinas,none,client-oos
+pano magreklamo pag binully batang autistic,none,client-oos
+pede ba magtravel by plane ang autistic,none,client-oos
+pano ihanda sa pagpapagupit ang batang autistic,none,client-oos
+anong music nakakakalma sa autistic,none,client-oos
+can autistic people be good at coding,none,client-oos
+may disability benefit ba sa autism,none,client-oos
+how much does autism therapy cost in ph,none,client-oos
+magkano ang MRI sa pinas,none,client-oos
+pwede ba ADHD at autism sabay,none,client-oos
+mag-aaral ba sa public school ang autistic,none,client-oos
+paano maghanap ng yaya ng special needs na bata,none,client-oos
+paano malaman kung may ADHD bata,none,client-oos
+ano pagkain ng batang may ADHD,none,client-oos
+is adhd genetic,none,client-oos
+ano ang gifted child,none,client-oos
+paano mapalakas memorya ng bata,none,client-oos
+kelan dapat potty train ang bata,none,client-oos
+ilang oras dapat tulog ng 2 yr old,none,client-oos
+paano magturo alphabet sa 3 yrs old,none,client-oos
+paano suportahan ang magulang na pagod sa pag-aalaga ng anak na autistic,none,client-oos
+best sports for teenagers with autism,none,client-oos
+what is the best school for autistic kids in manila,none,client-oos

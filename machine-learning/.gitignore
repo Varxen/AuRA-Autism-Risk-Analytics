@@ -6,5 +6,4 @@ artifacts/*
 !artifacts/*.joblib
 reports/*
 !reports/.gitkeep
-dataset/*.xlsx
 !dataset/.gitkeep
