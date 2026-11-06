@@ -38,7 +38,6 @@ export function ChatInput({
         }
       }}
     >
-      <Smile className="input-smile" aria-hidden="true" strokeWidth={1.2} />
       <label htmlFor="chat-response" className="sr-only">
         {responseLabel}
       </label>
