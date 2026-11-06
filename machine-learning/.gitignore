@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 artifacts/*
 !artifacts/.gitkeep
+!artifacts/*.joblib
 reports/*
 !reports/.gitkeep
 dataset/*.xlsx

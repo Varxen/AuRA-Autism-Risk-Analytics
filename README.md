@@ -2,6 +2,17 @@
 
 AuRA is an autism education and pre-screening research application. The React, TypeScript and Vite frontend lives in `frontend/`. A separate FastAPI backend provides PostgreSQL-backed authentication, onboarding, questionnaire storage and assessment inference using saved LR, RF and XGBoost artifacts with equal-weight soft voting. Output labels remain provisional score-derived categories, not ASD-risk estimates or diagnoses.
 
+## Quick start (Windows)
+
+```powershell
+git clone <your-fork-url>
+cd aura-thesis
+powershell -ExecutionPolicy Bypass -File .\setup.ps1   # once: installs everything, creates DB and tables
+powershell -ExecutionPolicy Bypass -File .\start.ps1   # every time: runs backend + frontend
+```
+
+Manual database steps: [DATABASE_SETUP.md](DATABASE_SETUP.md).
+
 ## Repository structure
 
 ```text
