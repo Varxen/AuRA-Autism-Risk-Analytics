@@ -85,22 +85,40 @@ const SMALL_TALK: Record<string, { en: string; tl: string }> = {
   },
 }
 
-const FALLBACK_TEXT =
-  'I could not find that in my information knowledge base. Try asking about ASD, signs, screening, diagnosis, support, or where to seek help.'
+const FALLBACK_TEXT = {
+  en: 'I could not find that in my information knowledge base. Try asking about ASD, signs, screening, diagnosis, support, or where to seek help.',
+  tl: 'Hindi ko iyan makita sa aking information knowledge base. Subukang magtanong tungkol sa ASD, mga senyales, screening, diagnosis, suporta, o kung saan hihingi ng tulong.',
+}
+
+const TAGALOG_WORDS = new Set(
+  'ano paano bakit kailan saan sino puwede pwede ba ko mo ako ka ang ng mga sa na yung yong ung anak kaya sya siya sila kami tayo po opo hindi wala gusto tanong tagalog nakakahawa senyales sanhi dapat magulang bata tahimik kumusta magandang salamat paalam lang naman din rin pa ay ito iyon yan nito nila namin natin kung kapag habang pero at o'.split(' '),
+)
+
+function isTagalog(input: string): boolean {
+  const words = input.toLocaleLowerCase().match(/[a-zñ]+/g) ?? []
+  return words.some((word) => TAGALOG_WORDS.has(word))
+}
 
 function knowledgeMessage(conversationId: string, input: string, intent?: ChatIntent | null) {
   if (intent?.decision === 'suggest' && intent.suggestions.length) {
-    const options = intent.suggestions.map((question) => `• ${question}`).join('\n')
+    const tagalog = isTagalog(input)
+    const options = intent.suggestions
+      .map((question) => {
+        const entry = informationKnowledgeBase.find((item) => item.questionEn === question)
+        return `• ${tagalog && entry?.questionTl ? entry.questionTl : question}`
+      })
+      .join('\n')
     return message(
       conversationId,
-      `I’m not sure what you meant. Did you mean one of these?\n\n${options}\n\nAsk again using one of these questions.`,
+      tagalog
+        ? `Hindi ako sigurado sa ibig mong sabihin. Ito ba ang ibig mong itanong?\n\n${options}\n\nMagtanong ulit gamit ang isa sa mga tanong na ito.`
+        : `I’m not sure what you meant. Did you mean one of these?\n\n${options}\n\nAsk again using one of these questions.`,
       { type: 'education' },
     )
   }
   const smallTalk = intent?.decision === 'answer' && intent.question ? SMALL_TALK[intent.question] : undefined
   if (smallTalk) {
-    const tagalog = /\b(kumusta|magandang|salamat|paalam|po)\b/i.test(input)
-    return message(conversationId, tagalog ? smallTalk.tl : smallTalk.en)
+    return message(conversationId, isTagalog(input) ? smallTalk.tl : smallTalk.en)
   }
   // With a trained-model result, only an "answer" decision selects an entry;
   // without one (backend unavailable), fall back to local keyword matching.
@@ -109,9 +127,11 @@ function knowledgeMessage(conversationId: string, input: string, intent?: ChatIn
       ? informationKnowledgeBase.find((item) => item.questionEn === intent.question)
       : undefined
     : findKnowledgeAnswer(input)?.entry
-  if (!entry) return message(conversationId, FALLBACK_TEXT, { type: 'education' })
+  const useTagalog = isTagalog(input)
+  if (!entry) {
+    return message(conversationId, useTagalog ? FALLBACK_TEXT.tl : FALLBACK_TEXT.en, { type: 'education' })
+  }
 
-  const useTagalog = /\b(ano|paano|bakit|kailan|saan|sino|puwede|puwede|nakakahawa|senyales|sanhi|dapat|magulang|bata)\b/i.test(input)
   return message(conversationId, useTagalog ? entry.answerTl : entry.answerEn, {
     type: 'education',
     sources: entry.sources,
