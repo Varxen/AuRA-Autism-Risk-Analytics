@@ -1779,19 +1779,19 @@ p {
 }
 
 .result-placeholder h3 {
-  font-size: 18px;
+  font-size: var(--font-lg);
   font-weight: 600;
   margin: 0;
 }
 
 .result-placeholder p {
-  font-size: 15px;
+  font-size: var(--font-base);
   margin: 0;
 }
 
 .result-placeholder .result-category {
   color: var(--brand-primary);
-  font-size: 24px;
+  font-size: calc(var(--font-lg) * 1.4);
   font-weight: 700;
   margin: 0 0 16px;
 }
@@ -1804,7 +1804,7 @@ p {
 
 .result-probabilities > p {
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: var(--font-base);
   font-weight: 600;
 }
 
@@ -1813,19 +1813,19 @@ p {
   justify-content: space-between;
   gap: 16px;
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: var(--font-base);
 }
 
 .result-placeholder .result-limitation {
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: var(--font-base);
   line-height: 1.5;
   margin-bottom: 10px;
 }
 
 .result-placeholder small {
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: calc(var(--font-base) * 0.85);
 }
 
 .result-card {
@@ -1865,14 +1865,14 @@ p {
 
 .result-card .result-heading h3 {
   color: #183b64;
-  font-size: 18px;
+  font-size: var(--font-lg);
   font-weight: 700;
 }
 
 .result-card .result-heading .result-subheading {
   margin-top: 3px;
   color: #708198;
-  font-size: 13px;
+  font-size: var(--font-base);
 }
 
 .result-actions {
@@ -1967,14 +1967,14 @@ p {
 
 .result-feature-label {
   color: #5f7188;
-  font-size: 13px;
+  font-size: var(--font-base);
   font-weight: 600;
 }
 
 .result-card .result-category {
   margin: 0;
   color: #155da9;
-  font-size: 25px;
+  font-size: calc(var(--font-lg) * 1.4);
   line-height: 1.1;
 }
 
@@ -2001,7 +2001,7 @@ p {
 .result-section-heading h4 {
   margin: 0;
   color: #263e5d;
-  font-size: 14px;
+  font-size: var(--font-lg);
   font-weight: 700;
 }
 
@@ -2010,7 +2010,7 @@ p {
   align-items: center;
   gap: 8px;
   color: #8492a5;
-  font-size: 11px;
+  font-size: calc(var(--font-base) * 0.85);
 }
 
 .result-section-heading > span svg {
@@ -2025,7 +2025,7 @@ p {
   align-items: center;
   gap: 12px;
   color: #52657d;
-  font-size: 14px;
+  font-size: var(--font-base);
 }
 
 .result-probability-category {
@@ -2034,7 +2034,7 @@ p {
 
 .result-probability-value {
   color: #52657d;
-  font-size: 14px;
+  font-size: var(--font-base);
   font-variant-numeric: tabular-nums;
 }
 
@@ -2076,7 +2076,7 @@ p {
 .result-explanation h4 {
   margin: 0 0 6px;
   color: #263e5d;
-  font-size: 14px;
+  font-size: var(--font-lg);
   font-weight: 700;
 }
 
@@ -2084,7 +2084,7 @@ p {
 .result-explanation p {
   margin: 0;
   color: #52657d;
-  font-size: 13px;
+  font-size: var(--font-base);
   line-height: 1.6;
 }
 
@@ -2112,13 +2112,13 @@ p {
 
 .result-indicator-influences li strong {
   color: #304862;
-  font-size: 13px;
+  font-size: var(--font-base);
 }
 
 .result-indicator-influences li span {
   flex: 0 0 auto;
   color: #52657d;
-  font-size: 12px;
+  font-size: calc(var(--font-base) * 0.85);
   font-weight: 650;
   font-variant-numeric: tabular-nums;
 }
@@ -2126,14 +2126,14 @@ p {
 .result-indicator-influences li p {
   margin: 3px 0 0;
   color: #708198;
-  font-size: 12px;
+  font-size: calc(var(--font-base) * 0.85);
   line-height: 1.45;
 }
 
 .result-indicator-influences .result-influence-reference {
   margin-top: 8px;
   color: #74849a;
-  font-size: 11px;
+  font-size: calc(var(--font-base) * 0.85);
 }
 
 .result-recommendation {
@@ -2147,14 +2147,14 @@ p {
 .result-recommendation h4 {
   margin: 0 0 6px;
   color: #263e5d;
-  font-size: 14px;
+  font-size: var(--font-lg);
   font-weight: 700;
 }
 
 .result-recommendation p {
   margin: 0;
   color: #52657d;
-  font-size: 13px;
+  font-size: var(--font-base);
   line-height: 1.6;
 }
 
@@ -2167,7 +2167,7 @@ p {
 .result-card .result-limitation {
   margin: 0;
   color: #5e7086;
-  font-size: 12px;
+  font-size: calc(var(--font-base) * 0.85);
   line-height: 1.55;
 }
 
@@ -2178,7 +2178,7 @@ p {
   gap: 8px;
   margin-top: 17px;
   color: #7d8ba0;
-  font-size: 11px;
+  font-size: calc(var(--font-base) * 0.85);
 }
 
 .result-metadata code {
@@ -2440,12 +2440,22 @@ p {
     position: relative !important;
     isolation: isolate;
     max-width: none !important;
+    box-sizing: border-box !important;
+    height: 296mm !important;
+    overflow: hidden !important;
     padding: 15mm 17mm !important;
     border: 0 !important;
     border-radius: 0 !important;
     color: #183b64 !important;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+  }
+
+  /* Scaled by JS (--print-zoom) so the whole result always fits one page. */
+  .result-fit {
+    width: calc(176mm / var(--print-zoom, 1));
+    transform: scale(var(--print-zoom, 1));
+    transform-origin: top left;
   }
 
   .result-watermark {
@@ -2541,7 +2551,7 @@ p {
 }
 
 .assessment-complete-message {
-  zoom: 85%;
+  zoom: 100%;
 }
 
 .assessment-page .assessment-complete-message .message-body {
@@ -3648,4 +3658,35 @@ p {
     100% 100px,
     100% 100%;
   background-repeat: no-repeat;
+}
+
+/* Off-screen copy used only to measure the printed height of the result card. */
+.result-card.result-fit-measure {
+  position: absolute;
+  top: 0;
+  left: -10000px;
+  box-sizing: border-box;
+  width: calc(176mm / var(--print-zoom, 1));
+  max-width: none;
+  height: auto;
+  padding: 0;
+  border: 0;
+  visibility: hidden;
+  zoom: 1;
+}
+
+.result-fit-measure .result-fit {
+  width: auto;
+}
+
+.result-fit-measure .result-actions,
+.result-fit-measure .result-watermark {
+  display: none;
+}
+
+.result-card .result-breakdown-note {
+  margin: 14px 0 0;
+  color: #52657d;
+  font-size: var(--font-base);
+  line-height: 1.6;
 }

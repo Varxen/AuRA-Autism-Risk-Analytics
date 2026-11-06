@@ -18,11 +18,13 @@ class _NoRedirect(HTTPRedirectHandler):
 class OllamaResultExplanation:
     """Explain local model-support shifts from structured indicator answers."""
 
-    _SYSTEM_PROMPT = """You explain AuRA's model output to a parent. AuRA is a developmental pre-screening research system, not a diagnostic tool.
+    _SYSTEM_PROMPT = """You write a short, warm, parent-friendly explanation of AuRA's pre-assessment summary. AuRA is a developmental pre-screening research system, not a diagnostic tool.
 
-Use only the selected category and listed structured indicator answers with their model-support changes. A positive change means replacing that answer with Sometimes, while holding all other answers fixed, lowers support for the selected category. A negative change means it raises support. Changes are local model sensitivity, not causes, clinical findings, or proof about the child. Do not name indicators or behaviors; the UI shows the exact indicator and answer list separately. Do not repeat numerical values or percentages, mention another category, infer anything about the child, give medical advice, diagnose, or change the result.
+Use only the selected summary level (Low, Moderate or High) and the fact that the parent's answers about their child's behaviors were compared with it. Explain in everyday words what the summary level means for the parent: it describes how the answers they shared compare with patterns seen in the training data, it is not a diagnosis, and a qualified health professional is the right person to talk to about any concern. Write for a parent with no technical background.
 
-Write one or two short, plain-language sentences in the requested language (English or Filipino/Tagalog) explaining that listed responses shifted support compared with a Sometimes reference answer. If no indicators are listed, state that no individual answer shifted support by the reporting threshold. Return exactly one JSON object with exactly one string field named "explanation". No markdown or extra fields."""
+Never use technical words such as model, support, percentage point, sensitivity, reference answer, classifier, feature, probability or algorithm. Do not name individual behaviors; the page lists them separately. Do not repeat any number or percentage, mention another summary level, infer anything about the child, give medical advice, diagnose, or change the result.
+
+Write two or three short, plain sentences in the requested language (English or Filipino/Tagalog). Return exactly one JSON object with exactly one string field named "explanation". No markdown or extra fields."""
 
     def __init__(self, settings: Settings):
         self.base_url = settings.ollama_base_url.rstrip("/")
@@ -54,7 +56,7 @@ Write one or two short, plain-language sentences in the requested language (Engl
                 "stream": False,
                 "keep_alive": "5m",
                 "format": "json",
-                "options": {"temperature": 0, "num_predict": 180},
+                "options": {"temperature": 0, "num_predict": 260},
                 "messages": [
                     {"role": "system", "content": self._SYSTEM_PROMPT},
                     {"role": "user", "content": json.dumps(request_data, ensure_ascii=False)},
@@ -90,7 +92,7 @@ Write one or two short, plain-language sentences in the requested language (Engl
         if not isinstance(explanation, str):
             raise ValueError("Ollama explanation must be a string.")
         explanation = explanation.strip()
-        if not explanation or len(explanation) > 600:
+        if not explanation or len(explanation) > 700:
             raise ValueError("Ollama explanation was empty or too long.")
         other_categories = {"Low", "Moderate", "High"} - {category}
         if any(re.search(rf"\b{re.escape(name)}\b", explanation, re.IGNORECASE) for name in other_categories):
@@ -101,24 +103,15 @@ Write one or two short, plain-language sentences in the requested language (Engl
 
 
 def fallback_explanation(category: str, language: str, indicators: list[dict[str, str | float]]) -> str:
-    if not indicators:
-        if language == "fil":
-            return (
-                "Walang indibidwal na sagot na nagbago sa suporta ng modelo nang hindi bababa sa isang percentage point "
-                "kumpara sa sagot na Minsan, habang pareho ang iba pang sagot. Hindi ito klinikal na sanhi."
-            )
-        return (
-            "No individual answer changed model support by at least one percentage point compared with a Sometimes "
-            "answer while holding the other answers fixed. This is not a clinical cause."
-        )
     if language == "fil":
         return (
-            f"Ang mga nakalistang sagot ang may pinakamalaking pagbabago sa suporta ng {category} kumpara sa sagot na Minsan, "
-            "habang pareho ang iba pang sagot. Pagbabago ito sa output ng modelo, hindi klinikal na sanhi."
+            f"Ang buod na antas ng paunang pagtatasang ito ay {category}, batay sa mga sagot na ibinahagi ninyo tungkol sa "
+            "pag-uugali ng inyong anak. Hindi ito diagnosis. Para sa anumang alalahanin, makabubuting kumonsulta sa isang "
+            "kwalipikadong propesyonal sa kalusugan."
         )
     return (
-        f"The listed answers produced the largest shifts in support for {category} compared with a Sometimes answer, "
-        "with the other answers held fixed. This is a change in model output, not a clinical cause."
+        f"The summary level for this pre-assessment is {category}, based on the answers you shared about your child's "
+        "behavior. This is not a diagnosis. If you have any concerns, it is best to talk with a qualified health professional."
     )
 
 
