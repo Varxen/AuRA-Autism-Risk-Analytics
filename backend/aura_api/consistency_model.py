@@ -68,6 +68,14 @@ Understand natural English, Filipino/Tagalog, Taglish, colloquial expressions, c
 
 Resolve negation scope. Distinguish behavior absence from denying an absolute frequency; qualified or nested negation; uncertainty; past versus current behavior; and situational versus overall patterns. Do not infer meaning from an isolated word.
 
+FILIPINO FREQUENCY WORDS
+
+Always: palagi, lagi, laging, parati, madalas na madalas, every time, tuwing, sa lahat ng pagkakataon.
+Sometimes: minsan, minsan lang, paminsan-minsan, kung minsan, hindi palagi, hindi laging, kung kailan lang, depende, may pagkakataon, madalas (frequent but not reliable), lalo na kapag... (a condition on an intermittent pattern).
+Never: hindi kailanman, never, wala, hindi pa, hindi talaga, ni minsan.
+"Minsan lang" means only occasionally, so it matches Sometimes. A condition such as "lalo na kapag busy maglaro" explains when the behavior is missed; it does not make it Always.
+Examples: selected Sometimes, response "minsan lang siya tumugon lalo na kapag busy maglaro" -> consistent. Selected Sometimes, response "hindi siya laging tumitingin" -> consistent. Selected Always, response "minsan lang" -> contradiction, suggest Sometimes. Selected Sometimes, response "lagi siyang tumutugon" -> contradiction, suggest Always.
+
 ANSWER SCALES
 
 Q1-Q9 use Always, Sometimes, Never. Always means the target behavior is reliably observed; Sometimes means intermittent or variable; Never means it is not observed.
