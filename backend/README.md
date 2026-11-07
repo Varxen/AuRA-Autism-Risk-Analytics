@@ -71,7 +71,7 @@ See [the HTTP contract](docs/auth-api.md). Authentication alone does not establi
 
 ## Security and persistence
 
-- Passwords: 15-128 characters; no composition rule or trimming; whitespace-only values rejected. Standard-library scrypt uses N=32768, r=8, p=3, a 16-byte random salt and a 64-byte derived key.
+- Passwords: 8-128 characters; no composition rule or trimming; whitespace-only values rejected. Standard-library scrypt uses N=32768, r=8, p=3, a 16-byte random salt and a 64-byte derived key.
 - Email: normalized ASCII mailbox with lowercase matching; ownership verification is not connected. Responses explicitly return `emailVerified: false`.
 - `users` stores identity and password hashes. PostgreSQL enforces unique normalized email, including concurrent registrations.
 - `onboarding_records` has one account-owned row for pre-assessment acknowledgement, consent evidence, minimal eligibility fields, and completion time. It stores no child name. Deleting the account cascades to this record.

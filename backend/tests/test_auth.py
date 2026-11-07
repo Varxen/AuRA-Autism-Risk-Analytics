@@ -240,9 +240,9 @@ def test_authentication_isolated_by_cookie_not_supplied_user_id(client):
 
 
 @pytest.mark.parametrize("body", [
-    {**CREDS, "password": "private-short"},
+    {**CREDS, "password": "short-7"},
     {**CREDS, "password": "x" * 129},
-    {**CREDS, "password": " " * 15},
+    {**CREDS, "password": " " * 8},
     {**CREDS, "password": 1234567890123456},
     {**CREDS, "email": "bad@@example.test"},
     {**CREDS, "email": "parent@localhost"},
@@ -259,7 +259,7 @@ def test_invalid_payloads_are_rejected_without_echoing_credentials(client, body)
     response = client.post("/api/v1/auth/register", json=body)
     assert response.status_code == 422
     assert response.json()["error"]["code"] == "validation_error"
-    assert PASSWORD not in response.text and "private-short" not in response.text
+    assert PASSWORD not in response.text and "short-7" not in response.text
     assert '"input"' not in response.text
     assert not stored_users(client)
 
