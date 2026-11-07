@@ -55,14 +55,14 @@ export function LoginCard({ mode }: { mode: 'login' | 'register' }) {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
-            minLength={15}
+            minLength={8}
             maxLength={128}
             disabled={busy}
             autoComplete={registering ? 'new-password' : 'current-password'}
             aria-describedby={registering ? 'password-help' : undefined}
           />
         </div>
-        {registering && <p className="entry-field-help" id="password-help">Use 15–128 characters.</p>}
+        {registering && <p className="entry-field-help" id="password-help">Use 8–128 characters.</p>}
       </div>
       {error && <p className="entry-error" role="alert">{error}</p>}
       <Button

@@ -103,7 +103,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             content={
                 "error": {
                     "code": "validation_error",
-                    "message": "Check the submitted fields. Use a valid email and a password of 15 to 128 characters.",
+                    "message": "Check the submitted fields. Use a valid email and a password of 8 to 128 characters.",
                     "fields": fields,
                 }
             },

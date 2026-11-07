@@ -13,7 +13,7 @@ POST `/register` returns 201. POST `/login` returns 200. Send application/json a
 }
 ```
 
-Email uses normalized lowercase ASCII matching. Passwords retain entered whitespace and must have 15-128 characters; blank-only passwords are rejected. Extra fields such as role, consent or onboardingComplete are rejected.
+Email uses normalized lowercase ASCII matching. Passwords retain entered whitespace and must have 8-128 characters; blank-only passwords are rejected. Extra fields such as role, consent or onboardingComplete are rejected.
 
 Both actions set an HttpOnly session cookie and return:
 

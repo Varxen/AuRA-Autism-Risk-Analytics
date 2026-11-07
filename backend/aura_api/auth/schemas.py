@@ -12,7 +12,7 @@ from pydantic.alias_generators import to_camel
 class Credentials(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     email: str = Field(min_length=3, max_length=254)
-    password: SecretStr = Field(min_length=15, max_length=128)
+    password: SecretStr = Field(min_length=8, max_length=128)
 
     @field_validator("email")
     @classmethod
@@ -46,7 +46,7 @@ class Credentials(BaseModel):
     @classmethod
     def reject_blank_password(cls, value: SecretStr) -> SecretStr:
         if not value.get_secret_value().strip():
-            raise ValueError("Use a nonblank password of 15 to 128 characters.")
+            raise ValueError("Use a nonblank password of 8 to 128 characters.")
         return value
 
 
