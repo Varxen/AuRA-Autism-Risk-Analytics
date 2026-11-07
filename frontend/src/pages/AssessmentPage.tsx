@@ -17,7 +17,7 @@ import { QUESTION_COUNT } from '../data/mockQuestions'
 export function AssessmentPage() {
   const { assessment } = useAura()
   const [selectedLanguage, setSelectedLanguage] = useState<AssessmentLanguage | null>(null)
-  const { session, stage, busy, loading, error, introduction, processing, pendingOptionId, pendingFollowUpText, failedAttempts, consistencyBlocked } = assessment
+  const { session, stage, busy, loading, error, introduction, processing, pendingOptionId, pendingFollowUpText } = assessment
   const language = session?.language ?? selectedLanguage ?? 'en'
   const copy = assessmentCopy[language]
   const current = session ? Math.min(session.currentQuestionIndex + 1, QUESTION_COUNT) : 1
@@ -69,13 +69,8 @@ export function AssessmentPage() {
               introduction={introduction}
               pendingOptionId={pendingOptionId}
               pendingFollowUpText={pendingFollowUpText}
-              failedAttempts={failedAttempts}
-              consistencyBlocked={consistencyBlocked}
               busy={busy}
-              approvedAnswerId={assessment.approvedSuggestions[question.id] ?? null}
               onSelect={(id) => void assessment.select(id)}
-              onApproveSuggestedAnswer={(id, text) => void assessment.approveSuggestion(id, text)}
-              onKeepCurrentAnswer={(id, text) => assessment.reviewSuggestedAnswer(id, text)}
             />
           ))}
         {processing.active && processing.step && (
@@ -132,14 +127,12 @@ export function AssessmentPage() {
       )}
       {!hasModelResult && <ChatInput
         onSend={assessment.followUp}
-        initialValue={assessment.followUpDraft ?? ''}
         responseLabel={copy.responseLabel}
         sendLabel={copy.sendLabel}
-        disabled={busy || presenting || stage !== 'follow-up' || consistencyBlocked}
+        disabled={busy || presenting || stage !== 'follow-up'}
         placeholder={
           processing.active ? copy.processingPlaceholder
           : presenting ? copy.inputPlaceholder
-            : consistencyBlocked ? copy.consistencyBlockedPlaceholder
             : stage === 'question' ? copy.choosePlaceholder
               : stage === 'ready-next'
                 ? (needsRetry ? copy.savedRetry : copy.preparingNext)

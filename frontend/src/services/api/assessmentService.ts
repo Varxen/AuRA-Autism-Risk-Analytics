@@ -1,4 +1,4 @@
-import type { AssessmentAnswerSubmission, AssessmentConsistencyGate, AssessmentProcessingJob, AssessmentSession, AssessmentSessionRecord } from '../../types/assessment.types'
+import type { AssessmentProcessingJob, AssessmentSession, AssessmentSessionRecord } from '../../types/assessment.types'
 import type { AssessmentLanguage, QuestionnaireQuestion } from '../../types/questionnaire.types'
 import type { SessionMetadataUpdate } from '../../types/history.types'
 
@@ -70,6 +70,12 @@ async function readProcessingJob(response: Response): Promise<AssessmentProcessi
       ('influenceMethod' in result && result.influenceMethod !== null && result.influenceMethod !== 'sometimes-one-at-a-time') ||
       !probabilities || typeof probabilities !== 'object')
       throw new Error('AuRA returned an invalid model result.')
+    if ('indicatorResponses' in result && (!Array.isArray(result.indicatorResponses) ||
+      result.indicatorResponses.some((item) => !item || typeof item !== 'object' ||
+        typeof item.indicatorId !== 'string' || typeof item.indicatorLabel !== 'string' ||
+        typeof item.selectedAnswer !== 'string' || typeof item.followUpQuestion !== 'string' ||
+        typeof item.followUpAnswer !== 'string')))
+      throw new Error('AuRA returned invalid parent response data.')
     if ('influentialIndicators' in result && (!Array.isArray(result.influentialIndicators) ||
       result.influentialIndicators.some((item) => !item || typeof item !== 'object' ||
         typeof item.indicatorId !== 'string' || typeof item.indicatorLabel !== 'string' ||
@@ -91,22 +97,6 @@ async function write(path: string, method: 'POST' | 'PUT', body?: unknown): Prom
     method,
     ...(body === undefined ? {} : { body: JSON.stringify(body) }),
   })
-}
-
-function isConsistencyGate(value: unknown): value is AssessmentConsistencyGate | null {
-  if (value === null) return true
-  if (!value || typeof value !== 'object') return false
-  const gate = value as Record<string, unknown>
-  const validStatus = gate.status === 'consistent' || gate.status === 'contradiction' || gate.status === 'unclear'
-  const validSuggestion = gate.suggestedOptionId === null || typeof gate.suggestedOptionId === 'string'
-  const validAttempts = Number.isInteger(gate.attemptsUsed) && Number.isInteger(gate.maxAttempts)
-  if (!validStatus || !validSuggestion || !validAttempts) return false
-  if (gate.status === 'contradiction')
-    return gate.nextAction === 'approve_suggestion' && typeof gate.suggestedOptionId === 'string'
-  if (gate.status === 'consistent')
-    return gate.nextAction === 'continue' && gate.suggestedOptionId === null
-  return (gate.nextAction === 'repeat_frequency_and_follow_up' || gate.nextAction === 'stop_unresolved') &&
-    gate.suggestedOptionId === null
 }
 
 export const assessmentService = {
@@ -151,31 +141,12 @@ export const assessmentService = {
       followUpText: text,
     }))
   },
-  async submitAnswer(
-    session: AssessmentSession,
-    optionId: string,
-    text: string,
-    approvedSuggestion = false,
-  ): Promise<AssessmentAnswerSubmission> {
-    const response = await write(
+  async submitAnswer(session: AssessmentSession, optionId: string, text: string): Promise<AssessmentSessionRecord> {
+    return readRecord(await write(
       `/${session.id}/answers/q${session.currentQuestionIndex + 1}`,
       'PUT',
-      { selectedOptionId: optionId, followUpText: text, approvedSuggestion },
-    )
-    const body: unknown = await response.json().catch(() => null)
-    if (!response.ok) {
-      const error = body && typeof body === 'object' && 'error' in body ? body.error : null
-      const message = error && typeof error === 'object' && 'message' in error && typeof error.message === 'string'
-        ? error.message
-        : 'AuRA could not validate this response.'
-      throw new Error(message)
-    }
-    if (!body || typeof body !== 'object' || !('session' in body) || !('questions' in body) || !('consistency' in body))
-      throw new Error('AuRA returned invalid consistency data.')
-    const consistency = body.consistency
-    if (!isConsistencyGate(consistency))
-      throw new Error('AuRA returned invalid consistency data.')
-    return body as AssessmentAnswerSubmission
+      { selectedOptionId: optionId, followUpText: text },
+    ))
   },
   async nextQuestion(session: AssessmentSession): Promise<AssessmentSession> {
     return readSession(await write(`/${session.id}/advance`, 'POST'))

@@ -185,3 +185,22 @@ def test_assessment_history_isolated_and_parent_can_delete_saved_session(client)
     deleted = client.delete(f"/api/v1/assessments/{assessment_id}")
     assert deleted.status_code == 204
     assert client.get("/api/v1/assessments").json() == []
+
+
+def test_result_returns_each_parent_follow_up_under_its_indicator(client):
+    register(client)
+    complete_onboarding(client)
+    assessment_id = create(client).json()["session"]["id"]
+    for number in range(1, 14):
+        option = "sometimes"
+        saved = client.put(f"/api/v1/assessments/{assessment_id}/answers/q{number}", json={
+            "selectedOptionId": option,
+            "followUpText": f"Fictional observation {number}.",
+        })
+        assert saved.status_code == 200
+        assert client.post(f"/api/v1/assessments/{assessment_id}/advance").status_code == 200
+    job = client.post(f"/api/v1/assessments/{assessment_id}/processing").json()
+    responses = job["result"]["indicatorResponses"]
+    assert len(responses) == 13
+    assert responses[1]["indicatorId"] == "eye-contact"
+    assert responses[1]["followUpAnswer"] == "Fictional observation 2."

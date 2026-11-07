@@ -14,9 +14,6 @@ export interface AssessmentSession {
   questionnaireVersion: string
   status: 'in-progress' | 'awaiting-content' | 'completed'
   currentQuestionIndex: number
-  clarificationAttemptsUsed?: number
-  maxClarificationAttempts?: number
-  consistencyBlocked?: boolean
   answers: AssessmentAnswer[]
   startedAt: string
   completedAt: string | null
@@ -27,23 +24,12 @@ export interface AssessmentSession {
   featureVector?: number[] | null
 }
 
-export interface AssessmentConsistencyGate {
-  status: 'consistent' | 'contradiction' | 'unclear'
-  nextAction: 'continue' | 'approve_suggestion' | 'repeat_frequency_and_follow_up' | 'stop_unresolved'
-  attemptsUsed: number
-  maxAttempts: number
-  suggestedOptionId: string | null
-}
-
-export interface AssessmentAnswerSubmission extends AssessmentSessionRecord {
-  consistency: AssessmentConsistencyGate | null
-}
-
-export interface AssessmentConsistencyAttempt {
-  selectedOptionId: string
-  followUpText: string
-  outcome: 'contradiction' | 'unclear'
-  suggestedOptionId: string | null
+export interface AssessmentIndicatorResponse {
+  indicatorId: string
+  indicatorLabel: string
+  selectedAnswer: string
+  followUpQuestion: string
+  followUpAnswer: string
 }
 
 export interface AssessmentResult {
@@ -61,6 +47,7 @@ export interface AssessmentResult {
     supportChangePercentagePoints: number
   }>
   influenceMethod?: 'sometimes-one-at-a-time' | null
+  indicatorResponses?: AssessmentIndicatorResponse[]
 }
 
 export interface AssessmentProcessingJob {
@@ -97,5 +84,4 @@ export interface AssessmentSessionRecord {
   session: AssessmentSession
   questions: QuestionnaireQuestion[]
   processingJob?: AssessmentProcessingJob | null
-  consistency?: AssessmentConsistencyGate | null
 }

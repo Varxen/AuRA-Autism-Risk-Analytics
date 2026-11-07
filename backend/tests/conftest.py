@@ -8,14 +8,8 @@ import pytest
 from sqlalchemy.schema import CreateSchema, DropSchema
 
 from aura_api.config import Settings
-from aura_api.consistency_model import ConsistencyDecision, ConsistencyOutcome
 from aura_api.database import Base, Database
 from aura_api.main import create_app
-
-
-class _TestConsistencyModel:
-    def evaluate(self, **_values):
-        return ConsistencyDecision(ConsistencyOutcome.CONSISTENT, ""), "continue"
 
 
 @pytest.fixture
@@ -36,7 +30,6 @@ def make_app():
         }
         values.update(overrides)
         app = create_app(replace(base, **values))
-        app.state.consistency_model = _TestConsistencyModel()
         databases.append(app.state.database)
         if create_tables:
             Base.metadata.create_all(app.state.database.engine)
