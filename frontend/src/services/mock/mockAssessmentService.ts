@@ -27,7 +27,6 @@ export const mockAssessmentService = {
       questionnaireVersion: QUESTIONNAIRE_VERSION,
       status: 'in-progress',
       currentQuestionIndex: 0,
-      clarificationAttemptsUsed: 0,
       answers: [],
       startedAt: new Date().toISOString(),
       completedAt: null,

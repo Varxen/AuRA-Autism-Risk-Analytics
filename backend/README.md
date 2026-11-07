@@ -31,13 +31,7 @@ Create the empty database first, then run the versioned migration:
 .\.venv\Scripts\python.exe -m uvicorn aura_api.main:create_app --factory --host 127.0.0.1 --port 8001 --reload --no-access-log
 ```
 
-Stage 2.3 calls a local Ollama model. This integration adds no database migration; apply migrations only when the checked-out revision adds one. Install and start Ollama yourself, then download the configured model:
-
-```powershell
-ollama pull llama3.2:3b
-```
-
-The API only accepts the loopback Ollama URL `http://127.0.0.1:11434`. The model call has a 90-second timeout. If Ollama is unavailable or returns invalid output, the API saves no answer and returns an error; it does not fall back to keyword matching. No Ollama dependency is installed in Python.
+Parent follow-up text is saved as typed. No language model reviews it, and any non-empty response is accepted. Only the educational chat intent check still uses local Ollama at `http://127.0.0.1:11434`.
 
 Linux/macOS uses `.venv/bin/python`. Health is `/api/v1/health`; interactive OpenAPI is `/docs`.
 
@@ -81,7 +75,7 @@ See [the HTTP contract](docs/auth-api.md). Authentication alone does not establi
 - Email: normalized ASCII mailbox with lowercase matching; ownership verification is not connected. Responses explicitly return `emailVerified: false`.
 - `users` stores identity and password hashes. PostgreSQL enforces unique normalized email, including concurrent registrations.
 - `onboarding_records` has one account-owned row for pre-assessment acknowledgement, consent evidence, minimal eligibility fields, and completion time. It stores no child name. Deleting the account cascades to this record.
-- `assessment_sessions` stores owner, language, questionnaire version, progress, clarification retry count, timestamps, legacy preview marker and full wording/options snapshot. `assessment_answers` stores one server-scored selected option and verbatim follow-up per item after stage 2.3 accepts the pair. `assessment_processing_jobs` stores status, retry attempt and the score-derived model category/probabilities with the Phase 4 explanation, category-based recommendation and influential-indicator details; assessment deletion cascades to all three.
+- `assessment_sessions` stores owner, language, questionnaire version, progress, timestamps, legacy preview marker and full wording/options snapshot. `assessment_answers` stores one server-scored selected option and verbatim follow-up per item. `assessment_processing_jobs` stores status, retry attempt and the score-derived model category/probabilities with the Phase 4 explanation, category-based recommendation and influential-indicator details; assessment deletion cascades to all three.
 - `chat_conversations` stores account-owned chats. `chat_messages` stores ordered user/assistant messages, fixed action buttons, knowledge sources and timestamps. Ownership is checked on reads and mutations; deleting a chat cascades to its messages.
 - `auth_sessions` stores a SHA-256 token digest, account foreign key, CSRF value and timestamps. Raw authentication tokens are never stored in the database or returned in JSON.
 - Cookies: host-only, Path=/, HttpOnly, SameSite=Lax. Local HTTP uses `aura_session`. Secure-cookie mode uses `__Host-aura_session` and requires HTTPS.
@@ -92,7 +86,7 @@ See [the HTTP contract](docs/auth-api.md). Authentication alone does not establi
 
 Use matching hostnames for Vite and the API, for example both `127.0.0.1`, so cookie same-site rules work across ports. Never copy authentication tokens to localStorage/sessionStorage.
 
-Accounts, onboarding state, chats, assessments, answers, model results and unexpired sessions survive API restarts. Processing loads the three saved Stage 3.1 artifacts and applies the Stage 3.2 equal-weight mean of class probabilities. Phase 4 compares each answer with a Sometimes reference while holding the other answers fixed, maps the five largest support shifts to approved indicator labels and selected answers, then asks local Ollama for a brief explanation of that structured evidence. Ollama cannot change the prediction or read follow-up text. A fixed recommendation is selected by category; localized fallback text preserves the result if Ollama fails. Accepted structured scores are the only classifier features; follow-up text remains stored but is not sent to the classifier. Low/Moderate/High labels and probabilities are score-derived and are not ASD-risk estimates or diagnoses. Install backend model dependencies and run `python -m alembic upgrade head` after pulling this change. Account-linked application data is retained while the account is active. Account deletion from Settings requires password re-entry and cascades through onboarding, chats, assessments, answers, model results and sessions. Backup retention and deletion are not configured. Use fictional child information. The local postgres administrator connection is for development; a limited application role and reviewed privacy/deletion procedures are required before production.
+Accounts, onboarding state, chats, assessments, answers, model results and unexpired sessions survive API restarts. Processing loads the three saved Stage 3.1 artifacts and applies the Stage 3.2 equal-weight mean of class probabilities. Phase 4 compares each answer with a Sometimes reference while holding the other answers fixed, maps the five largest support shifts to approved indicator labels and selected answers, and attaches fixed localized explanation text. A fixed recommendation is selected by category. The result also returns each saved follow-up answer under its behavioral indicator (`indicatorResponses`) for display only. Accepted structured scores are the only classifier features; follow-up text remains stored but is not sent to the classifier. Low/Moderate/High labels and probabilities are score-derived and are not ASD-risk estimates or diagnoses. Install backend model dependencies and run `python -m alembic upgrade head` after pulling this change. Account-linked application data is retained while the account is active. Account deletion from Settings requires password re-entry and cascades through onboarding, chats, assessments, answers, model results and sessions. Backup retention and deletion are not configured. Use fictional child information. The local postgres administrator connection is for development; a limited application role and reviewed privacy/deletion procedures are required before production.
 
 ## Checks
 

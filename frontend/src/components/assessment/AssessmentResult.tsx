@@ -159,7 +159,22 @@ export function AssessmentResult({
         aria-label={copy.resultInfluenceHeading}
       >
         <h4>{copy.resultInfluenceHeading}</h4>
-        {result.influenceMethod === "sometimes-one-at-a-time" ? (
+        {result.indicatorResponses?.length ? (
+          <ul>
+            {result.indicatorResponses.map((item) => (
+              <li key={item.indicatorId}>
+                <div>
+                  <strong>{item.indicatorLabel}</strong>
+                  <span>{item.selectedAnswer}</span>
+                </div>
+                <p className="result-indicator-followup">
+                  <em>{copy.resultParentResponse}:</em>{" "}
+                  {item.followUpAnswer.trim() || copy.resultNoFollowUp}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : result.influenceMethod === "sometimes-one-at-a-time" ? (
           <>
             {result.influentialIndicators?.length ? (
               <ul>
