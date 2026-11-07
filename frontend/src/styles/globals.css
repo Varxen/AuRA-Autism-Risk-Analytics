@@ -1693,6 +1693,17 @@ p {
   box-shadow: 0 4px 10px #155da933;
 }
 
+.result-download-button:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.result-download-error {
+  margin: 0 0 12px;
+  color: #b3261e;
+  font-size: var(--font-base);
+}
+
 .result-download-button:hover {
   background: #104f91;
   border-color: #104f91;
@@ -2153,6 +2164,7 @@ p {
 @media print {
   @page {
     size: A4;
+    /* Zero margin also removes the browser date, title and URL header/footer. */
     margin: 0;
   }
 
@@ -2203,6 +2215,7 @@ p {
   .assessment-complete-message .message-meta,
   .assessment-messages > :not(.assessment-complete-message),
   .assessment-complete-actions,
+  .assessment-page > :not(.assessment-messages),
   .result-actions {
     display: none !important;
   }
@@ -2221,26 +2234,100 @@ p {
     border: 0 !important;
   }
 
+  /* Real A4 document: the browser paginates it inside the @page margins. */
   .result-card {
+    --font-base: 10pt;
+    --font-lg: 12.5pt;
     position: relative !important;
     isolation: isolate;
     max-width: none !important;
     box-sizing: border-box !important;
-    height: 296mm !important;
-    overflow: hidden !important;
-    padding: 15mm 17mm !important;
+    padding: 16mm 15mm !important;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
     border: 0 !important;
     border-radius: 0 !important;
     color: #183b64 !important;
+    font-size: 10pt;
+    line-height: 1.45;
+    background: #fff !important;
+    box-shadow: none !important;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
 
-  /* Scaled by JS (--print-zoom) so the whole result always fits one page. */
   .result-fit {
-    width: calc(176mm / var(--print-zoom, 1));
-    transform: scale(var(--print-zoom, 1));
-    transform-origin: top left;
+    width: auto;
+  }
+
+  .result-card .result-indicator-influences {
+    padding: 0 !important;
+    border: 0 !important;
+    background: none !important;
+  }
+
+  .result-card .result-probabilities {
+    padding-inline: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .result-card .result-metadata {
+    margin-top: 3mm;
+    padding-top: 3mm;
+    border-top: 0.3mm solid #dce9f7;
+    background: none !important;
+    box-shadow: none !important;
+  }
+
+  .result-card .result-heading {
+    margin-bottom: 5mm;
+    padding-bottom: 4mm;
+    border-bottom: 0.4mm solid #cfe0f3;
+  }
+
+  .result-card .result-heading h3 {
+    font-size: 16pt;
+  }
+
+  .result-card .result-feature,
+  .result-card .result-probabilities,
+  .result-card .result-indicator-influences,
+  .result-card .result-explanation,
+  .result-card .result-recommendation {
+    margin: 0 0 4mm;
+    padding: 3mm 4.5mm;
+  }
+
+  .result-card .result-category {
+    font-size: 18pt;
+  }
+
+  .result-card .result-indicator-influences h4,
+  .result-card .result-explanation h4,
+  .result-card .result-recommendation h4,
+  .result-card .result-section-heading {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .result-card .result-indicator-influences ul {
+    gap: 2mm;
+    margin: 2.5mm 0 0;
+  }
+
+  .result-card .result-indicator-influences li {
+    padding: 2mm 3mm;
+  }
+
+  .result-card .result-indicator-influences li p,
+  .result-card .result-indicator-influences li span {
+    font-size: 9pt;
+  }
+
+  .result-card .result-limitation-box {
+    margin: 0 0 4mm;
   }
 
   .result-watermark {
@@ -2248,7 +2335,7 @@ p {
     position: fixed;
     z-index: 1000000;
     top: 55%;
-    left: 44%;
+    left: 50%;
     align-items: center;
     gap: 8mm;
     color: #155da9;
@@ -2293,7 +2380,11 @@ p {
     page-break-inside: auto;
   }
 
-  .result-indicator-influences li {
+  .result-indicator-influences li,
+  .result-explanation,
+  .result-recommendation,
+  .result-probabilities,
+  .result-feature {
     break-inside: avoid;
     page-break-inside: avoid;
   }
@@ -3392,30 +3483,6 @@ p {
     100% 100px,
     100% 100%;
   background-repeat: no-repeat;
-}
-
-/* Off-screen copy used only to measure the printed height of the result card. */
-.result-card.result-fit-measure {
-  position: absolute;
-  top: 0;
-  left: -10000px;
-  box-sizing: border-box;
-  width: calc(176mm / var(--print-zoom, 1));
-  max-width: none;
-  height: auto;
-  padding: 0;
-  border: 0;
-  visibility: hidden;
-  zoom: 1;
-}
-
-.result-fit-measure .result-fit {
-  width: auto;
-}
-
-.result-fit-measure .result-actions,
-.result-fit-measure .result-watermark {
-  display: none;
 }
 
 .result-card .result-breakdown-note {
